@@ -6,54 +6,48 @@
 /*   By: jle-quel <jle-quel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/23 18:43:38 by jle-quel          #+#    #+#             */
-/*   Updated: 2018/02/23 20:08:14 by jle-quel         ###   ########.fr       */
+/*   Updated: 2018/02/26 15:48:40 by jle-quel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 package main
 
 import (
-	"os"
-	"bufio"
 	"fmt"
 	"golang.org/x/crypto/ssh/terminal"
-	"os/exec"
-	"bytes"
+	"os"
+	"bufio"
 )
 
 func handleErr(err error) {
 	if (err != nil) {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
+		fmt.Println(err)
 	}
 }
 
-// func main() {
-//     cmd := exec.Command("tput", "-S")
-//     cmd.Stdin = bytes.NewBufferString("clear\ncup 5 200")
-//     cmd.Stdout = os.Stdout
-//     cmd.Run()
-//     fmt.Println("Hello")
-// }
-
 func main() {
+	fmt.Println("Taskmaster")
+
 	oldState, err := terminal.MakeRaw(0)
 	handleErr(err)
 
+	reader := bufio.NewReader(os.Stdin)
+	line := make([]rune, 0)
+
 	for {
-		reader := bufio.NewReader(os.Stdin)
-		char, _, _ := reader.ReadRune()
-		fmt.Printf("%c", char)
+		char, _, err := reader.ReadRune()
+		handleErr(err)
 
-		if (char == 'e') {
+		if char == 'E' {
 			break
+		} else {
+			line = append(line, char)
+			fmt.Printf("%c", char)
 		}
-
-		cmd := exec.Command("tput", "-S")
-		cmd.Stdin = bytes.NewBufferString("cup 0 1")
-		cmd.Stdout = os.Stdout
-		cmd.Run()
 	}
-
+	fmt.Printf("\n")
+	for _, key := range line {
+		fmt.Printf("%c", key)
+	}
 	terminal.Restore(0, oldState)
 }
