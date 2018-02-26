@@ -4,7 +4,7 @@
   "description": "Service Manager",
   "main": "index.js",
   "scripts": {
-    "start": "node ./src/index.js ./sample.cof"
+    "start": "node ./src/index.js ./sample.conf"
   },
   "repository": {
     "type": "git",
