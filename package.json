@@ -4,8 +4,7 @@
   "description": "Service Manager",
   "main": "index.js",
   "scripts": {
-    "start": "npm run server:watch",
-    "server:watch": "nodemon --config nodemon.json --inspect ./src/index.js"
+    "start": "node ./src/index.js"
   },
   "repository": {
     "type": "git",
@@ -16,8 +15,5 @@
   "bugs": {
     "url": "https://github.com/jle-quel/Taskmaster/issues"
   },
-  "homepage": "https://github.com/jle-quel/Taskmaster#readme",
-  "devDependencies": {
-    "nodemon": "^1.15.1"
-  }
+  "homepage": "https://github.com/jle-quel/Taskmaster#readme"
 }

@@ -6,38 +6,33 @@
 /*   By: jle-quel <jle-quel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/26 18:02:49 by jle-quel          #+#    #+#             */
-/*   Updated: 2018/02/26 18:42:49 by jle-quel         ###   ########.fr       */
+/*   Updated: 2018/02/26 19:21:13 by jle-quel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-"use strict"
+'use strict'
 
 const readline = require('readline')
 
 const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-  prompt: "Taskmaster> "
+	input: process.stdin,
+	output: process.stdout
 })
+const functionByCmd = {
+	'status': () => {console.log('status')},
+	'start': () => {console.log('start')},
+	'stop': () => {console.log('stop')},
+	'restart': () => {console.log('restart')},
+	'reload': () => {console.log('reload')},
+	'shutdown': () => {console.log('shutdown')}
+}
 
-rl.prompt()
-
+process.stdout.write('Taskmaster> ')
 rl.on('line', (line) => {
 	const trimmedLine = line.trim()
 
-	switch trimmedLine {
-		case: "status"
-			console.log("Status")
-		case: "start"
-			console.log("Status")
-		case: "stop"
-			console.log("Stop")
-		case: "restart"
-			console.log("Restart")
-		case: "reload"
-			console.log("Reload")
-		case: "shutdown"
-			console.log("Shutdown")
-	}
-	rl.prompt()
+	!functionByCmd[trimmedLine] ? console.error(`*** Unknown syntax: ${trimmedLine}`) :
+	functionByCmd[trimmedLine]()
+
+	process.stdout.write('Taskmaster> ')
 })
