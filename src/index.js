@@ -12,6 +12,11 @@
 
 'use strict'
 
+if (process.argv.length !== 3) {
+	console.error('usage: npm start || node path-to-index.js path-to-sample.conf')
+	process.exit(1)
+}
+
 const readline = require('readline')
 
 const rl = readline.createInterface({
