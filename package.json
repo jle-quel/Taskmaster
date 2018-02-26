@@ -1,0 +1,23 @@
+{
+  "name": "taskmaster",
+  "version": "1.0.0",
+  "description": "Service Manager",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run server:watch",
+    "server:watch": "nodemon --config nodemon.json --inspect ./src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jle-quel/Taskmaster.git"
+  },
+  "author": "mi-mazouz & jle-quel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jle-quel/Taskmaster/issues"
+  },
+  "homepage": "https://github.com/jle-quel/Taskmaster#readme",
+  "devDependencies": {
+    "nodemon": "^1.15.1"
+  }
+}
