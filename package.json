@@ -1,0 +1,19 @@
+{
+  "name": "taskmaster",
+  "version": "1.0.0",
+  "description": "Service Manager",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jle-quel/Taskmaster.git"
+  },
+  "author": "mi-mazouz & jle-quel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jle-quel/Taskmaster/issues"
+  },
+  "homepage": "https://github.com/jle-quel/Taskmaster#readme"
+}
