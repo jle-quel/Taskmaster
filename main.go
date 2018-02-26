@@ -6,7 +6,7 @@
 /*   By: jle-quel <jle-quel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/23 18:43:38 by jle-quel          #+#    #+#             */
-/*   Updated: 2018/02/26 15:48:40 by jle-quel         ###   ########.fr       */
+/*   Updated: 2018/02/26 16:19:51 by jle-quel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ func main() {
 			fmt.Printf("%c", char)
 		}
 	}
+
 	fmt.Printf("\n")
 	for _, key := range line {
 		fmt.Printf("%c", key)
