@@ -13,7 +13,7 @@
 "use strict"
 
 // I let you decide where and in what folder you want to place it
-// PS: " < "
+// PS: ' < "
 const basicHelp = (argv) => {
 	console.log("Basic Help")
 	console.log(`BUILTIN [${argv[0]}] ARGV [${argv[1]}]`)
