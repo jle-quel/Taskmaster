@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/jle-quel/Taskmaster/issues"
   },
-  "homepage": "https://github.com/jle-quel/Taskmaster#readme"
+  "homepage": "https://github.com/jle-quel/Taskmaster#readme",
+  "dependencies": {
+    "colors": "^1.1.2"
+  }
 }

@@ -6,25 +6,11 @@
 /*   By: jle-quel <jle-quel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/26 18:02:49 by jle-quel          #+#    #+#             */
-/*   Updated: 2018/02/26 19:21:13 by jle-quel         ###   ########.fr       */
+/*   Updated: 2018/02/27 03:18:32 by jle-quel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 "use strict"
-
-// I let you decide where and in what folder you want to place it
-// PS: ' < "
-const basicHelp = (argv) => {
-	console.log("Basic Help")
-	console.log(`BUILTIN [${argv[0]}] ARGV [${argv[1]}]`)
-}
-
-const advanceHelp = (argv) => {
-	console.log("Advance Help")
-	console.log(`BUILTIN [${argv[0]}] ARGV [${argv[1]}]`)
-}
-
-/* ************************************************************************** */
 
 if (process.argv.length !== 3) {
 	console.error("usage: npm start || node path-to-index.js path-to-sample.conf")
@@ -34,6 +20,8 @@ if (process.argv.length !== 3) {
 /* ************************************************************************** */
 
 const readline = require("readline")
+const logger = require("./logger")
+const help = require("./help")
 
 const rl = readline.createInterface({
 	input: process.stdin,
@@ -41,31 +29,26 @@ const rl = readline.createInterface({
 })
 const functionByCmd = {
 	"status": (argv) => {
-		console.log("status")
-		console.log(`BUILTIN [${argv[0]}] ARGV [${argv[1]}]`)
+		logger.Debug(`STATUS BUILTIN [${argv[0]}] ARGV [${argv[1]}]\n`)
 	},
 	"start": (argv) => {
-		console.log("start")
-		console.log(`BUILTIN [${argv[0]}] ARGV [${argv[1]}]`)
+		logger.Debug(`START BUILTIN [${argv[0]}] ARGV [${argv[1]}]\n`)
 	},
 	"stop": (argv) => {
-		console.log("stop")
-		console.log(`BUILTIN [${argv[0]}] ARGV [${argv[1]}]`)
+		logger.Debug(`STOP BUILTIN [${argv[0]}] ARGV [${argv[1]}]\n`)
 	},
 	"restart": (argv) => {
-		console.log("restart")
-		console.log(`BUILTIN [${argv[0]}] ARGV [${argv[1]}]`)
+		logger.Debug(`RESTART BUILTIN [${argv[0]}] ARGV [${argv[1]}]\n`)
 	},
 	"reload": (argv) => {
-		console.log("reload")
-		console.log(`BUILTIN [${argv[0]}] ARGV [${argv[1]}]`)
+		logger.Debug(`RELOAD BUILTIN [${argv[0]}] ARGV [${argv[1]}]\n`)
 	},
 	"shutdown": (argv) => {
-		console.log("Shutdown")
-		console.log(`BUILTIN [${argv[0]}] ARGV [${argv[1]}]`)
+		logger.Debug(`SHUTDOWN BUILTIN [${argv[0]}] ARGV [${argv[1]}]\n`)
 	},
 	"help": (argv) => {
-		argv.length === 1 ? basicHelp(argv) : advanceHelp(argv)
+		logger.Debug(`HELP BUILTIN [${argv[0]}] ARGV [${argv[1]}]\n`)		
+		argv.length === 1 ? help.Basic(argv) : help.Advance(argv)
 	}
 }
 
