@@ -6,7 +6,7 @@
 /*   By: jle-quel <jle-quel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/26 18:02:49 by jle-quel          #+#    #+#             */
-/*   Updated: 2018/02/27 03:18:32 by jle-quel         ###   ########.fr       */
+/*   Updated: 2018/02/27 03:44:42 by jle-quel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ const help = require("./help")
 
 const rl = readline.createInterface({
 	input: process.stdin,
-	output: process.stdout
+	output: process.stdout,
+	prompt: "Taskmaster> "
 })
 const functionByCmd = {
 	"status": (argv) => {
@@ -49,17 +50,21 @@ const functionByCmd = {
 	"help": (argv) => {
 		logger.Debug(`HELP BUILTIN [${argv[0]}] ARGV [${argv[1]}]\n`)		
 		argv.length === 1 ? help.Basic(argv) : help.Advance(argv)
+	},
+	"error": (argv) => {
+		logger.Debug(`ERROR BUILTIN [${argv[0]}] ARGV [${argv[1]}]\n`)
+		console.error(`*** Unknown syntax: ${argv[0]}`)
 	}
 }
 
 /* ************************************************************************** */
 
-process.stdout.write("Taskmaster> ")
+rl.prompt()
 rl.on("line", (line) => {
-	const array = line.trim().split(" ")
+	const argv = line.trim().split(" ")
 	
-	!functionByCmd[array[0]] ? console.error(`*** Unknown syntax: ${array[0]}`) :
-	functionByCmd[array[0]](array)
-
-	process.stdout.write("Taskmaster> ")
+	if (!functionByCmd[argv[0]]) functionByCmd["error"](argv)
+	else functionByCmd[argv[0]](argv)
+	
+	rl.prompt()
 })
