@@ -6,7 +6,7 @@
 /*   By: jle-quel <jle-quel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/26 18:02:49 by jle-quel          #+#    #+#             */
-/*   Updated: 2018/02/28 18:40:25 by jle-quel         ###   ########.fr       */
+/*   Updated: 2018/02/28 23:03:59 by jle-quel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 const readline = require("readline")
 const help = require("./help")
+const colors = require("colors")
 
 /* ************************************************************************** */
 /*								PRIVATE										  */
@@ -23,34 +24,34 @@ const help = require("./help")
 const rl = readline.createInterface({
 	input: process.stdin,
 	output: process.stdout,
-	prompt: "Taskmaster> "
+	prompt: "taskmaster> "
 })
 
 const functionByCmd = {
 	"status": (argv) => {
-		console.log(`STATUS BUILTIN [${argv[0]}] ARGV [${argv[1]}]\n`)
+		console.log(`STATUS BUILTIN [${argv[0]}] ARGV [${argv[1]}]\n`.green)
 	},
 	"start": (argv) => {
-		console.log(`START BUILTIN [${argv[0]}] ARGV [${argv[1]}]\n`)
+		console.log(`START BUILTIN [${argv[0]}] ARGV [${argv[1]}]\n`.green)
 	},
 	"stop": (argv) => {
-		console.log(`STOP BUILTIN [${argv[0]}] ARGV [${argv[1]}]\n`)
+		console.log(`STOP BUILTIN [${argv[0]}] ARGV [${argv[1]}]\n`.green)
 	},
 	"restart": (argv) => {
-		console.log(`RESTART BUILTIN [${argv[0]}] ARGV [${argv[1]}]\n`)
+		console.log(`RESTART BUILTIN [${argv[0]}] ARGV [${argv[1]}]\n`.green)
 	},
 	"reload": (argv) => {
-		console.log(`RELOAD BUILTIN [${argv[0]}] ARGV [${argv[1]}]\n`)
+		console.log(`RELOAD BUILTIN [${argv[0]}] ARGV [${argv[1]}]\n`.green)
 	},
 	"shutdown": (argv) => {
-		console.log(`SHUTDOWN BUILTIN [${argv[0]}] ARGV [${argv[1]}]\n`)
+		console.log(`SHUTDOWN BUILTIN [${argv[0]}] ARGV [${argv[1]}]\n`.green)
 	},
 	"help": (argv) => {
-		console.log(`HELP BUILTIN [${argv[0]}] ARGV [${argv[1]}]\n`)		
+		console.log(`HELP BUILTIN [${argv[0]}] ARGV [${argv[1]}]\n`.green)		
 		argv.length === 1 ? help.Basic(argv) : help.Advance(argv)
 	},
 	"error": (argv) => {
-		console.log(`ERROR BUILTIN [${argv[0]}] ARGV [${argv[1]}]\n`)
+		console.log(`ERROR BUILTIN [${argv[0]}] ARGV [${argv[1]}]\n`.red)
 		console.error(`*** Unknown syntax: ${argv[0]}`)
 	}
 }

@@ -1,9 +1,8 @@
 {
 	"ls": {
-		"cmd": "ls"
+		"cmd": "/bin/ls"
 	},
-
-	"cat": {
-		"cmd": "cat"
+	"pwd": {
+		"cmd": "/bin/pwd"
 	}
 }
