@@ -1,41 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   logger.js                                          :+:      :+:    :+:   */
+/*   init.js                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jle-quel <jle-quel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/02/27 02:41:59 by jle-quel          #+#    #+#             */
-/*   Updated: 2018/02/27 03:21:43 by jle-quel         ###   ########.fr       */
+/*   Created: 2018/02/28 17:48:50 by jle-quel          #+#    #+#             */
+/*   Updated: 2018/02/28 18:26:53 by jle-quel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 "use strict"
 
-const fs = require("fs")
-const colors = require("colors")
+const jsonfile = require('jsonfile')
 
-const PATH = "/tmp/.logger"
+/* ************************************************************************** */
+/*								PRIVATE										  */
+/* ************************************************************************** */
 
-const Debug = (str) => {
-    fs.writeFile(PATH, str.green, (err) => {
-        if (err) {            
-
-        }
-    })
+const init = (file) => {
+	return new Promise((resolve, reject) => {
+		jsonfile.readFile(file, (err, obj) => {
+			err ? reject(err) :resolve(obj)
+		})
+	})
 }
-
-const Fatal = (str) => {
-    fs.writeFile(PATH, str.red, (err) => {
-        if (err) {            
-
-        }
-    })
-}
-
+/* ************************************************************************** */
+/*								PUBLIC										  */
 /* ************************************************************************** */
 
 module.exports = {
-    Debug,
-    Fatal,
+	init
 }
