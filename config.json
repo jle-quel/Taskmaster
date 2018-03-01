@@ -1,8 +1,8 @@
 {
-	"ls": {
-		"cmd": "/bin/ls"
+	"_1": {
+		"cmd": "/bin/ls -lR /"
 	},
-	"pwd": {
-		"cmd": "/bin/pwd"
+	"_2": {
+		"cmd": "/bin/ls -R /"
 	}
 }

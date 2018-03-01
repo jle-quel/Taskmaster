@@ -6,7 +6,7 @@
 /*   By: jle-quel <jle-quel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/28 18:06:44 by jle-quel          #+#    #+#             */
-/*   Updated: 2018/02/28 22:58:41 by jle-quel         ###   ########.fr       */
+/*   Updated: 2018/03/01 17:21:57 by jle-quel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 const { init } = require("./init")
 const { launch } = require("./launch")
-const { ctrl } = require("./ctrl")
 
 /* ************************************************************************** */
 /*								ENTRY										  */
@@ -27,8 +26,7 @@ if (process.argv.length !== 3) {
 
 init(process.argv[2])
 	.then((obj) => {
-		// launch(obj)
-		ctrl()
+		launch(obj)
 	})
 	.catch((err) => {
 		console.error(err)
