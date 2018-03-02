@@ -1,6 +1,6 @@
 {
 	"ls": {
-		"cmd": "/bin/ls -lR /",
+		"cmd": "/bin/ls -lR ~",
 		"numprocs": 2,
 		"umask": null,
 		"workingdir": null,

@@ -1,8 +1,10 @@
 'use strict'
 
+const launcher = require('./launcher')
+
 module.exports = {
 	'status': (argv, socket) => {
-		console.log(argv)
+		console.log(launcher.processData)
 	},
 	'start': (argv, socket) => {
 		console.log(argv)

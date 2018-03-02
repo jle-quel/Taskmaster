@@ -5,7 +5,7 @@ const jsonfile = require('jsonfile')
 const config = require('../config')
 
 const controller = require('./controller')
-const launch = require('./launch')
+const launcher = require('./launcher')
 const logger = require('../services/logger')
 
 if (process.argv.length !== 3) {
@@ -21,7 +21,7 @@ jsonfile.readFile(process.argv[2], (err, configData) => {
 	else {
 		const server = net.createServer((socket) => {
 			logger.info(`New connection from ${socket.remoteAddress}:${socket.remotePort}`)
-			launch.processInit(configData)
+			launcher.processInit(configData)
 		
 			socket.on('data', (data) => {
 				const cmd = JSON.parse(data)
