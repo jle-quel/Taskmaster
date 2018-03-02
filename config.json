@@ -4,7 +4,7 @@
 		"numprocs": null,
 		"umask": null,
 		"workingdir": null,
-		"autostart": null,
+		"autostart": true,
 		"autorestart": null,
 		"exitcodes": null,
 		"startretries": null,

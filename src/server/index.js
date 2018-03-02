@@ -6,14 +6,14 @@
 /*   By: jle-quel <jle-quel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/28 18:06:44 by jle-quel          #+#    #+#             */
-/*   Updated: 2018/03/02 13:12:02 by jle-quel         ###   ########.fr       */
+/*   Updated: 2018/03/02 13:54:50 by jle-quel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 "use strict"
 
 const { init } = require("./init")
-const { launch } = require("./launch")
+const launch = require("./launch")
 const colors = require("colors")
 
 /* ************************************************************************** */
@@ -30,8 +30,11 @@ console.log(`Parent PPID [${process.ppid}]\n`.green)
 
 init(process.argv[2])
 	.then((obj) => {
-		console.error("Ok".green)
-		console.log(obj)
+		console.log("Ok\n".green)
+		launch.auto(obj)
+
+
+		
 	})
 	.catch((err) => {
 		console.error("Error".red)

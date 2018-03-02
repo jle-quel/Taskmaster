@@ -6,7 +6,7 @@
 /*   By: jle-quel <jle-quel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/01 15:41:57 by jle-quel          #+#    #+#             */
-/*   Updated: 2018/03/02 13:13:48 by jle-quel         ###   ########.fr       */
+/*   Updated: 2018/03/02 13:44:51 by jle-quel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,11 @@ const _process = child_process.spawn("echo $TEST", {
     }
 })
 
-_process.stdout.on("data", (data) => {
-    console.log(data.toString())
-})
-
 console.log(`Child PID [${_process.pid}]`.blue)
 console.log(`Child PPID [${process.ppid}]\n`.blue)
 
 _process.stdout.on("data", (data) => {
-
+    console.log(data.toString())
 })
 
 _process.stderr.on("data", (data) => {
