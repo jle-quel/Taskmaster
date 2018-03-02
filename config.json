@@ -1,7 +1,23 @@
 {
 	"ls": {
 		"cmd": "/bin/ls -lR /",
-		"numprocs": null,
+		"numprocs": 2,
+		"umask": null,
+		"workingdir": null,
+		"autostart": true,
+		"autorestart": null,
+		"exitcodes": null,
+		"startretries": null,
+		"starttime": null,
+		"stopsignal": null,
+		"stoptime": null,
+		"stdout": null,
+		"stderr": null,
+		"env": null
+	},
+	"pwd": {
+		"cmd": "/bin/pwd",
+		"numprocs": 1,
 		"umask": null,
 		"workingdir": null,
 		"autostart": true,

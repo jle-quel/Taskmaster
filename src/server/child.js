@@ -6,7 +6,7 @@
 /*   By: jle-quel <jle-quel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/01 15:41:57 by jle-quel          #+#    #+#             */
-/*   Updated: 2018/03/02 15:54:15 by jle-quel         ###   ########.fr       */
+/*   Updated: 2018/03/02 16:24:33 by jle-quel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,19 +19,17 @@ const colors = require('colors')
 /*								PUBLIC										  */
 /* ************************************************************************** */
 
-const _process = child_process.spawn("cat", {
+const _process = child_process.spawn(process.argv[2], {
     shell: true,
 })
 
-console.log(`Child PID [${_process.pid}]`.blue)
-console.log(`Child PPID [${process.ppid}]\n`.blue)
+console.log(`Child PID [${_process.pid}] [${process.argv[2]}]`.blue)
+console.log(`Child PPID [${process.ppid}] [${process.argv[2]}]\n`.blue)
 
 _process.stdout.on("data", (data) => {
-    console.log(data.toString())
 })
 
 _process.stderr.on("data", (data) => {
-    console.error(data.toString())    
 })
 
 _process.on("exit", (code, signal) => {
