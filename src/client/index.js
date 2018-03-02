@@ -5,47 +5,52 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jle-quel <jle-quel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/02/28 18:06:44 by jle-quel          #+#    #+#             */
-/*   Updated: 2018/03/02 16:03:03 by jle-quel         ###   ########.fr       */
+/*   Created: 2018/03/02 14:22:18 by jle-quel          #+#    #+#             */
+/*   Updated: 2018/03/02 15:27:40 by jle-quel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 "use strict"
 
-const colors = require("colors")
 const net = require("net")
-const jsonfile = require('jsonfile')
-
+const colors = require("colors")
+const readline = require("readline")
 const controller = require("./controller")
-const launch = require("./launch")
 
 /* ************************************************************************** */
 /*								ENTRY										  */
 /* ************************************************************************** */
 
-if (process.argv.length !== 3) {
-	console.log("Usage: node src/server/index.js [config.json]")
-	process.exit(1)
-}
+const PORT = 8000
+const HOST = "127.0.0.1"
 
-jsonfile.readFile(process.argv[2], (err, obj) => {
-	if (err) {
-		console.error("500".red)
-	} else {
-		console.log("200".green)
-		launch.auto()			
-	}
+const rl = readline.createInterface({
+	input: process.stdin,
+	output: process.stdout,
+	prompt: "taskmaster> "
 })
 
-const server = net.createServer((socket) => {
-	console.log(`New connection from ${socket.remoteAddress}:${socket.remotePort}`.green)
+const client = net.createConnection(PORT, HOST, () => {
+	console.log(`Connected to ${HOST}:${PORT}\n`.green)
 	
-	socket.on("data", (data) => {
-		const cmd = JSON.parse(data)
-		controller[cmd[0]](cmd, socket)
-	})
+	rl.prompt()
+	rl.on("line", (line) => {
+		const argv = line.trim().split(" ")
 	
-	socket.on("close", () => {
-		console.log(`Lost connection from ${socket.remoteAddress}:${socket.remotePort}`.red)		
+		if (!controller[argv[0]])
+			controller["error"](argv, client)
+		else
+			controller[argv[0]](argv, client)
+		
+		rl.prompt()
 	})
-}).listen(8000)
+})
+
+client.on("data", (data) => {
+	console.log(JSON.parse(data))
+})
+
+client.on("end", (end) => {
+	console.log(`\nDisconnected from ${HOST}:${PORT}`.red)
+	process.exit(0)
+})

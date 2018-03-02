@@ -6,7 +6,7 @@
 /*   By: jle-quel <jle-quel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/28 18:50:02 by jle-quel          #+#    #+#             */
-/*   Updated: 2018/03/02 13:52:32 by jle-quel         ###   ########.fr       */
+/*   Updated: 2018/03/02 15:56:48 by jle-quel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ const colors = require('colors')
 
 const auto = (obj) => {
 	// for (let index = 0; index < obj[key].numprocs; index++) {
-		// if (obj["ls"].autostart === true) {
-			let launcher = child_process.fork("./child", [obj["ls"].cmd])
+	// 	if (obj["ls"].autostart === true) {
+			let launcher = child_process.fork("./child")
 			
 			console.log(`Launcher PID [${launcher.pid}]`.green)
 			console.log(`Launcher PPID [${process.ppid}]\n`.green)
@@ -33,12 +33,8 @@ const auto = (obj) => {
 				console.log(`PID [${msg.pid}]`.yellow)
 				console.log(`MSG [${msg.msg}]`.yellow)
 			})
-		// }
+	// 	}
 	// }
-}
-
-const cmd = () => {
-		
 }
 
 /* ************************************************************************** */

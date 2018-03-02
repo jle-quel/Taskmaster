@@ -1,34 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init.js                                            :+:      :+:    :+:   */
+/*   controller.js                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jle-quel <jle-quel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/02/28 17:48:50 by jle-quel          #+#    #+#             */
-/*   Updated: 2018/02/28 18:55:16 by jle-quel         ###   ########.fr       */
+/*   Created: 2018/03/02 15:32:45 by jle-quel          #+#    #+#             */
+/*   Updated: 2018/03/02 16:03:09 by jle-quel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 "use strict"
 
-const jsonfile = require('jsonfile')
+const colors = require("colors")
 
-/* ************************************************************************** */
-/*								PRIVATE										  */
-/* ************************************************************************** */
-
-const init = (file) => {
-	return new Promise((resolve, reject) => {
-		jsonfile.readFile(file, (err, obj) => {
-			err ? reject(err) :resolve(obj)
-		})
-	})
-}
 /* ************************************************************************** */
 /*								PUBLIC										  */
 /* ************************************************************************** */
 
 module.exports = {
-	init
+	"status": (argv, socket) => {
+		console.log(argv)
+	},
+	"start": (argv, socket) => {
+		console.log(argv)
+	},
+	"stop": (argv, socket) => {
+		console.log(argv)
+	},
+	"restart": (argv, socket) => {
+		console.log(argv)
+	},
+	"reload": (argv, socket) => {
+		console.log(argv)
+	},
+	"shutdown": (argv, socket) => {
+		console.log(argv)
+	},
 }
