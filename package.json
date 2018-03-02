@@ -4,7 +4,8 @@
   "description": "Service Manager",
   "main": "index.js",
   "scripts": {
-    "start": "node ./src/index.js ./config.json"
+    "start:server": "node ./src/server/index.js ./config.json",
+    "start:client": "node ./src/client/index.js"
   },
   "repository": {
     "type": "git",
@@ -17,7 +18,7 @@
   },
   "homepage": "https://github.com/jle-quel/Taskmaster#readme",
   "dependencies": {
-    "colors": "^1.1.2",
-    "jsonfile": "^4.0.0"
+    "jsonfile": "^4.0.0",
+    "winston": "^2.4.0"
   }
 }

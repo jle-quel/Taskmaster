@@ -1,56 +1,43 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   index.js                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jle-quel <jle-quel@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/03/02 14:22:18 by jle-quel          #+#    #+#             */
-/*   Updated: 2018/03/02 15:27:40 by jle-quel         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+'use strict'
 
-"use strict"
+const net = require('net')
+const readline = require('readline')
 
-const net = require("net")
-const colors = require("colors")
-const readline = require("readline")
-const controller = require("./controller")
-
-/* ************************************************************************** */
-/*								ENTRY										  */
-/* ************************************************************************** */
-
-const PORT = 8000
-const HOST = "127.0.0.1"
-
+const logger = require('../services/logger')
+const controller = require('./controller')
+const config = require('../config')
 const rl = readline.createInterface({
 	input: process.stdin,
 	output: process.stdout,
-	prompt: "taskmaster> "
+	prompt: 'taskmaster> '
 })
 
-const client = net.createConnection(PORT, HOST, () => {
-	console.log(`Connected to ${HOST}:${PORT}\n`.green)
-	
+const client = net.createConnection(config.PORT, config.HOST, () => {
+	logger.info(`Connected to ${config.HOST}:${config.PORT}`)
+
 	rl.prompt()
-	rl.on("line", (line) => {
-		const argv = line.trim().split(" ")
-	
-		if (!controller[argv[0]])
-			controller["error"](argv, client)
-		else
-			controller[argv[0]](argv, client)
-		
+	rl.on('line', (line) => {
+		const argv = line.trim().split(' ')
+
+		if (!controller[argv[0]]) controller['error'](argv, client)
+		else controller[argv[0]](argv, client)
+
 		rl.prompt()
 	})
 })
 
-client.on("data", (data) => {
-	console.log(JSON.parse(data))
+rl.on('SIGINT', () => {
+	client.destroy()
+	process.exit(1)
 })
 
-client.on("end", (end) => {
-	console.log(`\nDisconnected from ${HOST}:${PORT}`.red)
+// client.on('data', (data) => {
+// 	console.log(JSON.parse(data))
+// })
+
+client.on('end', (end) => {
+	readline.clearLine(rl, 0)
+	readline.cursorTo(rl, 0)
+	logger.error(`Disconnected from ${config.HOST}:${config.PORT}`)
 	process.exit(0)
 })
