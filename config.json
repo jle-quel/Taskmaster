@@ -1,8 +1,18 @@
 {
-	"_1": {
-		"cmd": "/bin/ls -lR /"
-	},
-	"_2": {
-		"cmd": "/bin/ls -R /"
+	"ls": {
+		"cmd": "/bin/ls -lR /",
+		"numprocs": null,
+		"umask": null,
+		"workingdir": null,
+		"autostart": null,
+		"autorestart": null,
+		"exitcodes": null,
+		"startretries": null,
+		"starttime": null,
+		"stopsignal": null,
+		"stoptime": null,
+		"stdout": null,
+		"stderr": null,
+		"env": null
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: jle-quel <jle-quel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/28 18:50:02 by jle-quel          #+#    #+#             */
-/*   Updated: 2018/03/01 17:21:55 by jle-quel         ###   ########.fr       */
+/*   Updated: 2018/03/02 13:25:38 by jle-quel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,27 +19,12 @@ const colors = require('colors')
 /*								PRIVATE										  */
 /* ************************************************************************** */
 
-const getCommand = (cmd) => {
-	return cmd.split(" ")
-}
-
 const launch = (obj) => {
-	console.log(`Parent PID [${process.pid}]`.green)
-	console.log(`Parent PPID [${process.ppid}]`.green)
-
-	// for (let key in obj) {
-		const cmd = getCommand(obj["_1"].cmd)
-
-		const args = cmd.filter((elem, index) => {
-			if (index >= 1) return true
-			return false
-		})
-
-		console.log("**", args)
-		let launcher = child_process.fork("./child", [cmd[0], args])
-
+	for (let index = 0; index < obj[key].numprocs; index++) {
+		let launcher = child_process.fork("./child", [obj["_1"].cmd])
+		
 		console.log(`Launcher PID [${launcher.pid}]`.green)
-		console.log(`Launcher PPID [${process.ppid}]`.green)
+		console.log(`Launcher PPID [${process.ppid}]\n`.green)
 		
 		launcher.on("message", (msg) => {
 			console.log(`Code [${msg.code}]`.yellow)
@@ -47,7 +32,7 @@ const launch = (obj) => {
 			console.log(`PID [${msg.pid}]`.yellow)
 			console.log(`MSG [${msg.msg}]`.yellow)
 		})
-	// }	
+	}
 }
 
 /* ************************************************************************** */

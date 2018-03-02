@@ -6,7 +6,7 @@
 /*   By: jle-quel <jle-quel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/28 18:06:44 by jle-quel          #+#    #+#             */
-/*   Updated: 2018/03/01 17:21:57 by jle-quel         ###   ########.fr       */
+/*   Updated: 2018/03/02 13:12:02 by jle-quel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 const { init } = require("./init")
 const { launch } = require("./launch")
+const colors = require("colors")
 
 /* ************************************************************************** */
 /*								ENTRY										  */
@@ -24,10 +25,14 @@ if (process.argv.length !== 3) {
 	process.exit(1)
 }
 
+console.log(`Parent PID [${process.pid}]`.green)
+console.log(`Parent PPID [${process.ppid}]\n`.green)
+
 init(process.argv[2])
 	.then((obj) => {
-		launch(obj)
+		console.error("Ok".green)
+		console.log(obj)
 	})
 	.catch((err) => {
-		console.error(err)
+		console.error("Error".red)
 	})
