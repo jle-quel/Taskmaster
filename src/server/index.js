@@ -1,51 +1,37 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   index.js                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jle-quel <jle-quel@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/02/28 18:06:44 by jle-quel          #+#    #+#             */
-/*   Updated: 2018/03/02 16:16:23 by jle-quel         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+'use strict'
 
-"use strict"
-
-const colors = require("colors")
-const net = require("net")
+const net = require('net')
 const jsonfile = require('jsonfile')
+const config = require('../config')
 
-const controller = require("./controller")
-const launch = require("./launch")
-
-/* ************************************************************************** */
-/*								ENTRY										  */
-/* ************************************************************************** */
+const controller = require('./controller')
+const launcher = require('./launcher')
+const logger = require('../services/logger')
 
 if (process.argv.length !== 3) {
-	console.log("Usage: node src/server/index.js [config.json]")
+	logger.error('Usage: node src/server/index.js [config.json]')
 	process.exit(1)
 }
 
-jsonfile.readFile(process.argv[2], (err, obj) => {
+jsonfile.readFile(process.argv[2], (err, configData) => {
 	if (err) {
-		console.error("500".red)
-	} else {
-		console.log("200".green)
-		launch.auto(obj)		
+		logger.error('Bad config file')
+		process.exit(1)
 	}
+	else {
+		const server = net.createServer((socket) => {
+			logger.info(`New connection from ${socket.remoteAddress}:${socket.remotePort}`)
+			launcher.processInit(configData)
+		
+			socket.on('data', (data) => {
+				const cmd = JSON.parse(data)
+				
+				controller[cmd[0]](cmd, socket)
+			})
+			
+			socket.on('end', () => {
+				logger.warn(`Lost connection from ${socket.remoteAddress}:${socket.remotePort}`)
+			})
+		}).listen(8000, () => logger.info(`Server is running on PORT: ${config.PORT}`))
+	} 
 })
-
-// const server = net.createServer((socket) => {
-// 	console.log(`New connection from ${socket.remoteAddress}:${socket.remotePort}`.green)
-	
-// 	socket.on("data", (data) => {
-// 		const cmd = JSON.parse(data)
-// 		controller[cmd[0]](cmd, socket)
-// 	})
-	
-// 	socket.on("close", () => {
-// 		console.log(`Lost connection from ${socket.remoteAddress}:${socket.remotePort}`.red)		
-// 	})
-// }).listen(8000)
