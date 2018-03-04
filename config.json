@@ -5,13 +5,13 @@
 		"umask": 0,
 		"workingdir": "",
 		"autostart": true,
-		"autorestart": true,
+		"autorestart": false,
 		"exitcode": 0,
 		"startretries": 0,
 		"starttime": 0,
-		"stopsignal": 1,
+		"stopsignal": 2,
 		"stoptime": 0,
-		"stdout": "",
+		"stdout": "false",
 		"stderr": "false",
 		"env": {
 			"TEST": "lol"

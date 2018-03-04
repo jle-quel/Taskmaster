@@ -6,22 +6,23 @@ const jsonfile = require('jsonfile')
 const config = require('../config')
 const logger = require('../services/logger')
 const init = require('./init')
-const parser = require('./parser')
+const configParser = require('./parser')
 
 if (process.argv.length !== 3) {
 	logger.error('Usage: node src/server/index.js [config.json]')
 	process.exit(1)
 }
 
-
-parser(process.argv[2])
-.then((configData) => {
+configParser(process.argv[2])
+.then((configParsed) => {
 	logger.info('Config file has been parsed successfully')
-	init(configData)
 	
+	const getConfig = config.GET_CONFIG()
+	getConfig(configParsed)
+	init(getConfig)
 })
-.catch(() => {
-	logger.error('Bad config file')
+.catch((err) => {
+	logger.error(err)
 	process.exit(1)
 })
 
