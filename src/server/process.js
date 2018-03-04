@@ -4,27 +4,29 @@ const child_process = require('child_process')
 
 const logger = require('../services/logger')
 
-const _process = child_process.spawn("echo $TEST", [], JSON.parse(process.argv[3]))
-logger.info(`Child launched with PID: ${_process.pid} and CMD: ${_process.spawnargs[2]}`)
+const data = {}
 
-process.send({
-  'status': 'RUNNING',
-  'code': null,
-  'signal': null,
-  'pid': _process.pid
-})
+const processEventsInit = (launcher) => {
+	launcher.on('message', (processInfo) => {
+		if (processInfo.status === 'FINISH')
+			delete data[processInfo.pid]
+		else {
+			data[processInfo.pid] = {
+				'status': processInfo.status,
+				'code': processInfo.code,
+				'signal': processInfo.signal,
+				'pid': processInfo.pid
+			}
+		}
+	})
+}
 
-_process.stdout.on('data', (data) => {
-	console.log(data.toString())
-})
+const launcher = (cmd, spawnOptions, ioOptions) => {
+	const launcher = child_process.fork('./child-process', [cmd, JSON.stringify(spawnOptions), ioOptions])
+	processEventsInit(launcher)
+}
 
-_process.stderr.on('data', (data) => {})
-
-_process.on('exit', (code, signal) => {
-  process.send({
-    'status': 'FINISH',
-    'code': code,
-    'signal': signal,
-    'pid': _process.pid
-  })
-})
+module.exports = {
+	data,
+	launcher
+}

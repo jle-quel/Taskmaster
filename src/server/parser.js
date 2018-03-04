@@ -1,24 +1,15 @@
 'use strict'
 
-const parseData = {}
+const jsonfile = require('jsonfile')
 
-const getOptions = (obj) => {
-	return {
-		shell: true,
-		cwd: obj.workingdir,
-		env: obj.env
-	}
-}
-
-const parser = (configData, callback) => {
-	for (const key in configData) {
-		parseData[configData[key].cmd] = {
-			opt: getOptions(configData[key])
+const parser = (file, callback) => {
+	jsonfile.readFile(process.argv[2], (err, configData) => {
+		if (err) {
+			logger.error('Bad config file')
+			process.exit(1)
 		}
-		// parseData[configDa]
-		// const options = getOptions(configData[key])
-	}
-	console.log(parseData)	
+		callback(configData)
+	})
 }
 
 module.exports = {
