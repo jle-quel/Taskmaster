@@ -7,11 +7,12 @@ const index = require('./index')
 
 const data = {}
 
-const processEventsInit = (_process, processConfig) => {
+const processEventsInit = (_process, processConfig, numOfRestart) => {
 	_process.on('message', (processInfo) => {
 		if (processInfo.status === 'FINISH') {
-			if (processConfig.autorestart === true || processInfo.code !== processConfig.exitcode)
-				launcher(processConfig)
+			if (processConfig.autorestart === true || processInfo.code !== processConfig.exitcode) {
+				launcher(processConfig, numOfRestart + 1)
+			}
 			else
 				delete data[processInfo.pid]
 		}
@@ -37,12 +38,13 @@ const getIoOptions = (configData) => ({
 	'stdout': configData.stdout
 })
 
-const launcher = (processConfig) => {
+const launcher = (processConfig, numOfRestart) => {
 	const spawnOptions = JSON.stringify(getSpawnOptions(processConfig))
 	const ioOptions = JSON.stringify(getIoOptions(processConfig))
 
+	if (numOfRestart === processConfig.stoptime) return
 	const _process = child_process.fork('./src/server/child-process', [processConfig.cmd, spawnOptions, ioOptions])
-	processEventsInit(_process, processConfig)
+	processEventsInit(_process, processConfig, numOfRestart)
 }
 
 module.exports = {
