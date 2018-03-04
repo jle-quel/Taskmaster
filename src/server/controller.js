@@ -4,7 +4,7 @@ const launcher = require('./launcher')
 
 module.exports = {
 	'status': (argv, socket) => {
-		console.log(launcher.processData)
+		console.log(argv)
 	},
 	'start': (argv, socket) => {
 		console.log(argv)

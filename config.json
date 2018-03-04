@@ -1,7 +1,7 @@
 {
 	"ls": {
-		"cmd": "/bin/ls -lR ~/Desktop",
-		"numprocs": 2,
+		"cmd": "/bin/ls -lR /",
+		"numprocs": 5,
 		"umask": null,
 		"workingdir": null,
 		"autostart": true,
@@ -13,11 +13,13 @@
 		"stoptime": null,
 		"stdout": null,
 		"stderr": null,
-		"env": null
+		"env": {
+			"TEST": "lol"
+		}
 	},
 	"pwd": {
 		"cmd": "/bin/pwd",
-		"numprocs": 1,
+		"numprocs": 5,
 		"umask": null,
 		"workingdir": null,
 		"autostart": true,
