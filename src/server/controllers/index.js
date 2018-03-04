@@ -4,7 +4,7 @@ const process = require('../process')
 
 module.exports = {
 	'status': (argv, socket) => {
-		console.log(process.data)
+		console.log(argv)
 	},
 	'start': (argv, socket) => {
 		console.log(argv)

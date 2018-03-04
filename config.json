@@ -1,36 +1,20 @@
 {
 	"ls": {
-		"cmd": "/bin/ls -lR /",
+		"cmd": "ls -lR /",
 		"numprocs": 1,
-		"umask": null,
-		"workingdir": null,
+		"umask": 0,
+		"workingdir": "",
 		"autostart": true,
-		"autorestart": null,
-		"exitcodes": null,
-		"startretries": null,
-		"starttime": null,
-		"stopsignal": null,
-		"stoptime": null,
-		"stdout": null,
-		"stderr": null,
+		"autorestart": false,
+		"exitcode": 0,
+		"startretries": 0,
+		"starttime": 0,
+		"stopsignal": 1,
+		"stoptime": 0,
+		"stdout": "",
+		"stderr": "false",
 		"env": {
 			"TEST": "lol"
 		}
-	},
-	"pwd": {
-		"cmd": "/bin/pwd",
-		"numprocs": 0,
-		"umask": null,
-		"workingdir": null,
-		"autostart": true,
-		"autorestart": null,
-		"exitcodes": null,
-		"startretries": null,
-		"starttime": null,
-		"stopsignal": null,
-		"stoptime": null,
-		"stdout": null,
-		"stderr": null,
-		"env": null
 	}
 }
