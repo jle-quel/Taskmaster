@@ -1,7 +1,7 @@
 const jsonfile = require('jsonfile')
 
 module.exports = (filePath) => {
-	return new Promise((configolve, reject) => {
+	return new Promise((resolve, reject) => {
 		jsonfile.readFile(filePath, (err, config) => {
 			if (err) reject(err)
 
@@ -27,12 +27,12 @@ module.exports = (filePath) => {
 					![15, 1, 2, 3, 4, 30, 31].includes(config[processName].stopsignal)
 				) reject(err)
 				if (typeof config[processName].stopwaitsecs !== 'number' && config[processName].stopwaitsecs > -1) reject(err)
-				if (typeof config[processName].stderr !== 'string' && config[processName].stderr.length > 0) reject(err)
-				if (typeof config[processName].stdout !== 'string' && config[processName].stdout.length > 0) reject(err)
+				if (typeof config[processName].stderr !== 'string') reject(err)
+				if (typeof config[processName].stdout !== 'string') reject(err)
 				if (typeof config[processName].env !== 'object') reject(err)
-				if (typeof config[processName].umask !== 'number') reject(err)
+				if (typeof config[processName].umask !== 'string' || parseInt(config[processName].umask) < 0 || parseInt(config[processName].umask) > 777) reject(err)
 			}
-			configolve(config)
+			resolve(config)
 		})
 	})
 }

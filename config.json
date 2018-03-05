@@ -10,9 +10,9 @@
 		"startsecs": 0,
 		"stopsignal": 2,
 		"stoptime": 0,
-		"stdout": "false",
-		"stderr": "false",
-		"umask": 0,
+		"stdout": "",
+		"stderr": "",
+		"umask": "000",
 		"env": {
 			"TEST": "lol"
 		}

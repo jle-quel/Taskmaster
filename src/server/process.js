@@ -7,14 +7,15 @@ const index = require('./index')
 
 const data = {}
 
-const processEventsInit = (_process, getConfig, key, numOfRestart) => {
-	const config = getConfig()
-	
+const processEventsInit = (_process, processConfig, numOfRestart) => {
 	_process.on('message', (processInfo) => {
 		if (processInfo.status === 'FINISH') {
-			if (config[key].autorestart === "always" || 
-				config[key].autorestart === "unexpected" && processInfo.code !== config[key].exitcodes)
-					launcher(getConfig, key, numOfRestart + 1)
+			if (
+				processConfig.autorestart === "always" || 
+				processConfig.autorestart === "unexpected" &&
+				processInfo.code !== processConfig.exitcodes
+			)
+				launcher(getConfig, key, numOfRestart + 1)
 			else
 				delete data[processInfo.pid]
 		}
@@ -23,7 +24,8 @@ const processEventsInit = (_process, getConfig, key, numOfRestart) => {
 				'status': processInfo.status,
 				'code': processInfo.code,
 				'signal': processInfo.signal,
-				'pid': processInfo.pid
+				'pid': processInfo.pid,
+				'cmd': processInfo.cmd
 			}
 		}
 	})
@@ -40,14 +42,18 @@ const getIoOptions = (processConfig) => ({
 	'stdout': processConfig.stdout
 })
 
-const launcher = (getConfig, key, numOfRestart) => {
-	const config = getConfig()
-	const spawnOptions = JSON.stringify(getSpawnOptions(config[key]))
-	const ioOptions = JSON.stringify(getIoOptions(config[key]))
+const launcher = (processConfig, numOfRestart) => {
+	const spawnOptions = JSON.stringify(getSpawnOptions(processConfig))
+	const ioOptions = JSON.stringify(getIoOptions(processConfig))
 
-	if (numOfRestart === config.stoptime) return
-	const _process = child_process.fork('./src/server/child-process', [config[key].cmd, spawnOptions, ioOptions])
-	processEventsInit(_process, getConfig, key, numOfRestart)
+	if (numOfRestart === processConfig.stoptime) return
+	const _process = child_process.fork('./src/server/child-process', [
+		processConfig.command,
+		spawnOptions,
+		ioOptions,
+		processConfig.umask
+	])
+	processEventsInit(_process, processConfig, numOfRestart)
 }
 
 module.exports = {

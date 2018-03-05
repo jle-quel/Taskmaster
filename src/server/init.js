@@ -1,13 +1,12 @@
 const index = require('./index')
 const _process = require('./process')
+const processConfig = require('./process-config').get()
 
-module.exports = (getConfig) => {
-	const config = getConfig()
-	
-	for (const key in config) {
-		if (config[key].autostart === true) {
-			for (let index = 0; index < config[key].numprocs; index++) {
-				_process.launcher(getConfig, key, -1)
+module.exports = () => {
+	for (const processName in processConfig) {
+		if (processConfig[processName].autostart) {
+			for (let index = 0; index < processConfig[processName].numprocs; index++) {
+				_process.launcher(processConfig[processName], -1)
 			}
 		}
 	}
