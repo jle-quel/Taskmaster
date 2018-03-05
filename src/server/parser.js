@@ -11,7 +11,7 @@ module.exports = (filePath) => {
 				if (typeof res[key].umask !== 'number') reject(err)
 				if (typeof res[key].workingdir !== 'string') reject(err)
 				if (typeof res[key].autostart !== 'boolean') reject(err)
-				if (typeof res[key].autorestart !== 'boolean') reject(err)
+				if (typeof res[key].autorestart !== 'string') reject(err)
 				if (typeof res[key].exitcode !== 'number') reject(err)
 				if (typeof res[key].startretries !== 'number') reject(err)
 				if (typeof res[key].starttime !== 'number') reject(err)
