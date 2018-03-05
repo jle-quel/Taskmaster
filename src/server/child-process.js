@@ -6,9 +6,9 @@ const fs = require('fs')
 const logger = require('../services/logger')
 const errorCodes = require('../error-codes')
 
-// process.umask(process.argv[5].umask)
-const stdio = JSON.parse(process.argv[4])
 const options = JSON.parse(process.argv[3])
+const stdio = JSON.parse(process.argv[4])
+process.umask(process.argv[5].umask)
 
 const _process = child_process.spawn(process.argv[2], [], options)
 
@@ -16,16 +16,20 @@ process.send({
 	'status': 'BOOTING',
 	'code': null,
 	'signal': null,
-	'pid': null,
+	'pid': _process.pid,
 	'cmd': process.argv[2]
 })
 
-// process.send({
-// 	'status': 'RUNNING',
-// 	'code': null,
-// 	'signal': null,
-// 	'pid': _process.pid
-// })
+setTimeout(() => {
+	process.send({
+		'status': 'RUNNING',
+		'code': null,
+		'signal': null,
+		'pid': _process.pid,
+		'cmd': process.argv[2]
+	})
+}
+, parseInt(process.argv[6]) * 1000)
 
 logger.info(`Child launched with PID: ${_process.pid} and CMD: ${_process.spawnargs[2]}`)
 

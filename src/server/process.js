@@ -15,7 +15,7 @@ const processEventsInit = (_process, processConfig, numOfRestart) => {
 				processConfig.autorestart === "unexpected" &&
 				processInfo.code !== processConfig.exitcodes
 			)
-				launcher(getConfig, key, numOfRestart + 1)
+				launcher(processConfig, numOfRestart + 1)
 			else
 				delete data[processInfo.pid]
 		}
@@ -51,7 +51,8 @@ const launcher = (processConfig, numOfRestart) => {
 		processConfig.command,
 		spawnOptions,
 		ioOptions,
-		processConfig.umask
+		processConfig.umask,
+		processConfig.startsecs
 	])
 	processEventsInit(_process, processConfig, numOfRestart)
 }

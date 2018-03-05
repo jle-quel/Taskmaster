@@ -7,7 +7,7 @@
 		"autorestart": "always",
 		"exitcodes": [0],
 		"startretries": 0,
-		"startsecs": 0,
+		"startsecs": 10,
 		"stopsignal": 2,
 		"stoptime": 0,
 		"stdout": "",
