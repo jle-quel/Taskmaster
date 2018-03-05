@@ -15,12 +15,12 @@ if (process.argv.length !== 3) {
 
 configParser(process.argv[2])
 .then((configParsed) => {
-	processConfig.edit(configParsed)
-	initConfig()
+	console.log(configParsed)
+	// processConfig.edit(configParsed)
+	// initConfig()
 })
 .catch((err) => {
-	if (err) logger.error(err)
-	else logger.error('Parser failed')
+	logger.error(err)
 	process.exit(1)
 })
 
