@@ -13,7 +13,7 @@ const processEventsInit = (_process, getConfig, key, numOfRestart) => {
 	_process.on('message', (processInfo) => {
 		if (processInfo.status === 'FINISH') {
 			if (config[key].autorestart === "always" || 
-				config[key].autorestart === "unexpected" && processInfo.code !== config[key].exitcode)
+				config[key].autorestart === "unexpected" && processInfo.code !== config[key].exitcodes)
 					launcher(getConfig, key, numOfRestart + 1)
 			else
 				delete data[processInfo.pid]

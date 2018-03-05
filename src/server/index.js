@@ -21,7 +21,8 @@ configParser(process.argv[2])
 	initConfig(getConfig)
 })
 .catch((err) => {
-	logger.error(err)
+	if (err) logger.error(err)
+	else logger.error('Parser failed')
 	process.exit(1)
 })
 

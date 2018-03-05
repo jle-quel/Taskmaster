@@ -1,18 +1,18 @@
 {
 	"ls": {
-		"cmd": "ls -lR /",
+		"command": "ls -lR /",
 		"numprocs": 1,
-		"umask": 0,
-		"workingdir": "",
+		"directory": "/tmp",
 		"autostart": true,
 		"autorestart": "always",
-		"exitcode": 0,
+		"exitcodes": [0],
 		"startretries": 0,
-		"starttime": 0,
+		"startsecs": 0,
 		"stopsignal": 2,
 		"stoptime": 0,
 		"stdout": "false",
 		"stderr": "false",
+		"umask": 0,
 		"env": {
 			"TEST": "lol"
 		}
