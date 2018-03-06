@@ -25,7 +25,8 @@ const processEventsInit = (_process, processConfig, processName, numOfRestart) =
 				'code': processInfo.code,
 				'signal': processInfo.signal,
 				'pid': processInfo.pid,
-				'cmd': processInfo.cmd
+				'cmd': processInfo.cmd,
+				'time': processInfo.time
 			}
 		}
 	})
