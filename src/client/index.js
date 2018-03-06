@@ -25,10 +25,16 @@ const client = net.createConnection(config.PORT, config.HOST, () => {
 		rl.prompt()
 	})
 
-	// rl.on('SIGINT', () => {
-	// 	client.destroy()
-	// 	process.exit(1)
-	// })
+	rl.on('SIGINT', () => {
+		client.destroy()
+		process.exit(1)
+	})
+})
+
+client.on('data', (data) => {
+	console.log(data.toString())
+	rl.prompt()
+	
 })
 
 client.on('end', (end) => {
