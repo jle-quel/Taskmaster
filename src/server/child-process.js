@@ -4,7 +4,7 @@ const child_process = require('child_process')
 const fs = require('fs')
 
 const logger = require('../services/logger')
-const errorCodes = require('../error-codes')
+const errorCodes = require('../signal-codes')
 
 const options = JSON.parse(process.argv[3])
 const stdio = JSON.parse(process.argv[4])

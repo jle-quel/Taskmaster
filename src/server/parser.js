@@ -3,8 +3,6 @@ const joi = require('joi')
 
 const signalCode = require('../signal-codes')
 
-const envSchema = {"TEST": 'lol'}
-
 const schema = joi.object().keys({
 	command: joi.string().required(),
 	numprocs: joi.number().integer().min(1).default(1),
@@ -32,11 +30,19 @@ module.exports = (filePath) => {
 	return new Promise((resolve, reject) => {
 		jsonfile.readFile(filePath, (err, config) => {
 			if (err) return reject(err)
-			else if (joi.validate(config, joi.object().min(1)).error) return reject('Config file is empty')
-
-			Promise.all(Object.keys(config).map((processName) => joi.validate(config[processName], schema)))
-			.then((configParsed) => resolve(configParsed))
-			.catch((err) => reject(err))
+			
+			joi.validate(config, joi.object().min(1))
+			.then(() => {
+				const configParsed = {}
+				
+				Promise.all(Object.keys(config).map((processName) => {
+					configParsed[processName] = joi.validate(config[processName], schema).value
+					return Promise.resolve(configParsed)
+				}))
+				.then(([configParsed]) => resolve(configParsed))
+				.catch((err) => reject(err))
+			})
+			.catch((err) => reject('Config file is empty'))
 		})
 	})
 }

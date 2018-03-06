@@ -1,18 +1,17 @@
 'use stirct'
 
-let procesConfig = {}
+let processConfig = {ls: {command: 'toto'}}
 
 const get = () => {
-    return procesConfig
+    return processConfig
 }
 
-const edit = (newConfig) => {
-    for (const processName in newConfig) {
-        for (const processNameValue in newConfig[processName]) {
-            if (!procesConfig[processName]) procesConfig[processName] = newConfig[processName]
-            procesConfig[processName][processNameValue] = newConfig[processName][processNameValue]
-        }
-    }
+const edit = (newProcessConfig) => {
+    Object.keys(newProcessConfig).map((newProcessName) => {
+        Object.keys(newProcessConfig[newProcessName]).map((newProcessConfigKey) => {
+            processConfig[newProcessName] = newProcessConfig[newProcessName]
+        })
+    })
 }
 
 module.exports = {

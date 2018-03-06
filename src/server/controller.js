@@ -1,10 +1,15 @@
 'use strict'
 
-const process = require('../process')
+const processConfig = require('./process-config').get()
 
 module.exports = {
-	'status': (argv, socket) => {
-		console.log(argv)
+	'status': (processNames) => {
+		if (processNames.length === 0 || processNames[0] === 'all') {
+
+		} else {
+		
+		}
+		return 'toto'
 	},
 	'start': (argv, socket) => {
 		console.log(argv)
