@@ -9,9 +9,8 @@
 		"startretries": 0,
 		"startsecs": 10,
 		"stopsignal": 2,
-		"stoptime": 0,
-		"stdout": "",
-		"stderr": "",
+		"stdout_logfile": "/tmp",
+		"stderr_logfile": "/tmp",
 		"umask": "000",
 		"env": {
 			"TEST": "lol"
