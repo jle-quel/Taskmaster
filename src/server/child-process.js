@@ -34,7 +34,7 @@ setTimeout(() => {
 logger.info(`Child launched with PID: ${_process.pid} and CMD: ${_process.spawnargs[2]}`)
 
 _process.stdout.on('data', (data) => {
-	if (stdio.stdout.length !== 0) {
+	if (stdio.stdout) {
 		fs.writeFile(stdio.stdout, data.toString(), (err) => {
 			if (err) {
 				// print err in logfile;
@@ -45,7 +45,7 @@ _process.stdout.on('data', (data) => {
 })
 
 _process.stderr.on('data', (data) => {
-	if (stdio.stderr !== 0) {
+	if (stdio.stderr) {
 		fs.writeFile(stdio.stderr, data.toString(), (err) => {
 			if (err) {
 				// print err in logfile;
