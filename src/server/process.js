@@ -7,7 +7,7 @@ const index = require('./index')
 
 const data = {}
 
-const processEventsInit = (_process, processConfig, numOfRestart) => {
+const processEventsInit = (_process, processConfig, processName, numOfRestart) => {
 	_process.on('message', (processInfo) => {
 		if (processInfo.status === 'FINISH') {
 			if (
@@ -15,12 +15,12 @@ const processEventsInit = (_process, processConfig, numOfRestart) => {
 				processConfig.autorestart === "unexpected" &&
 				processInfo.code !== processConfig.exitcodes
 			)
-				launcher(processConfig, numOfRestart + 1)
+				launcher(processConfig, processName, numOfRestart + 1)
 			else
-				delete data[processInfo.pid]
+				delete data[processName]
 		}
 		else {
-			data[processInfo.pid] = {
+			data[processName] = {
 				'status': processInfo.status,
 				'code': processInfo.code,
 				'signal': processInfo.signal,
@@ -42,7 +42,7 @@ const getIoOptions = (processConfig) => ({
 	'stdout': processConfig.stdout
 })
 
-const launcher = (processConfig, numOfRestart) => {
+const launcher = (processConfig, processName, numOfRestart) => {
 	const spawnOptions = JSON.stringify(getSpawnOptions(processConfig))
 	const ioOptions = JSON.stringify(getIoOptions(processConfig))
 
@@ -54,7 +54,7 @@ const launcher = (processConfig, numOfRestart) => {
 		processConfig.umask,
 		processConfig.startsecs
 	])
-	processEventsInit(_process, processConfig, numOfRestart)
+	processEventsInit(_process, processConfig, processName, numOfRestart)
 }
 
 module.exports = {

@@ -33,8 +33,13 @@ module.exports = (filePath) => {
 			
 			joi.validate(config, joi.object().min(1))
 			.then(() => {
-				Promise.all(Object.keys(config).map((processName) => joi.validate(config[processName], schema)))
-				.then((configParsed) => resolve(configParsed))
+				const configParsed = {}
+				
+				Promise.all(Object.keys(config).map((processName) => {
+					configParsed[processName] = joi.validate(config[processName], schema).value
+					return Promise.resolve(configParsed)
+				}))
+				.then(([configParsed]) => resolve(configParsed))
 				.catch((err) => reject(err))
 			})
 			.catch((err) => reject('Config file is empty'))

@@ -31,6 +31,12 @@ const client = net.createConnection(config.PORT, config.HOST, () => {
 	})
 })
 
+client.on('data', (data) => {
+	console.log(data.toString())
+	rl.prompt()
+	
+})
+
 client.on('end', (end) => {
 	readline.clearLine(rl, 0)
 	readline.cursorTo(rl, 0)

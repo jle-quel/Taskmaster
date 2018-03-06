@@ -4,9 +4,11 @@ const net = require('net')
 const jsonfile = require('jsonfile')
 
 const logger = require('../services/logger')
+const config = require('../config')
 const initConfig = require('./init')
 const configParser = require('./parser')
 const processConfig = require('./process-config')
+const controller = require('./controller')
 
 if (process.argv.length !== 3) {
 	logger.error('Usage: npm start')
@@ -30,10 +32,12 @@ const server = net.createServer((socket) => {
 	// 	console.log("Received SIGHUP")
 	// })
 	
-	// socket.on('data', (data) => {
-	// 	const cmd = JSON.parse(data)
-	// 	controller[cmd[0]](cmd, socket)
-	// })
+	socket.on('data', (data) => {
+		const command = JSON.parse(data)
+		
+		const resultToSend = controller[command[0]](command.slice(1))
+		socket.write(resultToSend)
+	})
 	
 	socket.on('end', () => {
 		logger.warn(`Lost connection from ${socket.remoteAddress}:${socket.remotePort}`)
