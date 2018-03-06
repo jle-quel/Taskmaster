@@ -8,6 +8,8 @@ const initConfig = require('./init')
 const configParser = require('./parser')
 const processConfig = require('./process-config')
 
+const fs = require('fs')
+
 if (process.argv.length !== 3) {
 	logger.error('Usage: npm start')
 	process.exit(1)
@@ -16,11 +18,12 @@ if (process.argv.length !== 3) {
 configParser(process.argv[2])
 .then((configParsed) => {
 	console.log(configParsed)
+	logger.write("Hello")
 	// processConfig.edit(configParsed)
 	// initConfig()
 })
 .catch((err) => {
-	logger.error(err)
+	//logger.error(err)
 	process.exit(1)
 })
 
