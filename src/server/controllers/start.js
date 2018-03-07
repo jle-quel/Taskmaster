@@ -5,13 +5,17 @@ const _process = require('../process')
 
 
 const allProcess = () => {
+	const response = []
+	
 	Object.keys(processData).map((processGroupName) => {
 		Object.keys(processData[processGroupName]).map((processName, index) => {
 			if (processData[processGroupName][processName].status === 'STOPPED') {
-				_process.launcher(processData[processGroupName][processName], processGroupName, -1, index)	
+				_process.launcher(processData[processGroupName][processName], processGroupName, -1, index)
+				response.push(`started: ${processData[processGroupName][processName].config.command}`)
 			}
 		})
 	})
+	return response.join('\n')
 }
 
 
