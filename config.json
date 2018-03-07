@@ -1,9 +1,9 @@
 {
 	"ls": {
 		"command": "ls -lR /",
-		"numprocs": 1,
+		"numprocs": 2,
 		"directory": "/tmp",
-		"autostart": true,
+		"autostart": false,
 		"autorestart": "never",
 		"exitcodes": [0],
 		"startretries": 0,
