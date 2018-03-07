@@ -36,7 +36,7 @@ const server = net.createServer((socket) => {
 		const command = JSON.parse(data)
 		
 		const resultToSend = controller[command[0]](command.slice(1))
-		socket.write(resultToSend)
+		if (resultToSend) socket.write(resultToSend)
 	})
 	
 	socket.on('end', () => {

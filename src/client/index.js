@@ -35,9 +35,10 @@ const client = net.createConnection(config.PORT, config.HOST, () => {
 })
 
 client.on('data', (data) => {
+	readline.clearLine(rl, -1)
+	readline.cursorTo(rl, 0)
 	console.log(data.toString())
 	rl.prompt()
-	
 })
 
 client.on('end', (end) => {
