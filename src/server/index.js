@@ -26,20 +26,19 @@ configParser(process.argv[2])
 })
 
 const server = net.createServer((socket) => {
+	let ping = true
 	logger.info(`New connection from ${socket.remoteAddress}:${socket.remotePort}`)
 		
-	// process.on('SIGHUP', () => {
-	// 	console.log("Received SIGHUP")
-	// })
-	
 	socket.on('data', (data) => {
 		const command = JSON.parse(data)
 		
-		const resultToSend = controller[command[0]](command.slice(1))
-		if (resultToSend) socket.write(resultToSend)
+		const resultToSend = controller[command[0]](command.splice(1))
+		if (resultToSend && ping) socket.write(resultToSend)
 	})
 	
 	socket.on('end', () => {
+		ping = false
 		logger.warn(`Lost connection from ${socket.remoteAddress}:${socket.remotePort}`)
 	})
+
 }).listen(8000, () => logger.info(`Server is running on PORT: ${config.PORT}`))

@@ -25,14 +25,10 @@ module.exports = {
 	'shutdown': (argv, client) => {
 		client.write(JSON.stringify(argv))
 	},
-	'help': (argv, client) => {
-		argv.splice(0, 1)
-		
-		if (argv[0])
-			help[argv[0]] ? help[argv[0]]() : help["error"](argv.join(" "))
-		else
-			help["help"]()
-		
+	'help': (argv) => {
+		if (argv.length === 1) help[argv[0]]()
+		else if (argv.length > 2) help["error"](argv.join(" "))
+		else help[argv[1]] ? help[argv[1]]() : help["error"](argv[1]) 
 	},
 	'error': (argv, client) => {
 		console.error(`*** Unknown syntax: ${argv[0]}`)
