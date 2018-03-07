@@ -3,7 +3,7 @@
 		"command": "ls -lR /",
 		"numprocs": 2,
 		"directory": "/tmp",
-		"autostart": false,
+		"autostart": true,
 		"autorestart": "never",
 		"exitcodes": [0],
 		"startretries": 0,

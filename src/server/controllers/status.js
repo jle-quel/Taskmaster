@@ -1,6 +1,7 @@
 'use strict'
 
-const process = require('../process')
+const processData = require('../process-data').get()
+const getOneData = require('../process').getOneData
 
 const getUpTime = (time) => {
 	const timeDiff = Date.now() - time
@@ -18,35 +19,37 @@ module.exports = (processNamesOrGroupName) => {
 	const status = []
 
 	if (!processNamesOrGroupName) {
-		Object.keys(process.data).map((processGroupName) => {
-			const processGroupLength = Object.keys(process.data[processGroupName]).length
+		Object.keys(processData).map((processGroupName) => {
+			const processGroupLength = Object.keys(processData[processGroupName]).length
 
-			Object.keys(process.data[processGroupName]).map((processName) => {
-				const time = getUpTime(process.data[processGroupName][processName].time)
+			Object.keys(processData[processGroupName]).map((processName) => {
+				const time = getUpTime(processData[processGroupName][processName].time)
 
-				if (process.data[processGroupName][processName].status !== 'STARTING') {
-						status.push(`${processGroupLength === 1 ? '' : processGroupName + ':'}${processName}\t${process.data[processGroupName][processName].status}\t\tpid ${process.data[processGroupName][processName].pid}, uptime ${time[0]}:${time[1]}:${time[2]}`)
-				} else status.push(`${processGroupLength === 1 ? '' : processGroupName + ':'}${processName}\t${process.data[processGroupName][processName].status}`)
+				if (processData[processGroupName][processName].status !== 'STARTING') {
+						status.push(`${processGroupLength === 1 ? '' : processGroupName + ':'}${processName}\t${processData[processGroupName][processName].status}\t\tpid ${processData[processGroupName][processName].pid}, uptime ${time[0]}:${time[1]}:${time[2]}`)
+				} else status.push(`${processGroupLength === 1 ? '' : processGroupName + ':'}${processName}\t${processData[processGroupName][processName].status}`)
 			})
 		})
 	}
 	 else {
 		processNamesOrGroupName.map((processNameOrGroupName) => {
-			if (process.data[processNameOrGroupName]) {
-				const processGroupLength = Object.keys(process.data[processNameOrGroupName]).length
+			if (processData[processNameOrGroupName]) {
+				const processGroupLength = Object.keys(processData[processNameOrGroupName]).length
 			
-				Object.keys(process.data[processNameOrGroupName]).map((processName) => {
-					const time = getUpTime(process.data[processNameOrGroupName][processName].time)
+				Object.keys(processData[processNameOrGroupName]).map((processName) => {
+					const time = getUpTime(processData[processNameOrGroupName][processName].time)
 
-					if (process.data[processNameOrGroupName][processName].status !== 'STARTING') {
-						status.push(`${processGroupLength === 1 ? '' : processNameOrGroupName + ':'}${processName}\t${process.data[processNameOrGroupName][processName].status}\t\tpid ${process.data[processNameOrGroupName][processName].pid}, uptime ${time[0]}:${time[1]}:${time[2]}`)
-					} else status.push(`${processGroupLength === 1 ? '' : processNameOrGroupName + ':'}${processName}\t${process.data[processNameOrGroupName][processName].status}`)
+					if (processData[processNameOrGroupName][processName].status !== 'STARTING') {
+						status.push(`${processGroupLength === 1 ? '' : processNameOrGroupName + ':'}${processName}\t${processData[processNameOrGroupName][processName].status}\t\tpid ${processData[processNameOrGroupName][processName].pid}, uptime ${time[0]}:${time[1]}:${time[2]}`)
+					} else status.push(`${processGroupLength === 1 ? '' : processNameOrGroupName + ':'}${processName}\t${processData[processNameOrGroupName][processName].status}`)
 				})
 			}
 			else {
-				const processDataFound = process.getOneData(processNameOrGroupName)
-			
+				const processDataFound = getOneData(processNameOrGroupName)
+
 				if (processDataFound) {
+					const time = getUpTime(processDataFound.time)
+					
 					if (processDataFound.status !== 'STARTING') {
 						status.push(`${processNameOrGroupName}\t${processDataFound.status}\t\tpid ${processDataFound.pid}, uptime ${time[0]}:${time[1]}:${time[2]}`)
 					} else status.push(`${processNameOrGroupName}\t${processDataFound.status}`)

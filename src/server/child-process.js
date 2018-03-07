@@ -16,7 +16,7 @@ process.send({
 	'code': null,
 	'signal': null,
 	'pid': null,
-	'cmd': null,
+	'command': null,
 	'time': null
 })
 
@@ -26,13 +26,13 @@ setTimeout(() => {
 		'code': null,
 		'signal': null,
 		'pid': _process.pid,
-		'cmd': process.argv[2],
+		'command': process.argv[2],
 		'time': Date.now()
 	})
 }
 , parseInt(process.argv[6]) * 1000)
 
-logger.info(`Child launched with PID: ${_process.pid} and CMD: ${_process.spawnargs[2]}`)
+logger.info(`Child launched with PID: ${_process.pid} and command: ${_process.spawnargs[2]}`)
 
 _process.stdout.on('data', (data) => {
 	if (stdio.stdout) {
@@ -62,7 +62,7 @@ _process.on('exit', (code, signal) => {
 	  'code': signal ? 128 + errorCodes[signal] : code,
 	  'signal': signal,
 	  'pid': _process.pid,
-		'cmd': process.argv[2],
-		'time': null
+	  'command': process.argv[2],
+	  'time': null
 	})
 })
