@@ -1,17 +1,21 @@
-"use strict"
+'use strict'
 
 module.exports = {
-	"start": () => {
-		console.log("start <name>\t\tStart a process or group")
-		console.log("start all\t\tStart all processes and group")
+	'start': () => {
+		console.log('start <name/gname>\tStart a process or group')
+		console.log('start all\t\tStart all processes and group')
 	},
-	"help": () => {
-		console.log("default commands (type help <topic>):")
-		console.log("=====================================")
-		console.log("status\t\tstart\t\tstop")
-		console.log("restart\t\treload\t\tshutdown")
+	'status': () => {
+		console.log('status <name/gname>\tGet status for a single or group process')
+		console.log('status	\t\tGet all process status info')
 	},
-	"error": (str) => {
+	'help': () => {
+		console.log('default commands (type help <topic>):')
+		console.log('=====================================')
+		console.log('status\t\tstart\t\tstop')
+		console.log('restart\t\treload\t\tshutdown')
+	},
+	'error': (str) => {
 		console.log(`** No help on ${str}`)
 	}
 }
