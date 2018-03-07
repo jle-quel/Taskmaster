@@ -2,6 +2,7 @@
 
 const processConfig = require('../process-config').get()
 const _process = require('../process')
+const processData = require('../process').data
 
 /*const start = {
 	"started":
@@ -11,11 +12,18 @@ const _process = require('../process')
 
 
 const allProcess = () => {
-	Object.keys(processConfig).map((processGroupName) => {
+	/*Object.keys(processConfig).map((processGroupName) => {
 		const numprocs = processConfig[processGroupName].numprocs
 		for (let index = 0; index < numprocs; index++) {
 			_process.launcher(processConfig[processGroupName], processGroupName, -1, index)
 		}
+	})*/
+	Object.keys(processData).map((processGroupName) => {
+		console.log(processData[processGroupName][processName])
+
+		Object.keys(processData[processGroupName]).map((processName) => {
+			console.log(processData[processGroupName][processName])
+		})
 	})
 	return null
 }
