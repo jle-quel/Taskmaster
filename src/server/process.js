@@ -7,20 +7,19 @@ const index = require('./index')
 
 const data = {}
 
-const processEventsInit = (_process, processConfig, processName, numOfRestart) => {
+const processEventsInit = (_process, processConfig, processGroupName, numOfRestart, numOfProcess) => {
+	const processGroupLength = processConfig.numprocs
+	
 	_process.on('message', (processInfo) => {
-		if (processInfo.status === 'FINISH') {
-			if (
-				processConfig.autorestart === "always" || 
-				processConfig.autorestart === "unexpected" &&
-				processInfo.code !== processConfig.exitcodes
-			)
-				launcher(processConfig, processName, numOfRestart + 1)
-			else
-				delete data[processName]
-		}
+		if (processInfo.status === 'FINISH' && (
+			processConfig.autorestart === "always" || 
+			(processConfig.autorestart === "unexpected" &&
+			processInfo.code !== processConfig.exitcodes)
+		)) launcher(processConfig, processGroupName, numOfRestart + 1)
 		else {
-			data[processName] = {
+			if (!data[processGroupName]) data[processGroupName] = {}
+				
+			data[processGroupName][`${processGroupLength === 1 ? processGroupName : processGroupName + '_' + numOfProcess}`] = {
 				'status': processInfo.status,
 				'code': processInfo.code,
 				'signal': processInfo.signal,
@@ -43,7 +42,7 @@ const getIoOptions = (processConfig) => ({
 	'stdout': processConfig.stdout
 })
 
-const launcher = (processConfig, processName, numOfRestart) => {
+const launcher = (processConfig, processGroupName, numOfRestart, numOfProcess) => {
 	const spawnOptions = JSON.stringify(getSpawnOptions(processConfig))
 	const ioOptions = JSON.stringify(getIoOptions(processConfig))
 
@@ -55,7 +54,7 @@ const launcher = (processConfig, processName, numOfRestart) => {
 		processConfig.umask,
 		processConfig.startsecs
 	])
-	processEventsInit(_process, processConfig, processName, numOfRestart)
+	processEventsInit(_process, processConfig, processGroupName, numOfRestart, numOfProcess)
 }
 
 module.exports = {

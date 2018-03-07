@@ -14,35 +14,60 @@ const getUpTime = (time) => {
 	return [hours, minutes, secondes]
 }
 
-const status = (processNames) => {
+const getProcessData = (processNameToFind) => {
+	for (const processGroupName in processData) {
+		if (Object.keys(processData[processGroupName]).includes(processNameToFind)) return processData[processGroupName][processNameToFind]
+	}
+	return null
+}
+
+const status = (processNamesOrGroupName) => {
 	const status = []
 
-	if (!processNames) {
-		Object.keys(processData).map((processName) => {
-			const time = getUpTime(processData[processName].time)
-			
-			if (processData[processName].status !== 'STARTING') {
-				status.push(`${processName}		${processData[processName].status} 	pid ${processData[processName].pid}, uptime ${time[0]}:${time[1]}:${time[2]}`)
-			} else status.push(`${processName}		${processData[processName].status}`)
-		})
-	} else {
-		processNames.map((processName) => {
-			if (processData[processName]) {
-				const time = getUpTime(processData[processName].time)
+	if (!processNamesOrGroupName) {
+		Object.keys(processData).map((processGroupName) => {
+			const processGroupLength = Object.keys(processData[processGroupName]).length
 
-				if (processData[processName].status !== 'STARTING') {
-					status.push(`${processName}		${processData[processName].status} 	pid ${processData[processName].pid}, uptime ${time[0]}:${time[1]}:${time[2]}`)
-				} else status.push(`${processName}		${processData[processName].status}`)
-			} else status.push(`${processName}: ERROR (no such process)`)
+			Object.keys(processData[processGroupName]).map((processName) => {
+				const time = getUpTime(processData[processGroupName][processName].time)
+
+				if (processData[processGroupName][processName].status !== 'STARTING') {
+						status.push(`${processGroupLength === 1 ? '' : processGroupName + ':'}${processName}		${processData[processGroupName][processName].status} 	pid ${processData[processGroupName][processName].pid}, uptime ${time[0]}:${time[1]}:${time[2]}`)
+				} else status.push(`${processGroupLength === 1 ? '' : processGroupName + ':'}${processName}		${processData[processGroupName][processName].status}`)
+			})
+		})
+	}
+	 else {
+		processNamesOrGroupName.map((processNameOrGroupName) => {
+			if (processData[processNameOrGroupName]) {
+				const processGroupLength = Object.keys(processData[processNameOrGroupName]).length
+			
+				Object.keys(processData[processNameOrGroupName]).map((processName) => {
+					const time = getUpTime(processData[processNameOrGroupName][processName].time)
+
+					if (processData[processNameOrGroupName][processName].status !== 'STARTING') {
+						status.push(`${processGroupLength === 1 ? '' : processNameOrGroupName + ':'}${processName}		${processData[processNameOrGroupName][processName].status} 	pid ${processData[processNameOrGroupName][processName].pid}, uptime ${time[0]}:${time[1]}:${time[2]}`)
+					} else status.push(`${processGroupLength === 1 ? '' : processNameOrGroupName + ':'}${processName}		${processData[processNameOrGroupName][processName].status}`)
+				})
+			}
+			else {
+				const processDataFound = getProcessData(processNameOrGroupName)
+			
+				if (processDataFound) {
+					if (processDataFound.status !== 'STARTING') {
+						status.push(`${processNameOrGroupName}		${processDataFound.status} 	pid ${processDataFound.pid}, uptime ${time[0]}:${time[1]}:${time[2]}`)
+					} else status.push(`${processNameOrGroupName}		${processDataFound.status}`)
+				} else status.push(`${processNameOrGroupName}: ERROR (no such process)`)
+			}
 		})
 	}
 	return status.join('\n')
 }
 
 module.exports = {
-	'status': (processNames) => {
-		if (processNames.length === 0 || processNames[0] === 'all') return status(null)
-		else return status(processNames)
+	'status': (processNamesOrGroupName) => {
+		if (processNamesOrGroupName.length === 0 || processNamesOrGroupName[0] === 'all') return status(null)
+		else return status(processNamesOrGroupName)
 	},
 	'start': (argv, socket) => {
 		console.log(argv)

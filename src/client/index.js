@@ -17,11 +17,14 @@ const client = net.createConnection(config.PORT, config.HOST, () => {
 
 	rl.prompt()
 	rl.on('line', (line) => {
-		const argv = line.trim().split(' ')
+		if (line) {
+			const argv = line.trim().split(' ')
 
-		if (!controller[argv[0]]) controller['error'](argv, client)
-		else controller[argv[0]](argv, client)
-
+			if (!controller[argv[0]])
+				controller["error"](argv)
+			else
+				controller[argv[0]](argv, client)
+		}
 		rl.prompt()
 	})
 

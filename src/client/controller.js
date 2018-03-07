@@ -8,7 +8,14 @@ module.exports = {
 		client.write(JSON.stringify(argv))
 	},
 	'start': (argv, client) => {
-		client.write(JSON.stringify(argv))
+		argv.splice(0, 1)
+
+		if (argv[0])
+			client.write(JSON.stringify(argv))
+		else {
+			console.error("Error")
+			//help()
+		}
 	},
 	'stop': (argv, client) => {
 		client.write(JSON.stringify(argv))

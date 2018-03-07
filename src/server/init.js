@@ -3,11 +3,11 @@ const _process = require('./process')
 const processConfig = require('./process-config').get()
 
 module.exports = () => {
-	Object.keys(processConfig).map((processName) => {
-		if (processConfig[processName].autostart) {
-			const numprocs = processConfig[processName].numprocs
+	Object.keys(processConfig).map((processGroupName) => {
+		if (processConfig[processGroupName].autostart) {
+			const numprocs = processConfig[processGroupName].numprocs
 			for (let index = 0; index < numprocs; index++) {
-				_process.launcher(processConfig[processName], processName, -1)
+				_process.launcher(processConfig[processGroupName], processGroupName, -1, index)
 			}
 		}
 	})
