@@ -39,6 +39,6 @@ module.exports = {
 		
 	},
 	'error': (argv, client) => {
-		logger.error(`*** Unknown syntax: ${argv[0]}`)
+		console.error(`*** Unknown syntax: ${argv[0]}`)
 	}
 }
