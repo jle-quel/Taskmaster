@@ -20,13 +20,18 @@ const client = net.createConnection(config.PORT, config.HOST, () => {
 		if (line) {
 			const argv = line.trim().split(' ')
 
-			if (!controller[argv[0]])
+			if (!controller[argv[0]]) {
 				controller["error"](argv)
-			else
-				controller[argv[0]](argv, client)
-		}
-		rl.prompt()
-	})
+				rl.prompt()
+			}
+			else {
+				const commandToSend = controller[argv[0]](argv)
+
+				if (commandToSend) client.write(JSON.stringify(commandToSend))
+				else rl.prompt()
+			}
+		} else  rl.prompt()
+})
 
 	rl.on('SIGINT', () => {
 		client.destroy()
@@ -35,8 +40,6 @@ const client = net.createConnection(config.PORT, config.HOST, () => {
 })
 
 client.on('data', (data) => {
-	readline.clearLine(rl, -1)
-	readline.cursorTo(rl, 0)
 	console.log(data.toString())
 	rl.prompt()
 })
