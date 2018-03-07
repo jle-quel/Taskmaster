@@ -7,6 +7,15 @@ const index = require('./index')
 
 const data = {}
 
+const getOneData = (processToFind) => {
+	for (const processGroupName in data) {
+		if (Object.keys(data[processGroupName]).includes(processToFind)) {
+			return data[processGroupName][processToFind]
+		}
+	}
+	return null
+}
+
 const processEventsInit = (_process, processConfig, processGroupName, numOfRestart, numOfProcess) => {
 	const processGroupLength = processConfig.numprocs
 	
@@ -59,5 +68,6 @@ const launcher = (processConfig, processGroupName, numOfRestart, numOfProcess) =
 
 module.exports = {
 	data,
+	getOneData,
 	launcher
 }

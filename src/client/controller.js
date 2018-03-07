@@ -3,19 +3,19 @@
 const help = require('./help')
 const logger = require('../services/logger')
 
+const checkCommand = (command) => {
+	if (command[1]) return command
+	else {
+		console.error(`Error: ${command[0]} requires a process name`)
+		help[command[0]]()
+		return null
+	}
+}
+
 module.exports = {
 	'status': (argv) => argv,
-	'start': (argv) => {
-		if (argv[1]) return argv
-		else {
-			console.error("error: start requires a process name")
-			help["start"]()
-			return null
-		}
-	},
-	'stop': (argv, client) => {
-		client.write(JSON.stringify(argv))
-	},
+	'start': (argv) => checkCommand(argv),
+	'stop': (argv) => checkCommand(argv),
 	'restart': (argv, client) => {
 		client.write(JSON.stringify(argv))
 	},
