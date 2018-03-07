@@ -1,6 +1,7 @@
 const index = require('./index')
 const _process = require('./process')
 const processConfig = require('./process-config').get()
+require process data
 
 module.exports = () => {
 	Object.keys(processConfig).map((processGroupName) => {
