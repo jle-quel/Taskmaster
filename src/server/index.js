@@ -3,12 +3,12 @@
 const net = require('net')
 const jsonfile = require('jsonfile')
 
-const logger = require('../services/logger')
 const config = require('../config')
-const initConfig = require('./init')
 const configParser = require('./parser')
-const processConfig = require('./process-config')
+const processData = require('./process-data')
+const _process = require('./process')
 const controller = require('./controller')
+const logger = require('../services/logger')
 
 if (process.argv.length !== 3) {
 	logger.error('Usage: npm start')
@@ -17,8 +17,8 @@ if (process.argv.length !== 3) {
 
 configParser(process.argv[2])
 .then((configParsed) => {
-	processConfig.edit(configParsed)
-	initConfig()
+	processData.init(configParsed)
+	_process.init()
 })
 .catch((err) => {
 	logger.error(err)
