@@ -1,6 +1,8 @@
 'use strict'
 
 const processData = require('./process').data
+const processConfig = require('./process-config').get()
+const _process = require('./process')
 
 const getUpTime = (time) => {
 	const timeDiff = Date.now() - time
@@ -64,13 +66,15 @@ const status = (processNamesOrGroupName) => {
 	return status.join('\n')
 }
 
+const start = require('./controllers/start')
+
 module.exports = {
 	'status': (processNamesOrGroupName) => {
 		if (processNamesOrGroupName.length === 0 || processNamesOrGroupName[0] === 'all') return status(null)
 		else return status(processNamesOrGroupName)
 	},
-	'start': (argv, socket) => {
-		console.log(argv)
+	'start': (argv) => {
+		return argv[0] === "all" ? start.AllProcess() : start.OneProcess(argv)
 	},
 	'stop': (argv, socket) => {
 		console.log(argv)
