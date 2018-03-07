@@ -1,18 +1,17 @@
 "use strict"
 
-const Basic = (argv) => {
-    console.log(`BASIC HELP BUILTIN [${argv[0]}] ARGV [${argv[1]}]\n`)
-    console.log("\ndefault commands (type help <topic>):")
-    console.log("=====================================")
-    console.log("status\t\tstart\t\tstop")
-    console.log("restart\t\treload\t\tshutdown\n")
-}
-
-const Advance = (argv) => {
-	console.log(`ADVANCE HELP BUILTIN [${argv[0]}] ARGV [${argv[1]}]\n`)
-}
-
 module.exports = {
-    Basic,
-    Advance
+	"start": () => {
+		console.log("start <name>\t\tStart a process or group")
+		console.log("start all\t\tStart all processes and group")
+	},
+	"help": () => {
+		console.log("\ndefault commands (type help <topic>):")
+		console.log("=====================================")
+		console.log("status\t\tstart\t\tstop")
+		console.log("restart\t\treload\t\tshutdown\n")
+	},
+	"error": (str) => {
+		console.log(`** No help on ${str}`)
+	}
 }

@@ -13,8 +13,8 @@ module.exports = {
 		if (argv[0])
 			client.write(JSON.stringify(argv))
 		else {
-			console.error("Error")
-			//help()
+			console.error("error: start requires a process name")
+			help["start"]()
 		}
 	},
 	'stop': (argv, client) => {
@@ -30,7 +30,13 @@ module.exports = {
 		client.write(JSON.stringify(argv))
 	},
 	'help': (argv, client) => {
-		argv.length === 1 ? help.Basic(argv) : help.Advance(argv)
+		argv.splice(0, 1)
+		
+		if (argv[0])
+			help[argv[0]] ? help[argv[0]]() : help["error"](argv.join(" "))
+		else
+			help["help"]()
+		
 	},
 	'error': (argv, client) => {
 		logger.error(`*** Unknown syntax: ${argv[0]}`)
