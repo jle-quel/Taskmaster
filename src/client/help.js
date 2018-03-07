@@ -6,10 +6,10 @@ module.exports = {
 		console.log("start all\t\tStart all processes and group")
 	},
 	"help": () => {
-		console.log("\ndefault commands (type help <topic>):")
+		console.log("default commands (type help <topic>):")
 		console.log("=====================================")
 		console.log("status\t\tstart\t\tstop")
-		console.log("restart\t\treload\t\tshutdown\n")
+		console.log("restart\t\treload\t\tshutdown")
 	},
 	"error": (str) => {
 		console.log(`** No help on ${str}`)
