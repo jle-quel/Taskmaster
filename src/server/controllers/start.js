@@ -1,10 +1,14 @@
 'use strict'
 
+const processConfig = require('../process-config').get()
+const _process = require('../process')
+
 /*const start = {
 	"started":
 	"start":
 	"error":
 }*/
+
 
 const allProcess = () => {
 	Object.keys(processConfig).map((processGroupName) => {
@@ -16,7 +20,7 @@ const allProcess = () => {
 	return null
 }
 
-const checkProcess(str) => {
+const checkProcess = (str) => {
 	return "start"
 }
 
