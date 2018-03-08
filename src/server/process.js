@@ -14,7 +14,7 @@ const processEventsInit = (_process, processConfig, processGroupName, numOfResta
 			processInfo.code !== processConfig.exitcodes)
 		)) launcher(processConfig, processGroupName, numOfRestart + 1)
 		else {
-			if (!processData[processGroupName]) data[processGroupName] = {}
+			if (!processData[processGroupName]) processData[processGroupName] = {}
 
 			processData[processGroupName][`${processGroupLength === 1 ? processGroupName : processGroupName + '_' + numOfProcess}`] = {
 				'status': processInfo.status,
