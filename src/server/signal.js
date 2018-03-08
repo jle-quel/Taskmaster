@@ -16,6 +16,7 @@ const handle = (signal) => {
 
 const killAll = () => {
 	console.log("supervisord and all its subprocesses will shut down. This may take several seconds.")
+	process.exit(42)
 }
 
 const log = () => {

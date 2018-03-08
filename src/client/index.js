@@ -3,7 +3,6 @@
 const net = require('net')
 const readline = require('readline')
 
-const logger = require('../services/logger')
 const controller = require('./controller')
 const config = require('../config')
 const rl = readline.createInterface({
@@ -13,8 +12,6 @@ const rl = readline.createInterface({
 })
 
 const client = net.createConnection(config.PORT, config.HOST, () => {
-	logger.info(`Connected to ${config.HOST}:${config.PORT}`)
-
 	rl.prompt()
 	rl.on('line', (line) => {
 		if (line) {
@@ -47,7 +44,6 @@ client.on('data', (data) => {
 client.on('end', (end) => {
 	readline.clearLine(rl, 0)
 	readline.cursorTo(rl, 0)
-	logger.error(`Disconnected from ${config.HOST}:${config.PORT}`)
 	process.exit(0)
 })
 

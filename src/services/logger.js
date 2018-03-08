@@ -9,16 +9,28 @@ const getDate = () => {
 	return event.toUTCString()
 }
 
-const write = (data) => {
-	return new Promise((resolve, reject) => {
-		fs.write(FILEPATH, getDate(), (err) => {
-			if (err) reject(err)
-		})
-				
-		fs.writeFile(FILEPATH, data + "\n", (err) => {
-			if (err) reject(err)
-		})
-		resolve()
+const log = {
+	"INIT": (str) => {
+		if (fs.existsSync(FILEPATH) === true)
+			return `\n\x1b[32mNEW INSTANCE\x1b[0m\n`
+		else
+			return `\x1b[32mNEW INSTANCE\x1b[0m\n`
+	},
+	"INFO": (str) => {
+		return `${getDate()} INFO: ${str}\n`
+	},
+	"WARN": (str) => {
+		return `${getDate()} \x1b[33mWARN\x1b[0m: ${str}\n`
+	}
+}
+
+
+const write = (code, str) => {
+	fs.appendFile(FILEPATH, log[code](str), "utf8", (err) =>  {
+		if (err) {
+			console.error("taskmaster: error in creation of the logger")
+			process.exit(1)
+		}
 	})
 }
 

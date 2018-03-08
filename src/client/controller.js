@@ -1,7 +1,6 @@
 'use strict'
 
 const help = require('./help')
-const logger = require('../services/logger')
 
 const checkCommand = (command) => {
 	if (command[1]) return command
