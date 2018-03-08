@@ -9,6 +9,7 @@ const processData = require('./process-data')
 const _process = require('./process')
 const controller = require('./controllers')
 const logger = require('../services/logger')
+const handleSignal = require('./signal')
 
 if (process.argv.length !== 3) {
 	logger.error('Usage: npm start')
@@ -37,8 +38,8 @@ const server = net.createServer((socket) => {
 			if (resultToSend && ping) socket.write(resultToSend)
 		}
 		else {
-			console.log(command.status)
-			console.log(command.value)
+			const resultToSend = handleSignal(command.value)
+			if (resultToSend && ping) console.log(resultToSend)
 		}
 	})
 	
