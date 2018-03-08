@@ -31,9 +31,15 @@ const server = net.createServer((socket) => {
 		
 	socket.on('data', (data) => {
 		const command = JSON.parse(data)
-		
-		const resultToSend = controller[command[0]](command.splice(1))
-		if (resultToSend && ping) socket.write(resultToSend)
+
+		if (command.status === "command") {
+			const resultToSend = controller[command.value[0]](command.value.splice(1))
+			if (resultToSend && ping) socket.write(resultToSend)
+		}
+		else {
+			console.log(command.status)
+			console.log(command.value)
+		}
 	})
 	
 	socket.on('end', () => {

@@ -25,17 +25,19 @@ const client = net.createConnection(config.PORT, config.HOST, () => {
 				rl.prompt()
 			}
 			else {
-				const commandToSend = controller[argv[0]](argv)
-
-				if (commandToSend) client.write(JSON.stringify(commandToSend))
-				else rl.prompt()
+				const commandToSend = {
+					status: "command",
+					value: controller[argv[0]](argv)
+				}
+				commandToSend.value ? client.write(JSON.stringify(commandToSend)) : rl.prompt()
 			}
-		} else  rl.prompt()
-})
+		}
+		else
+			rl.prompt()
+	})
 
 	rl.on('SIGINT', () => {
-		client.destroy()
-		process.exit(1)
+		handleSignal('SIGINT')
 	})
 })
 
@@ -50,3 +52,18 @@ client.on('end', (end) => {
 	logger.error(`Disconnected from ${config.HOST}:${config.PORT}`)
 	process.exit(0)
 })
+
+const handleSignal = (signal) => {
+	const signalToSend = {
+		status: "signal",
+		value: signal
+	}
+	client.write(JSON.stringify(signalToSend))
+}
+
+process.on('SIGHUP', () => handleSignal("SIGHUP"))
+process.on('SIGINT', () => handleSignal("SIGINT"))
+process.on('SIGQUIT', () => handleSignal("SIGQUIT"))
+process.on('SIGALRM', () => handleSignal("SIGALRM"))
+process.on('SIGTERM', () => handleSignal("SIGTERM"))
+process.on('SIGUSR2', () => handleSignal("SIGUSR2"))
