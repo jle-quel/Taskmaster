@@ -3,6 +3,7 @@
 const status = require('./status')
 const start = require('./start')
 const stop = require('./stop')
+const signalCodes = require('../../signal-codes')
 
 module.exports = {
 	'status': (processNamesOrGroupName) => {
@@ -11,8 +12,8 @@ module.exports = {
 	'start': (processNamesOrGroupName) => {
 		return processNamesOrGroupName[0] === "all" ? start.all() : start.one(processNamesOrGroupName)
 	},
-	'stop': (argv) => {
-		return argv[0] === "all" ? stop.allProcess() : start.oneProcess(argv)
+	'stop': (processNamesOrGroupName) => {
+		return processNamesOrGroupName[0] === "all" ? stop.all() : stop.one(processNamesOrGroupName, signalCodes.SIGTERM)
 	},
 	'restart': (argv, socket) => {
 		console.log(argv)
