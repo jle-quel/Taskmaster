@@ -50,9 +50,10 @@ const one = (processNamesOrGroupName) => {
 			})
 		}
 		else {
-			const processDataFound = getByProcessName(processNameOrGroupName)
+			const processInfos = getByProcessName(processNameOrGroupName)
 
-			if (processDataFound) {
+			if (processInfos) {
+				const processDataFound = processInfos[1]
 				const time = getUpTime(processDataFound.time)
 				
 				if (processDataFound.status !== 'STARTING') {

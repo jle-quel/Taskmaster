@@ -26,8 +26,9 @@ const init = (processConfig) => {
 
 const getByProcessName = (processName) => {
 	for (const processGroupName in processData) {
-		if (Object.keys(processData[processGroupName]).includes(processName)) {
-			return processData[processGroupName][processName]
+        const processDataKeys = Object.keys(processData[processGroupName])
+		if (processDataKeys.includes(processName)) {
+			return [processGroupName, processData[processGroupName][processName], processDataKeys.indexOf(processName)]
 		}
 	}
 	return null
