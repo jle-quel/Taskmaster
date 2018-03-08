@@ -1,11 +1,11 @@
 'use strict'
 
-const processData = require('../process-data').get()
+const processData = require('../process-data').getAll()
 const _process = require('../process')
 
 
-const allProcess = () => {
-	const response = []
+const all = () => {
+	const start = []
 	
 	Object.keys(processData).map((processGroupName) => {
 		Object.keys(processData[processGroupName]).map((processName, index) => {
@@ -15,11 +15,11 @@ const allProcess = () => {
 			}
 		})
 	})
-	return response.join('\n')
+	return start.join('\n')
 }
 
 
-const oneProcess = (argv) => {
+const one = (processNamesOrGroupName) => {
 	argv.forEach((element) => {
 		const status = checkProcess(element)
 		console.log(`Element [${element}] Status [${status}]`)
@@ -28,6 +28,6 @@ const oneProcess = (argv) => {
 }
 
 module.exports = {
-	allProcess,
-	oneProcess
+	all,
+	one
 }

@@ -2,16 +2,7 @@
 
 const child_process = require('child_process')
 
-const processData = require('./process-data').get()
-
-const getOneData = (processToFind) => {
-	for (const processGroupName in processData) {
-		if (Object.keys(processData[processGroupName]).includes(processToFind)) {
-			return processData[processGroupName][processToFind]
-		}
-	}
-	return null
-}
+const processData = require('./process-data').getAll()
 
 const processEventsInit = (_process, processConfig, processGroupName, numOfRestart, numOfProcess) => {
 	const processGroupLength = processConfig.config.numprocs
@@ -77,7 +68,6 @@ const init = () => {
 
 
 module.exports = {
-	getOneData,
 	init,
 	launcher
 }

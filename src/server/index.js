@@ -7,7 +7,7 @@ const config = require('../config')
 const configParser = require('./parser')
 const processData = require('./process-data')
 const _process = require('./process')
-const controller = require('./controller')
+const controller = require('./controllers')
 const logger = require('../services/logger')
 
 if (process.argv.length !== 3) {

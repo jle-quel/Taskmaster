@@ -2,7 +2,7 @@
 
 let processData = {}
 
-const get = () => {
+const getAll = () => {
     return processData
 }
 
@@ -24,8 +24,18 @@ const init = (processConfig) => {
 	})
 }
 
+const getByProcessName = (processName) => {
+	for (const processGroupName in processData) {
+		if (Object.keys(processData[processGroupName]).includes(processName)) {
+			return processData[processGroupName][processName]
+		}
+	}
+	return null
+}
+
 module.exports = {
-    get,
+    getByProcessName,
+    getAll,
     init
 }
 
