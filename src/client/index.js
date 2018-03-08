@@ -32,7 +32,7 @@ const client = net.createConnection(config.PORT, config.HOST, () => {
 
 	rl.on('SIGINT', () => {
 		client.destroy()
-		process.exit(130)
+		process.exit(1)
 	})
 })
 
