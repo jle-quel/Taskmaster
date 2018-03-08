@@ -2,32 +2,39 @@
 
 const net = require('net')
 const jsonfile = require('jsonfile')
+const fs = require('fs')
 
 const config = require('../config')
 const configParser = require('./parser')
 const processData = require('./process-data')
 const _process = require('./process')
 const controller = require('./controllers')
+const signal = require('./signal')
 const logger = require('../services/logger')
 
+
 if (process.argv.length !== 3) {
-	logger.error('Usage: npm start')
+	console.error('Usage: npm run start:server')
 	process.exit(1)
 }
 
+logger.write("INIT")
 configParser(process.argv[2])
 .then((configParsed) => {
+	logger.write("INFO", `[${process.argv[2]}] was sucessfully parsed`)
+
 	processData.init(configParsed)
 	_process.init()
 })
 .catch((err) => {
-	logger.error(err)
+	console.error(err)
 	process.exit(1)
 })
 
 const server = net.createServer((socket) => {
 	let ping = true
-	logger.info(`New connection from ${socket.remoteAddress}:${socket.remotePort}`)
+	logger.write("INFO", `New connection from [${socket.remoteAddress}:${socket.remotePort}]`)
+
 		
 	socket.on('data', (data) => {
 		const command = JSON.parse(data)
@@ -37,14 +44,23 @@ const server = net.createServer((socket) => {
 			if (resultToSend && ping) socket.write(resultToSend)
 		}
 		else {
-			console.log(command.status)
-			console.log(command.value)
+			const resultToSend = signal.handle(command.value)
+			if (resultToSend && ping) console.log(resultToSend)
 		}
 	})
 	
 	socket.on('end', () => {
 		ping = false
-		logger.warn(`Lost connection from ${socket.remoteAddress}:${socket.remotePort}`)
+		logger.write("WARN", `Lost connection from [${socket.remoteAddress}:${socket.remotePort}]`)
 	})
+})
 
-}).listen(8000, () => logger.info(`Server is running on PORT: ${config.PORT}`))
+server.listen(8000, () => {
+	logger.write("INFO", `server is running on PORT: [${config.PORT}]`)
+})
+
+process.on('SIGHUP', () => console.log("supervisord will stop all processes, reload the configuration from the first config file it finds, and start all processes."))
+process.on('SIGINT', () => signal.killAll())
+process.on('SIGQUIT', () => signal.killAll())
+process.on('SIGTERM', () => signal.killAll())
+process.on('SIGUSR2', () => signal.log())

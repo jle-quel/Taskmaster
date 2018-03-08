@@ -3,7 +3,6 @@
 const net = require('net')
 const readline = require('readline')
 
-const logger = require('../services/logger')
 const controller = require('./controller')
 const config = require('../config')
 const rl = readline.createInterface({
@@ -13,8 +12,6 @@ const rl = readline.createInterface({
 })
 
 const client = net.createConnection(config.PORT, config.HOST, () => {
-	logger.info(`Connected to ${config.HOST}:${config.PORT}`)
-
 	rl.prompt()
 	rl.on('line', (line) => {
 		if (line) {
@@ -36,9 +33,7 @@ const client = net.createConnection(config.PORT, config.HOST, () => {
 			rl.prompt()
 	})
 
-	rl.on('SIGINT', () => {
-		handleSignal('SIGINT')
-	})
+	rl.on('SIGINT', () => handleSignal(2))
 })
 
 client.on('data', (data) => {
@@ -49,7 +44,6 @@ client.on('data', (data) => {
 client.on('end', (end) => {
 	readline.clearLine(rl, 0)
 	readline.cursorTo(rl, 0)
-	logger.error(`Disconnected from ${config.HOST}:${config.PORT}`)
 	process.exit(0)
 })
 
@@ -61,9 +55,9 @@ const handleSignal = (signal) => {
 	client.write(JSON.stringify(signalToSend))
 }
 
-process.on('SIGHUP', () => handleSignal("SIGHUP"))
-process.on('SIGINT', () => handleSignal("SIGINT"))
-process.on('SIGQUIT', () => handleSignal("SIGQUIT"))
-process.on('SIGALRM', () => handleSignal("SIGALRM"))
-process.on('SIGTERM', () => handleSignal("SIGTERM"))
-process.on('SIGUSR2', () => handleSignal("SIGUSR2"))
+process.on('SIGHUP', () => handleSignal(1))
+process.on('SIGINT', () => handleSignal(2))
+process.on('SIGQUIT', () => handleSignal(3))
+process.on('SIGTERM', () => handleSignal(5))
+process.on('SIGUSR1', () => handleSignal(30))
+process.on('SIGUSR2', () => handleSignal(31))
