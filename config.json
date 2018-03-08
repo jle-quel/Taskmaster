@@ -15,5 +15,8 @@
 		"env": {
 			"TEST": "lol"
 		}
+	},
+	"tail": {
+		"command": "tail -f"
 	}
 }
