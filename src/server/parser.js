@@ -36,8 +36,12 @@ module.exports = (filePath) => {
 				const configParsed = {}
 				
 				Promise.all(Object.keys(config).map((processName) => {
-					configParsed[processName] = joi.validate(config[processName], schema).value
-					return Promise.resolve(configParsed)
+					return joi.validate(config[processName], schema)
+					.then((value) => {
+						configParsed[processName] = value
+						return Promise.resolve(configParsed)
+					})
+				.catch((err) => reject('Parse error config file'))
 				}))
 				.then(([configParsed]) => resolve(configParsed))
 				.catch((err) => reject(err))

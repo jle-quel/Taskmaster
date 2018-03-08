@@ -50,7 +50,10 @@ const server = net.createServer((socket) => {
 			} else {
 				controller[command[0]](command.slice(1))
 				.then((resultToSend) => {
-					if (resultToSend && ping) socket.write(resultToSend)
+					if (ping) {
+						if (!resultToSend) socket.write('No result')
+						else socket.write(resultToSend)
+					}
 				})
 			}
 		})
