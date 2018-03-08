@@ -30,6 +30,8 @@ configParser(process.argv[2])
 	process.exit(1)
 })
 
+const status = require('./controllers/status')
+
 const server = net.createServer((socket) => {
 	socket.server.getConnections((err, numberOfConnections) => {
 		if (numberOfConnections > 1) {
@@ -39,6 +41,8 @@ const server = net.createServer((socket) => {
 	
 		let ping = true
 		logger.write("INFO", `New connection from [${socket.remoteAddress}:${socket.remotePort}]`)
+		status.all()
+			.then((ret) => socket.write(ret))
 
 		socket.on('data', (data) => {
 			const command = JSON.parse(data)
@@ -48,6 +52,7 @@ const server = net.createServer((socket) => {
 				stopAll()
 				.then(() => process.exit(0))
 			} else {
+
 				controller[command[0]](command.slice(1))
 				.then((resultToSend) => {
 					if (ping) {

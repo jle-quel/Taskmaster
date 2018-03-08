@@ -12,7 +12,6 @@ const rl = readline.createInterface({
 })
 
 const client = net.createConnection(config.PORT, config.HOST, () => {
-	rl.prompt()
 	rl.on('line', (line) => {
 		if (line) {
 			const argv = line.trim().split(' ')
