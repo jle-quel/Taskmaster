@@ -36,9 +36,7 @@ const client = net.createConnection(config.PORT, config.HOST, () => {
 			rl.prompt()
 	})
 
-	rl.on('SIGINT', () => {
-		handleSignal('SIGINT')
-	})
+	rl.on('SIGINT', () => handleSignal(2))
 })
 
 client.on('data', (data) => {
@@ -61,9 +59,9 @@ const handleSignal = (signal) => {
 	client.write(JSON.stringify(signalToSend))
 }
 
-process.on('SIGHUP', () => handleSignal("SIGHUP"))
-process.on('SIGINT', () => handleSignal("SIGINT"))
-process.on('SIGQUIT', () => handleSignal("SIGQUIT"))
-process.on('SIGALRM', () => handleSignal("SIGALRM"))
-process.on('SIGTERM', () => handleSignal("SIGTERM"))
-process.on('SIGUSR2', () => handleSignal("SIGUSR2"))
+process.on('SIGHUP', () => handleSignal(1))
+process.on('SIGINT', () => handleSignal(2))
+process.on('SIGQUIT', () => handleSignal(3))
+process.on('SIGTERM', () => handleSignal(5))
+process.on('SIGUSR1', () => handleSignal(30))
+process.on('SIGUSR2', () => handleSignal(31))
