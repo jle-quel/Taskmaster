@@ -11,6 +11,8 @@ const controller = require('./controllers')
 const logger = require('../services/logger')
 const signal = require('./signal')
 
+const fs = require('fs')
+
 if (process.argv.length !== 3) {
 	logger.error('Usage: npm start')
 	process.exit(1)
@@ -22,7 +24,7 @@ configParser(process.argv[2])
 	_process.init()
 })
 .catch((err) => {
-	logger.error(err)
+	//logger.error(err)
 	process.exit(1)
 })
 

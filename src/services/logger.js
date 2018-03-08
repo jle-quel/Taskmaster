@@ -1,6 +1,27 @@
-const winston = require('winston')
+'use strict'
 
-winston.level = 'debug'
-winston.default.transports.console.colorize = true
+const fs = require('fs')
 
-module.exports = winston
+const FILEPATH = './taskmaster.log'
+
+const getDate = () => {
+	const event = new Date(Date.now());
+	return event.toUTCString()
+}
+
+const write = (data) => {
+	return new Promise((resolve, reject) => {
+		fs.write(FILEPATH, getDate(), (err) => {
+			if (err) reject(err)
+		})
+				
+		fs.writeFile(FILEPATH, data + "\n", (err) => {
+			if (err) reject(err)
+		})
+		resolve()
+	})
+}
+
+module.exports = {
+	write
+}
