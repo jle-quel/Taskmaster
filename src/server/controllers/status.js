@@ -46,7 +46,7 @@ const one = (processNamesOrGroupName) => {
 
 				if (_process.status !== 'STARTING' && (_process.status !== 'STOPPED' && _process.pid)) {
 					status.push(`${processGroupLength === 1 ? '' : processNameOrGroupName + ':'}${processName}\t${_process.status}\t\tpid ${_process.pid}, uptime ${time[0]}:${time[1]}:${time[2]}`)
-				} else status.push(`${processGroupLength === 1 ? '' : processGroupName + ':'}${processName}\t${_process.status}\t\t${_process.status === 'STOPPED' && !_process.pid ? 'Not started': ''}`)
+				} else status.push(`${processGroupLength === 1 ? '' : processNameOrGroupName + ':'}${processName}\t${_process.status}\t\t${_process.status === 'STOPPED' && !_process.pid ? 'Not started': ''}`)
 			})
 		}
 		else {
