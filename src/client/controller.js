@@ -13,6 +13,7 @@ const checkCommand = (command) => {
 
 module.exports = {
 	'status': (argv) => argv,
+	'exit': (argv) => process.exit(0),
 	'start': (argv) => checkCommand(argv),
 	'stop': (argv) => checkCommand(argv),
 	'restart': (argv) => checkCommand(argv),
