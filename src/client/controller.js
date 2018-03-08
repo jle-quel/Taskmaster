@@ -18,7 +18,6 @@ module.exports = {
 	'stop': (argv) => checkCommand(argv),
 	'restart': (argv) => checkCommand(argv),
 	'reload': (argv, client) => {
-		client.write(JSON.stringify(argv))
 	},
 	'shutdown': (argv) => {
 		if (argv[1]) {

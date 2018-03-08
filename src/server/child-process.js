@@ -63,14 +63,18 @@ _process.stderr.on('data', (data) => {
 process.on('message', (data) => {
 	processData = data
 })
-	
+
 
 _process.on('exit', (code, signal) => {
+	const returnCode = signal ? 128 + errorCodes[signal] : code
+
 	logger.write("WARN", `Process [${process.argv[2]}] exited with code [${code}]`)
+	if (checkCode(returnCode) === true) //logger.write("INFO", `exited: [${process.argv[2]}] (exit status [${returnCode}]; not expected)`)
+		console.log(processData)
 	if (processData.killedByMe === true) {
 		process.send({
 			'status': 'STOPPED',
-			'code': signal ? 128 + errorCodes[signal] : code,
+			'code': returnCode,
 			'signal': signal,
 			'pid': _process.pid,
 			'killedByMe': false,

@@ -18,6 +18,8 @@ if (process.argv.length !== 3) {
 }
 
 logger.write("INIT")
+logger.write("INFO", `supervisord started with pid [${process.pid}]`)
+
 configParser(process.argv[2])
 .then((configParsed) => {
 	logger.write("INFO", `[${process.argv[2]}] was sucessfully parsed`)
@@ -71,7 +73,7 @@ const server = net.createServer((socket) => {
 })
 
 server.listen(8000, () => {
-	logger.write("INFO", `server is running on PORT: [${config.PORT}]`)
+	logger.write("INFO", `server is running on PORT [${config.PORT}]`)
 })
 
 process.on('SIGHUP', () => console.log("supervisord will stop all processes, reload the configuration from the first config file it finds, and start all processes."))
