@@ -21,15 +21,19 @@ module.exports = {
 	'reload': (argv, client) => {
 		client.write(JSON.stringify(argv))
 	},
-	'shutdown': (argv, client) => {
-		client.write(JSON.stringify(argv))
+	'shutdown': (argv) => {
+		if (argv[1]) {
+			console.error(`Error: ${argv[0]} don't allows arguments`)
+			help[argv[0]]()
+			return null
+		} else return argv
 	},
 	'help': (argv) => {
 		if (argv.length === 1) help[argv[0]]()
 		else if (argv.length > 2) help["error"](argv.join(" "))
 		else help[argv[1]] ? help[argv[1]]() : help["error"](argv[1]) 
 	},
-	'error': (argv, client) => {
+	'error': (argv) => {
 		console.error(`*** Unknown syntax: ${argv[0]}`)
 	}
 }

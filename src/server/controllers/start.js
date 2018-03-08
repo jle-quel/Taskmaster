@@ -16,7 +16,7 @@ const all = () => {
 			}
 		})
 	})
-	return start.join('\n')
+	return Promise.resolve(start.join('\n'))
 }
 
 
@@ -45,7 +45,7 @@ const one = (processNamesOrGroupName) => {
 			} else start.push(`${processNameOrGroupName}: ERROR (no such process)`)
 		}
 	})
-	return start.join('\n')
+	return Promise.resolve(start.join('\n'))
 }
 
 module.exports = {

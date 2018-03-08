@@ -20,11 +20,10 @@ const all = () => {
 				processCopy.send(_process)
 				childProcess.spawn(`kill -${_process.config.stopsignal} ${_process.pid}`, [], {detached: true, shell: true})
 				stop.push(`${_process.config.command}: stopped`)
-				
 			}
 		})
 	})
-	return stop.join('\n')
+	return Promise.resolve(stop.join('\n'))
 }
 
 const one = (processNamesOrGroupName) => {
@@ -64,7 +63,7 @@ const one = (processNamesOrGroupName) => {
 			} else stop.push(`${processNameOrGroupName}: ERROR (no such process)`)
 		}
 	})
-	return stop.join('\n')
+	return Promise.resolve(stop.join('\n'))
 }
 
 module.exports = {

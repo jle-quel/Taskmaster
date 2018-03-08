@@ -30,7 +30,7 @@ const all = () => {
 			} else status.push(`${processGroupLength === 1 ? '' : processGroupName + ':'}${processName}\t${_process.status}\t\t${_process.status === 'STOPPED' && !_process.pid ? 'Not started': ''}`)
 		})
 	})
-	return status.join('\n')
+	return Promise.resolve(status.join('\n'))
 }
 
 const one = (processNamesOrGroupName) => {
@@ -62,7 +62,7 @@ const one = (processNamesOrGroupName) => {
 			} else status.push(`${processNameOrGroupName}: ERROR (no such process)`)
 		}
 	})
-	return status.join('\n')
+	return Promise.resolve(status.join('\n'))
 }
 
 module.exports = {

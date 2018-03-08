@@ -19,8 +19,5 @@ module.exports = {
 	},
 	'reload': (argv, socket) => {
 		console.log(argv)
-	},
-	'shutdown': (argv, socket) => {
-		console.log(argv)
-	},
+	}
 }

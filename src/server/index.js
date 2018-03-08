@@ -9,8 +9,8 @@ const configParser = require('./parser')
 const processData = require('./process-data')
 const _process = require('./process')
 const controller = require('./controllers')
+const stopAll = require('./controllers/stop').all
 const logger = require('../services/logger')
-
 
 if (process.argv.length !== 3) {
 	console.error('Usage: npm run start:server')
@@ -43,8 +43,16 @@ const server = net.createServer((socket) => {
 		socket.on('data', (data) => {
 			const command = JSON.parse(data)
 			
-			const resultToSend = controller[command[0]](command.slice(1))
-			if (resultToSend && ping) socket.write(resultToSend)
+			if (command[0] === 'shutdown') {
+				logger.write("INFO", `Connection to the server stopped from [${socket.remoteAddress}:${socket.remotePort}]`)
+				stopAll()
+				.then(() => process.exit(0))
+			} else {
+				controller[command[0]](command.slice(1))
+				.then((resultToSend) => {
+					if (resultToSend && ping) socket.write(resultToSend)
+				})
+			}
 		})
 
 		socket.on('end', () => {

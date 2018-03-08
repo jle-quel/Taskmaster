@@ -19,6 +19,9 @@ module.exports = {
 		console.log('status\t\tstart\t\tstop')
 		console.log('restart\t\treload\t\tshutdown')
 	},
+	'shutdown': () => {
+		console.log('Stop the server')
+	},
 	'error': (str) => {
 		console.log(`** No help on ${str}`)
 	}
