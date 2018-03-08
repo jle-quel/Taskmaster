@@ -2,7 +2,7 @@
 
 const processData = require('./process-data')
 
-module.exports = (signal) => {
+const handle = (signal) => {
 	const objectToIterate = processData.getAll()
 
 	Object.keys(objectToIterate).map((processGroupName) => {
@@ -12,4 +12,18 @@ module.exports = (signal) => {
 			//stop()
 		})
 	})
+}
+
+const killAll = () => {
+	console.log("supervisord and all its subprocesses will shut down. This may take several seconds.")
+}
+
+const log = () => {
+	console.log("supervisord will close and reopen the main activity log and all child log files.")
+}
+
+module.exports = {
+	handle,
+	kill,
+	log
 }
