@@ -15,9 +15,11 @@ const init = (processConfig) => {
             processData[processGroupName][`${numprocs === 1 ? processGroupName : processGroupName + '_' + index}`] = {
                 config: processConfig[processGroupName],
                 'status': 'STOPPED',
+                'killedByMe': false,
                 'code': null,
                 'signal': null,
                 'pid': null,
+                'ppid': null,
                 'time': null
             }
         }
@@ -34,9 +36,26 @@ const getByProcessName = (processName) => {
 	return null
 }
 
+const getByPid = (pid) => {
+    Object.keys(processData).map((processGroupName) => {
+        Object.keys(processData[processGroupName]).map((processName) => {
+            if (processData[processGroupName][processName].pid === pid) return processData[processGroupName][processName]
+        })
+    })
+	return null
+}
+
+const edit = (dataToEdit, processGroupName, processName) => {
+    Object.keys(dataToEdit).map(key => {
+        processData[processGroupName][processName][key] = dataToEdit[key]
+    })
+}
+
 module.exports = {
     getByProcessName,
     getAll,
-    init
+    getByPid,
+    init,
+    edit
 }
 

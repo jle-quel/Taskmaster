@@ -1,10 +1,12 @@
 'use strict'
 
-const child_process = require('child_process')
+const childProcess = require('child_process')
 const fs = require('fs')
 
 const logger = require('../services/logger')
 const errorCodes = require('../signal-codes')
+
+let processData = {}
 
 const options = JSON.parse(process.argv[3])
 const stdio = JSON.parse(process.argv[4])
@@ -17,7 +19,8 @@ process.send({
 	'code': null,
 	'signal': null,
 	'pid': null,
-	'command': null,
+	'ppid': null,
+	'killedByMe': false,
 	'time': null
 })
 
@@ -27,8 +30,9 @@ setTimeout(() => {
 		'status': 'RUNNING',
 		'code': null,
 		'signal': null,
+		'killedByMe': false,
 		'pid': _process.pid,
-		'command': process.argv[2],
+		'ppid': process.pid,
 		'time': Date.now()
 	})
 }
@@ -56,14 +60,33 @@ _process.stderr.on('data', (data) => {
 	}
 })
 
+process.on('message', (data) => {
+	processData = data
+})
+	
+
 _process.on('exit', (code, signal) => {
 	logger.write("WARN", `Process [${process.argv[2]}] exited with code [${code}]`)
-	process.send({
-	  'status': 'FINISH',
-	  'code': signal ? 128 + errorCodes[signal] : code,
-	  'signal': signal,
-	  'pid': _process.pid,
-	  'command': process.argv[2],
-	  'time': null
-	})
+	if (processData.killedByMe === true) {
+		process.send({
+			'status': 'STOPPED',
+			'code': signal ? 128 + errorCodes[signal] : code,
+			'signal': signal,
+			'pid': _process.pid,
+			'killedByMe': false,
+			'ppid': process.ppid,
+			'time': null
+		})
+	} else {
+		process.send({
+			'status': 'EXITED',
+			'code': signal ? 128 + errorCodes[signal] : code,
+			'signal': signal,
+			'pid': _process.pid,
+			'killedByMe': false,
+			'ppid': process.ppid,
+			'time': null
+		})
+	}
+	process.exit(0)
 })

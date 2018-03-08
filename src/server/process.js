@@ -1,14 +1,15 @@
 'use strict'
 
-const child_process = require('child_process')
+const childProcess = require('child_process')
 
 const processData = require('./process-data').getAll()
+const processDataEdit = require('./process-data').edit
 
 const processEventsInit = (_process, processConfig, processGroupName, numOfRestart, numOfProcess) => {
 	const processGroupLength = processConfig.config.numprocs
-	
+
 	_process.on('message', (processInfo) => {
-		if (processInfo.status === 'FINISH' && (
+			if (processInfo.status === 'FINISH' && (
 			processConfig.autorestart === "always" || 
 			(processConfig.autorestart === "unexpected" &&
 			processInfo.code !== processConfig.exitcodes)
@@ -16,14 +17,12 @@ const processEventsInit = (_process, processConfig, processGroupName, numOfResta
 		else {
 			if (!processData[processGroupName]) processData[processGroupName] = {}
 
-			processData[processGroupName][`${processGroupLength === 1 ? processGroupName : processGroupName + '_' + numOfProcess}`] = {
-				'status': processInfo.status,
-				'code': processInfo.code,
-				'signal': processInfo.signal,
-				'pid': processInfo.pid,
-				'command': processInfo.command,
-				'time': processInfo.time
-			}
+			const processDataInfo = processData[processGroupName][`${processGroupLength === 1 ? processGroupName : processGroupName + '_' + numOfProcess}`]
+			processDataEdit(processInfo, processGroupName, `${processGroupLength === 1 ? processGroupName : processGroupName + '_' + numOfProcess}`)
+
+			delete processDataInfo['process']
+			_process.send(processDataInfo)
+			processDataInfo['process'] = _process
 		}
 	})
 }
@@ -44,7 +43,7 @@ const launcher = (processConfig, processGroupName, numOfRestart, numOfProcess) =
 	const ioOptions = JSON.stringify(getIoOptions(processConfig))
 
 	if (numOfRestart === processConfig.stoptime) return
-	const _process = child_process.fork('./src/server/child-process', [
+	const _process = childProcess.fork('./src/server/child-process', [
 		processConfig.config.command,
 		spawnOptions,
 		ioOptions,

@@ -27,7 +27,7 @@ const all = () => {
 
 			if (_process.status !== 'STARTING' && (_process.status !== 'STOPPED' && _process.pid)) {
 					status.push(`${processGroupLength === 1 ? '' : processGroupName + ':'}${processName}\t${_process.status}\t\tpid ${_process.pid}, uptime ${time[0]}:${time[1]}:${time[2]}`)
-			} else status.push(`${processGroupLength === 1 ? '' : processGroupName + ':'}${processName}\t${_process.status}\t\t${_process.status === 'STOPPED' ? 'Not started': ''}`)
+			} else status.push(`${processGroupLength === 1 ? '' : processGroupName + ':'}${processName}\t${_process.status}\t\t${_process.status === 'STOPPED' && !_process.pid ? 'Not started': ''}`)
 		})
 	})
 	return status.join('\n')
@@ -46,7 +46,7 @@ const one = (processNamesOrGroupName) => {
 
 				if (_process.status !== 'STARTING' && (_process.status !== 'STOPPED' && _process.pid)) {
 					status.push(`${processGroupLength === 1 ? '' : processNameOrGroupName + ':'}${processName}\t${_process.status}\t\tpid ${_process.pid}, uptime ${time[0]}:${time[1]}:${time[2]}`)
-				} else status.push(`${processGroupLength === 1 ? '' : processGroupName + ':'}${processName}\t${_process.status}\t\t${_process.status === 'STOPPED' ? 'Not started': ''}`)
+				} else status.push(`${processGroupLength === 1 ? '' : processGroupName + ':'}${processName}\t${_process.status}\t\t${_process.status === 'STOPPED' && !_process.pid ? 'Not started': ''}`)
 			})
 		}
 		else {
@@ -58,7 +58,7 @@ const one = (processNamesOrGroupName) => {
 				
 				if (processDataFound.status !== 'STARTING') {
 					status.push(`${processNameOrGroupName}\t${processDataFound.status}\t\tpid ${processDataFound.pid}, uptime ${time[0]}:${time[1]}:${time[2]}`)
-				} else status.push(`${processNameOrGroupName}\t${processDataFound.status}\t\t${processDataFound.status === 'STOPPED' ? 'Not started': ''}`)
+				} else status.push(`${processNameOrGroupName}\t${processDataFound.status}\t\t${processDataFound.status === 'STOPPED' && !processDataFound.pid ? 'Not started': ''}`)
 			} else status.push(`${processNameOrGroupName}: ERROR (no such process)`)
 		}
 	})
