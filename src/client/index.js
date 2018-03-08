@@ -37,6 +37,11 @@ const client = net.createConnection(config.PORT, config.HOST, () => {
 	})
 })
 
+client.on('error', (err) => {
+	console.error(err + '\n')
+	process.exit(1)
+})
+
 client.on('data', (data) => {
 	if (data.toString() !== 'No result') console.log(data.toString())
 	rl.prompt()
