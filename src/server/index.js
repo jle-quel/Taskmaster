@@ -9,7 +9,7 @@ const processData = require('./process-data')
 const _process = require('./process')
 const controller = require('./controllers')
 const logger = require('../services/logger')
-const handleSignal = require('./signal')
+const signal = require('./signal')
 
 if (process.argv.length !== 3) {
 	logger.error('Usage: npm start')
@@ -38,7 +38,7 @@ const server = net.createServer((socket) => {
 			if (resultToSend && ping) socket.write(resultToSend)
 		}
 		else {
-			const resultToSend = handleSignal(command.value)
+			const resultToSend = signal.handle(command.value)
 			if (resultToSend && ping) console.log(resultToSend)
 		}
 	})
@@ -49,3 +49,9 @@ const server = net.createServer((socket) => {
 	})
 
 }).listen(8000, () => logger.info(`Server is running on PORT: ${config.PORT}`))
+
+process.on('SIGHUP', () => console.log("supervisord will stop all processes, reload the configuration from the first config file it finds, and start all processes.")
+process.on('SIGINT', () => signal.killAll())
+process.on('SIGQUIT', () => signal.killAll())
+process.on('SIGTERM', () => signal.killAll())
+process.on('SIGUSR2', () => signal.log())
