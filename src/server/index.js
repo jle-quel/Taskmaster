@@ -9,7 +9,6 @@ const configParser = require('./parser')
 const processData = require('./process-data')
 const _process = require('./process')
 const controller = require('./controllers')
-const signal = require('./signal')
 const logger = require('../services/logger')
 
 
@@ -32,26 +31,26 @@ configParser(process.argv[2])
 })
 
 const server = net.createServer((socket) => {
-	let ping = true
-	logger.write("INFO", `New connection from [${socket.remoteAddress}:${socket.remotePort}]`)
-
-		
-	socket.on('data', (data) => {
-		const command = JSON.parse(data)
-
-		if (command.status === "command") {
-			const resultToSend = controller[command.value[0]](command.value.splice(1))
-			if (resultToSend && ping) socket.write(resultToSend)
+	socket.server.getConnections((err, numberOfConnections) => {
+		if (numberOfConnections > 1) {
+			socket.write('Sorry only one connection is allowed')
+			socket.destroy()
 		}
-		else {
-			const resultToSend = signal.handle(command.value)
-			if (resultToSend && ping) console.log(resultToSend)
-		}
-	})
 	
-	socket.on('end', () => {
-		ping = false
-		logger.write("WARN", `Lost connection from [${socket.remoteAddress}:${socket.remotePort}]`)
+		let ping = true
+		logger.write("INFO", `New connection from [${socket.remoteAddress}:${socket.remotePort}]`)
+
+		socket.on('data', (data) => {
+			const command = JSON.parse(data)
+			
+			const resultToSend = controller[command[0]](command.slice(1))
+			if (resultToSend && ping) socket.write(resultToSend)
+		})
+
+		socket.on('end', () => {
+			ping = false
+			logger.write("WARN", `Lost connection from [${socket.remoteAddress}:${socket.remotePort}]`)
+		})
 	})
 })
 
@@ -60,7 +59,4 @@ server.listen(8000, () => {
 })
 
 process.on('SIGHUP', () => console.log("supervisord will stop all processes, reload the configuration from the first config file it finds, and start all processes."))
-process.on('SIGINT', () => signal.killAll())
-process.on('SIGQUIT', () => signal.killAll())
-process.on('SIGTERM', () => signal.killAll())
-process.on('SIGUSR2', () => signal.log())
+process.on('SIGUSR2', () => console.log("log"))

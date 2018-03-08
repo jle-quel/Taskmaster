@@ -22,18 +22,19 @@ const client = net.createConnection(config.PORT, config.HOST, () => {
 				rl.prompt()
 			}
 			else {
-				const commandToSend = {
-					status: "command",
-					value: controller[argv[0]](argv)
-				}
-				commandToSend.value ? client.write(JSON.stringify(commandToSend)) : rl.prompt()
+				const commandToSend = controller[argv[0]](argv)
+
+				if (commandToSend) client.write(JSON.stringify(commandToSend))
+				else rl.prompt()
 			}
 		}
-		else
-			rl.prompt()
+		else rl.prompt()
 	})
 
-	rl.on('SIGINT', () => handleSignal(2))
+	rl.on('SIGINT', () => {
+		client.destroy()
+		process.exit(130)
+	})
 })
 
 client.on('data', (data) => {
@@ -46,18 +47,3 @@ client.on('end', (end) => {
 	readline.cursorTo(rl, 0)
 	process.exit(0)
 })
-
-const handleSignal = (signal) => {
-	const signalToSend = {
-		status: "signal",
-		value: signal
-	}
-	client.write(JSON.stringify(signalToSend))
-}
-
-process.on('SIGHUP', () => handleSignal(1))
-process.on('SIGINT', () => handleSignal(2))
-process.on('SIGQUIT', () => handleSignal(3))
-process.on('SIGTERM', () => handleSignal(5))
-process.on('SIGUSR1', () => handleSignal(30))
-process.on('SIGUSR2', () => handleSignal(31))

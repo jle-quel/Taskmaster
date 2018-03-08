@@ -12,7 +12,7 @@ const options = JSON.parse(process.argv[3])
 const stdio = JSON.parse(process.argv[4])
 process.umask(process.argv[5].umask)
 
-const _process = child_process.spawn(process.argv[2], [], options)
+const _process = childProcess.spawn(process.argv[2], [], options)
 logger.write("INFO", `New process [${process.argv[2]}] starting with PID [${_process.pid}]`)
 process.send({
 	'status': 'STARTING',

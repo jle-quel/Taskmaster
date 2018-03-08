@@ -18,7 +18,7 @@ const all = () => {
 				delete _process['process']
 
 				processCopy.send(_process)
-				childProcess.spawn(`kill ${_process.pid}`, [], {detached: true, shell: true})
+				childProcess.spawn(`kill -${_process.config.stopsignal} ${_process.pid}`, [], {detached: true, shell: true})
 				stop.push(`${_process.config.command}: stopped`)
 				
 			}
@@ -41,7 +41,7 @@ const one = (processNamesOrGroupName) => {
 					delete _process['process']
 
 					processCopy.send(_process)
-					childProcess.spawn(`kill ${_process.pid}`, [], {detached: true, shell: true})
+					childProcess.spawn(`kill -${_process.config.stopsignal} ${_process.pid}`, [], {detached: true, shell: true})
 					stop.push(`${_process.config.command}: stopped`)
 				}
 			})				
@@ -58,7 +58,7 @@ const one = (processNamesOrGroupName) => {
 					delete processDataFound['process']
 
 					processCopy.send(processDataFound)
-					childProcess.spawn(`kill ${processDataFound.pid}`, [], {detached: true, shell: true})
+					childProcess.spawn(`kill -${_process.config.stopsignal} ${processDataFound.pid}`, [], {detached: true, shell: true})
 					stop.push(`${processDataFound.config.command}: stopped`)
 				}
 			} else stop.push(`${processNameOrGroupName}: ERROR (no such process)`)
