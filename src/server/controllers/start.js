@@ -5,14 +5,14 @@ const getByProcessName = require('../process-data').getByProcessName
 const _process = require('../process')
 
 
-const all = () => {
+const all = (restart) => {
 	const start = []
 	
 	Object.keys(processData).map((processGroupName) => {
 		Object.keys(processData[processGroupName]).map((processName, index) => {
-			if (processData[processGroupName][processName].status === 'STOPPED') {
+			if (processData[processGroupName][processName].status === 'STOPPED' || restart) {
 				_process.launcher(processData[processGroupName][processName], processGroupName, -1, index)
-				start.push(`${processData[processGroupName][processName].config.command}: started`)
+				start.push(`${processName}: STARTED`)
 			}
 		})
 	})
@@ -20,15 +20,15 @@ const all = () => {
 }
 
 
-const one = (processNamesOrGroupName) => {
+const one = (processNamesOrGroupName, restart) => {
 	const start = []
 	
 	processNamesOrGroupName.map((processNameOrGroupName) => {
 		if (processData[processNameOrGroupName]) {
 			Object.keys(processData[processNameOrGroupName]).map((processName, index) => {
-				if (processData[processNameOrGroupName][processName].status === 'STOPPED') {
+				if (processData[processNameOrGroupName][processName].status === 'STOPPED' || restart) {
 					_process.launcher(processData[processNameOrGroupName][processName], processNameOrGroupName, -1, index)
-					start.push(`${processData[processNameOrGroupName][processName].config.command}: started`)
+					start.push(`${processName}: started`)
 				}
 			})				
 		}
@@ -37,10 +37,10 @@ const one = (processNamesOrGroupName) => {
 			
 			if (processInfos) {
 				const processDataFound = processInfos[1]
-				
-				if (processDataFound.status === 'STOPPED') {
+
+				if (processDataFound.status === 'STOPPED' || restart) {
 					_process.launcher(processDataFound, processInfos[0], -1, processInfos[2])
-					start.push(`${processDataFound.config.command}: started`)
+					start.push(`${processNameOrGroupName}: STARTED`)
 				}
 			} else start.push(`${processNameOrGroupName}: ERROR (no such process)`)
 		}

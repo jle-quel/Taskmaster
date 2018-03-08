@@ -33,7 +33,7 @@ const one = (processNamesOrGroupName) => {
   processNamesOrGroupName.map((processNameOrGroupName) => {
 		if (processData[processNameOrGroupName]) {
 			Object.keys(processData[processNameOrGroupName]).map((processName, index) => {
-			const processGroupLength = Object.keys(processData[processGroupName]).length
+			const processGroupLength = Object.keys(processData[processNameOrGroupName]).length
 			const _process = processData[processNameOrGroupName][processName]
 			
 				if (_process.status !== 'STOPPED' && _process.status !== 'EXITED') {
@@ -43,7 +43,7 @@ const one = (processNamesOrGroupName) => {
 
 					processCopy.send(_process)
 					childProcess.spawn(`kill -${_process.config.stopsignal} ${_process.pid}`, [], {detached: true, shell: true})
-					stop.push(`${processGroupLength === 1 ? '' : processGroupName + ':'}${processName} STOPPED`)
+					stop.push(`${processGroupLength === 1 ? '' : processNameOrGroupName + ':'}${processName} STOPPED`)
 				}
 			})				
 		}

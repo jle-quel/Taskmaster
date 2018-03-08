@@ -1,30 +1,13 @@
 {
 	"ls": {
 		"command": "ls -lR /",
-		"numprocs": 5,
+		"numprocs": 2,
 		"directory": "/tmp",
 		"autostart": false,
 		"autorestart": "never",
 		"exitcodes": [0],
 		"startretries": 0,
 		"startsecs": 0,
-		"stopsignal": 2,
-		"stdout_logfile": "/tmp",
-		"stderr_logfile": "/tmp",
-		"umask": "000",
-		"env": {
-			"TEST": "lol"
-		}
-	},
-	"ls2": {
-		"command": "ls -lR /",
-		"numprocs": 1,
-		"directory": "/tmp",
-		"autostart": false,
-		"autorestart": "always",
-		"exitcodes": [0],
-		"startretries": 0,
-		"startsecs": 10,
 		"stopsignal": 2,
 		"stdout_logfile": "/tmp",
 		"stderr_logfile": "/tmp",

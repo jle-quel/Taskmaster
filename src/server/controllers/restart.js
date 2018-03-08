@@ -11,8 +11,8 @@ const all = () => {
   
   return stop.all()
   .then((stopResult) => {
-    restart.push(stopResult)
-    return start.all()
+		restart.push(stopResult)
+    return start.all(true)
     .then((startResult) => {
       restart.push(startResult)
       return Promise.resolve(restart.join())
@@ -22,31 +22,38 @@ const all = () => {
 
 
 const one = (processNamesOrGroupName) => {
-	const start = []
+	const restart = []
 	
-	processNamesOrGroupName.map((processNameOrGroupName) => {
+	return Promise.all(processNamesOrGroupName.map((processNameOrGroupName) => {
 		if (processData[processNameOrGroupName]) {
-			Object.keys(processData[processNameOrGroupName]).map((processName, index) => {
-				if (processData[processNameOrGroupName][processName].status === 'STOPPED') {
-					_process.launcher(processData[processNameOrGroupName][processName], processNameOrGroupName, -1, index)
-					start.push(`${processData[processNameOrGroupName][processName].config.command}: started`)
-				}
-			})				
-		}
-		else {
+			return stop.one([processNameOrGroupName])
+			.then((stopResult) => {
+				restart.push(stopResult)
+				return start.one([processNameOrGroupName], true)
+				.then((startResult) => {
+					restart.push(startResult)
+					console.log(startResult)
+					return Promise.resolve(restart.join())
+				})
+			})
+		} else {
 			const processInfos = getByProcessName(processNameOrGroupName)
-			
-			if (processInfos) {
-				const processDataFound = processInfos[1]
-				
-				if (processDataFound.status === 'STOPPED') {
-					_process.launcher(processDataFound, processInfos[0], -1, processInfos[2])
-					start.push(`${processDataFound.config.command}: started`)
-				}
-			} else start.push(`${processNameOrGroupName}: ERROR (no such process)`)
+			const processName = Object.keys(processData[processInfos[0]])[processInfos[2]]
+		
+			return stop.one([processName])
+			.then((stopResult) => {
+				restart.push(stopResult)
+				return start.one([processName], true)
+				.then((startResult) => {
+					restart.push(startResult)
+					return Promise.resolve(restart)
+				})
+			})
 		}
+	}))
+	.then(([restartResult]) => {
+		return Promise.resolve(restartResult.join('\n'))
 	})
-	return Promise.resolve(start.join('\n'))
 }
 
 module.exports = {
