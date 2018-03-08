@@ -10,6 +10,7 @@ const all = () => {
 	
 	Object.keys(processData).map((processGroupName) => {
 		Object.keys(processData[processGroupName]).map((processName, index) => {
+			const processGroupLength = Object.keys(processData[processGroupName]).length
 			const _process = processData[processGroupName][processName]
 		
 			if (_process.status !== 'STOPPED' && _process.status !== 'EXITED') {
@@ -19,7 +20,7 @@ const all = () => {
 
 				processCopy.send(_process)
 				childProcess.spawn(`kill -${_process.config.stopsignal} ${_process.pid}`, [], {detached: true, shell: true})
-				stop.push(`${_process.config.command}: stopped`)
+				stop.push(`${processGroupLength === 1 ? '' : processGroupName + ':'}${processName} STOPPED`)
 			}
 		})
 	})
@@ -32,7 +33,8 @@ const one = (processNamesOrGroupName) => {
   processNamesOrGroupName.map((processNameOrGroupName) => {
 		if (processData[processNameOrGroupName]) {
 			Object.keys(processData[processNameOrGroupName]).map((processName, index) => {
-				const _process = processData[processNameOrGroupName][processName]
+			const processGroupLength = Object.keys(processData[processGroupName]).length
+			const _process = processData[processNameOrGroupName][processName]
 			
 				if (_process.status !== 'STOPPED' && _process.status !== 'EXITED') {
 					processDataEdit({killedByMe: true}, processNameOrGroupName, processName)
@@ -41,7 +43,7 @@ const one = (processNamesOrGroupName) => {
 
 					processCopy.send(_process)
 					childProcess.spawn(`kill -${_process.config.stopsignal} ${_process.pid}`, [], {detached: true, shell: true})
-					stop.push(`${_process.config.command}: stopped`)
+					stop.push(`${processGroupLength === 1 ? '' : processGroupName + ':'}${processName} STOPPED`)
 				}
 			})				
 		}
@@ -52,13 +54,13 @@ const one = (processNamesOrGroupName) => {
 				const processDataFound = processInfos[1]
 				
 				if (processDataFound.status !== 'STOPPED' && processDataFound.status !== 'EXITED') {
-					processDataEdit({killedByMe: true}, processDataFound[0], processNameOrGroupName)
+					processDataEdit({killedByMe: true}, processInfos[0], processNameOrGroupName)
 					const processCopy = processDataFound['process']
 					delete processDataFound['process']
 
 					processCopy.send(processDataFound)
-					childProcess.spawn(`kill -${_process.config.stopsignal} ${processDataFound.pid}`, [], {detached: true, shell: true})
-					stop.push(`${processDataFound.config.command}: stopped`)
+					childProcess.spawn(`kill -${processDataFound.config.stopsignal} ${processDataFound.pid}`, [], {detached: true, shell: true})
+					stop.push(`${processNameOrGroupName} STOPPED`)
 				}
 			} else stop.push(`${processNameOrGroupName}: ERROR (no such process)`)
 		}

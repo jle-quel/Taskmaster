@@ -56,7 +56,7 @@ const one = (processNamesOrGroupName) => {
 				const processDataFound = processInfos[1]
 				const time = getUpTime(processDataFound.time)
 				
-				if (processDataFound.status !== 'STARTING') {
+				if (processDataFound.status !== 'STARTING' && processDataFound.pid) {
 					status.push(`${processNameOrGroupName}\t${processDataFound.status}\t\tpid ${processDataFound.pid}, uptime ${time[0]}:${time[1]}:${time[2]}`)
 				} else status.push(`${processNameOrGroupName}\t${processDataFound.status}\t\t${processDataFound.status === 'STOPPED' && !processDataFound.pid ? 'Not started': ''}`)
 			} else status.push(`${processNameOrGroupName}: ERROR (no such process)`)

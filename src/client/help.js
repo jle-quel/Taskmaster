@@ -9,6 +9,10 @@ module.exports = {
 		console.log('status <name/gname>\tGet status for a single or group process')
 		console.log('status	\t\tGet all process status info')
 	},
+	'restart': () => {
+		console.log('restart <name/gname>\tRestart a single or group process')
+		console.log('restart	\t\tRestart all process')
+	},
 	'stop': () => {
 		console.log('stop <name/gname>\tStop a single or group process')
 		console.log('stop	\t\tStop all process')
