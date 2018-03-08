@@ -50,7 +50,7 @@ const server = net.createServer((socket) => {
 
 }).listen(8000, () => logger.info(`Server is running on PORT: ${config.PORT}`))
 
-process.on('SIGHUP', () => console.log("supervisord will stop all processes, reload the configuration from the first config file it finds, and start all processes.")
+process.on('SIGHUP', () => console.log("supervisord will stop all processes, reload the configuration from the first config file it finds, and start all processes."))
 process.on('SIGINT', () => signal.killAll())
 process.on('SIGQUIT', () => signal.killAll())
 process.on('SIGTERM', () => signal.killAll())

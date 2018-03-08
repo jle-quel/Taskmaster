@@ -24,6 +24,6 @@ const log = () => {
 
 module.exports = {
 	handle,
-	kill,
+	killAll,
 	log
 }
