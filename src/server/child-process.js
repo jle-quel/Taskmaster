@@ -13,7 +13,7 @@ const stdio = JSON.parse(process.argv[4])
 process.umask(process.argv[5].umask)
 
 const _process = childProcess.spawn(process.argv[2], [], options)
-logger.write("INFO", `New process [${process.argv[2]}] starting with PID [${_process.pid}]`)
+logger.write("INFO", `process [${process.argv[2]}] spawn with PID [${_process.pid}]`)
 process.send({
 	'status': 'STARTING',
 	'code': null,
@@ -25,7 +25,7 @@ process.send({
 })
 
 setTimeout(() => {
-	logger.write("INFO", `Process [${process.argv[2]}] is running with PID [${_process.pid}]`)
+	logger.write("INFO", `process [${process.argv[2]}] is running with PID [${_process.pid}]`)
 	process.send({
 		'status': 'RUNNING',
 		'code': null,
@@ -42,7 +42,7 @@ _process.stdout.on('data', (data) => {
 	if (stdio.stdout) {
 		fs.writeFile(stdio.stdout, data.toString(), (err) => {
 			if (err) {
-				// print err in logfile;
+				logger.write("FATAL", `err`)
 				_process.kill(15)
 			}
 		})
@@ -53,7 +53,7 @@ _process.stderr.on('data', (data) => {
 	if (stdio.stderr) {
 		fs.writeFile(stdio.stderr, data.toString(), (err) => {
 			if (err) {
-				// print err in logfile;
+				logger.write("FATAL", `err`)
 				_process.kill(15)
 			}
 		})
