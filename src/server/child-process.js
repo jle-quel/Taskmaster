@@ -42,8 +42,8 @@ _process.stdout.on('data', (data) => {
 	if (stdio.stdout) {
 		fs.writeFile(stdio.stdout, data.toString(), (err) => {
 			if (err) {
-				logger.write("FATAL", `err`)
-				_process.kill(15)
+				logger.write("FATAL", `fs: err`)
+				_process.kill(processData.config.stopsignal)
 			}
 		})
 	}
@@ -53,8 +53,8 @@ _process.stderr.on('data', (data) => {
 	if (stdio.stderr) {
 		fs.writeFile(stdio.stderr, data.toString(), (err) => {
 			if (err) {
-				logger.write("FATAL", `err`)
-				_process.kill(15)
+				logger.write("FATAL", `fs: err`)
+				_process.kill(processData.config.stopsignal)
 			}
 		})
 	}
