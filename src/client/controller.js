@@ -5,7 +5,7 @@ const help = require('./help')
 const checkCommand = (command) => {
   if (command[1]) return command
   else {
-    console.error(`Error: ${command[0]} requires a process name`)
+    console.error(`Error: ${command[0]} requires a process name'}`)
     help[command[0]]()
     return null
   }
@@ -18,6 +18,11 @@ module.exports = {
   'stop': (argv) => checkCommand(argv),
   'restart': (argv) => checkCommand(argv),
   'reload': (argv) => {
+    if (argv.length !== 2) {
+      console.error(`Error: ${argv[0]} don't allows many arguments`)
+      help[argv[0]]()
+      return null
+    } else return argv
   },
   'shutdown': (argv) => {
     if (argv[1]) {

@@ -12,7 +12,7 @@ const logger = require('../services/logger')
 const status = require('./controllers/status')
 
 if (process.argv.length !== 3) {
-  console.error('Usage: npm run start:server')
+  console.error('usage: npm run start:server [configuration file]')
   process.exit(1)
 }
 
@@ -34,17 +34,17 @@ configParser(process.argv[2])
 const server = net.createServer((socket) => {
   socket.server.getConnections((err, numberOfConnections) => {
     if (numberOfConnections > 1) {
-      socket.write('Sorry only one connection is allowed')
+      socket.write(`taskmaster: only one connection is allowed on [${socket.remoteAddress}:${socket.remotePort}]`)
       socket.destroy()
     } else if (err) {
-      socket.write('Error to get number of connections')
+      socket.write('taskmaster: error to get number of connections')
       socket.destroy()
     }
     let ping = true
 
     logger.write('INFO', `new connection from [${socket.remoteAddress}:${socket.remotePort}]`)
     status.all()
-    .then((ret) => socket.write(ret))
+    .then((ret) => { if (ping) socket.write(ret) })
 
     socket.on('data', (data) => {
       const command = JSON.parse(data)
@@ -61,6 +61,7 @@ const server = net.createServer((socket) => {
             else socket.write(resultToSend)
           }
         })
+        .catch((err) => socket.write(err.message))
       }
     })
 
@@ -83,7 +84,4 @@ server.on("error", (err) => {
 })
 
 process.on('SIGHUP', () => console.log("supervisord will stop all processes, reload the configuration from the first config file it finds, and start all processes."))
-process.on('SIGTERM', () => logger.write("WARN", `received SIGTERM indicating exit request`))
-process.on('SIGINT', () => logger.write("WARN", `received SIGINT indicating exit request`))
-process.on('SIGQUIT', () => logger.write("WARN", `received SIGQUIT indicating exit request`))
 process.on('SIGUSR2', () => console.log("log"))
