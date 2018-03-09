@@ -13,7 +13,7 @@ const stdio = JSON.parse(process.argv[4])
 process.umask(process.argv[5].umask)
 
 const _process = childProcess.spawn(process.argv[2], [], options)
-logger.write("INFO", `process [${process.argv[2]}] spawn with PID [${_process.pid}]`)
+logger.write("INFO", `process [${process.argv[2]}] starting with PID [${_process.pid}]`)
 process.send({
 	'status': 'STARTING',
 	'code': null,
@@ -67,9 +67,8 @@ process.on('message', (data) => {
 
 _process.on('exit', (code, signal) => {
 	const returnCode = signal ? 128 + errorCodes[signal] : code
+	logger.write(`${returnCode ? 'WARN' : 'INFO'}`, `exited: [${process.argv[2]}] (exit status [${returnCode}])`)
 
-	if (returnCode) logger.write("WARN", `exited: [${process.argv[2]}] (exit status [${returnCode}])`)
-	else logger.write("INFO", `exited: [${process.argv[2]}] (exit status [${returnCode}])`)
 	if (processData.killedByMe === true) {
 		process.send({
 			'status': 'STOPPED',
@@ -83,7 +82,7 @@ _process.on('exit', (code, signal) => {
 	} else {
 		process.send({
 			'status': 'EXITED',
-			'code': signal ? 128 + errorCodes[signal] : code,
+			'code': returnCode,
 			'signal': signal,
 			'pid': _process.pid,
 			'killedByMe': false,

@@ -43,7 +43,7 @@ const server = net.createServer((socket) => {
 		let ping = true
 		logger.write("INFO", `new connection from [${socket.remoteAddress}:${socket.remotePort}]\n`)
 		status.all()
-			.then((ret) => socket.write(ret))
+		.then((ret) => socket.write(ret))
 
 		socket.on('data', (data) => {
 			const command = JSON.parse(data)
@@ -53,7 +53,6 @@ const server = net.createServer((socket) => {
 				stopAll()
 				.then(() => process.exit(0))
 			} else {
-
 				controller[command[0]](command.slice(1))
 				.then((resultToSend) => {
 					if (ping) {

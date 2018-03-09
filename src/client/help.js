@@ -24,7 +24,7 @@ module.exports = {
 		console.log('restart\t\treload\t\tshutdown\n')
 	},
 	'shutdown': () => {
-		console.log('shutdown \t\tShut the remote supervisord down')
+		console.log('shutdown \t\tShut the remote taskmaster down')
 	},
 	'error': (str) => {
 		console.log(`*** No help on ${str}`)

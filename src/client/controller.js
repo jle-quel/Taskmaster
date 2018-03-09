@@ -17,11 +17,11 @@ module.exports = {
 	'start': (argv) => checkCommand(argv),
 	'stop': (argv) => checkCommand(argv),
 	'restart': (argv) => checkCommand(argv),
-	'reload': (argv, client) => {
+	'reload': (argv) => {
 	},
 	'shutdown': (argv) => {
 		if (argv[1]) {
-			console.error(`Error: ${argv[0]} don't allows arguments`)
+			console.error(`Error: ${argv[0]} don't allows any arguments`)
 			help[argv[0]]()
 			return null
 		} else return argv
