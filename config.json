@@ -1,6 +1,6 @@
 {
-	"nc": {
-		"command": "nc -l 5000",
+	"ls": {
+		"command": "ls -lR /",
 		"numprocs": 2,
 		"directory": "/tmp",
 		"autostart": false,
@@ -15,11 +15,5 @@
 		"env": {
 			"TEST": "lol"
 		}
-	},
-	"tail": {
-		"command": "tail -f"
-	},
-	"error": {
-		"command": "cvbzxcvb"
 	}
 }

@@ -19,5 +19,5 @@ module.exports = {
   'restart': (processNamesOrGroupName) => {
     return processNamesOrGroupName[0] === 'all' ? restart.all() : restart.one(processNamesOrGroupName)
   },
-  'reload': (configFile) => reload(configFile)
+  'reload': (configFile) => reload(configFile.toString())
 }

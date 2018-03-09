@@ -61,6 +61,7 @@ const server = net.createServer((socket) => {
             else socket.write(resultToSend)
           }
         })
+        .catch((err) => socket.write(err.message))
       }
     })
 
