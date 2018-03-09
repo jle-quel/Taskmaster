@@ -29,7 +29,7 @@ configParser(process.argv[2])
 	_process.init()
 })
 .catch((err) => {
-	console.error(err)
+	console.error(`error: config.json: ${err.details[0].message}`)
 	process.exit(1)
 })
 
@@ -41,7 +41,7 @@ const server = net.createServer((socket) => {
 		}
 	
 		let ping = true
-		logger.write("INFO", `new connection from [${socket.remoteAddress}:${socket.remotePort}]\n`)
+		logger.write("INFO", `new connection from [${socket.remoteAddress}:${socket.remotePort}]`)
 		status.all()
 			.then((ret) => socket.write(ret))
 
@@ -73,6 +73,13 @@ const server = net.createServer((socket) => {
 
 server.listen(8000, () => {
 	logger.write("INFO", `server is running on PORT [${config.PORT}]`)
+})
+
+server.on("error", (err) => {
+	if (err.errno === 'EADDRINUSE')
+		console.error('error: EADDRINUSE address already in use')
+	else
+		console.error(`error: ${err}`)
 })
 
 process.on('SIGHUP', () => console.log("supervisord will stop all processes, reload the configuration from the first config file it finds, and start all processes."))

@@ -64,7 +64,6 @@ process.on('message', (data) => {
 	processData = data
 })
 
-
 _process.on('exit', (code, signal) => {
 	const returnCode = signal ? 128 + errorCodes[signal] : code
 

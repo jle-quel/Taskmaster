@@ -41,12 +41,12 @@ module.exports = (filePath) => {
 						configParsed[processName] = value
 						return Promise.resolve(configParsed)
 					})
-				.catch((err) => reject('Parse error config file'))
+				.catch((err) => reject(err))
 				}))
 				.then(([configParsed]) => resolve(configParsed))
 				.catch((err) => reject(err))
 			})
-			.catch((err) => reject('Config file is empty'))
+			.catch((err) => reject(err))
 		})
 	})
 }
