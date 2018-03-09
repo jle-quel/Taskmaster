@@ -29,13 +29,13 @@ const processEventsInit = (_process, processConfig, processGroupName, numOfResta
 
 const getSpawnOptions = (processConfig) => ({
   'shell': true,
-  'env': processConfig.env,
-  'cwd': processConfig.workingdir
+  'env': processConfig.config.env,
+  'cwd': processConfig.config.directory
 })
 
 const getIoOptions = (processConfig) => ({
-  'stderr': processConfig.stderr,
-  'stdout': processConfig.stdout
+  'stderr_logfile': processConfig.config.stderr_logfile,
+  'stdout_logfile': processConfig.config.stdout_logfile
 })
 
 const launcher = (processConfig, processGroupName, numOfRestart, numOfProcess) => {

@@ -25,7 +25,7 @@ process.send({
 })
 
 setTimeout(() => {
-	logger.write('INFO', `success [${process.argv[2]}] entered RUNNING state, process has stayed up for > than [${processData.config.startsecs}] seconds (startsecs)`)
+	logger.write('INFO', `success [${process.argv[2]}] entered RUNNING state`)
   process.send({
     'status': 'RUNNING',
     'code': null,
@@ -37,28 +37,6 @@ setTimeout(() => {
   })
 }
 , parseInt(process.argv[6]) * 1000)
-
-_process.stdout.on('data', (data) => {
-	if (stdio.stdout) {
-		fs.writeFile(stdio.stdout, data.toString(), (err) => {
-			if (err) {
-				logger.write("FATAL", `fs: err`)
-				_process.kill(processData.config.stopsignal)
-			}
-		})
-	}
-})
-
-_process.stderr.on('data', (data) => {
-	if (stdio.stderr) {
-		fs.writeFile(stdio.stderr, data.toString(), (err) => {
-			if (err) {
-				logger.write("FATAL", `fs: err`)
-				_process.kill(processData.config.stopsignal)
-			}
-		})
-	}
-})
 
 process.on('message', (data) => { processData = data })
 
