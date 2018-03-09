@@ -2,7 +2,7 @@
 
 const fs = require('fs')
 
-const FILEPATH = './taskmaster.log'
+const FILEPATH = '/tmp/taskmaster.log'
 
 const getDate = () => {
 	return new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')
