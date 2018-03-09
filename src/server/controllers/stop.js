@@ -4,6 +4,7 @@ const childProcess = require('child_process')
 const processData = require('../process-data').getAll()
 const processDataEdit = require('../process-data').edit
 const getByProcessName = require('../process-data').getByProcessName
+const logger = require('../../services/logger.js')
 
 const all = () => {
   const stop = []
@@ -21,6 +22,7 @@ const all = () => {
         processCopy.send(_process)
         childProcess.spawn(`kill -${_process.config.stopsignal} ${_process.pid}`, [], {detached: true, shell: true})
         stop.push(`${processGroupLength === 1 ? '' : processGroupName + ':'}${processName} STOPPED`)
+		logger.write("INFO", `stopped [${processName}] (terminated by ${_process.config.stopsignal})`)
       }
     })
   })

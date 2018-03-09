@@ -84,16 +84,11 @@ server.on("error", (err) => {
 		console.error(`error: ${err}`)
 })
 
-process.on('SIGHUP', () => console.log("supervisord will stop all processes, reload the configuration from the first config file it finds, and start all processes."))
-process.on('SIGTERM', () => {
-	stopAll()
-	.then((ret) => {
-		const array = ret.split("\n")
-		const len = array.length
-		
-		for (let index = 0; index < len; index++)
-			logger.write("INFO", `${array[index]} (terminated by SIGTERM)`)
-	})
+process.on('SIGHUP', () => {
+	logger.write("INFO", `WARN received SIGHUP indicating restart request`)
+	//restart
 })
-
-process.on('SIGUSR2', () => console.log("log"))
+process.on('SIGTERM', () => {
+	logger.write("INFO", `WARN received SIGTERM indicating exit request`)
+	stopAll()
+})
