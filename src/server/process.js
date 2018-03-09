@@ -4,6 +4,7 @@ const childProcess = require('child_process')
 
 const processData = require('./process-data').getAll()
 const processDataEdit = require('./process-data').edit
+const logger = require('../services/logger')
 
 const processEventsInit = (_process, processConfig, processGroupName, numOfRestart, numOfProcess) => {
   const processGroupLength = processConfig.config.numprocs
@@ -42,7 +43,10 @@ const launcher = (processConfig, processGroupName, numOfRestart, numOfProcess) =
   const spawnOptions = JSON.stringify(getSpawnOptions(processConfig))
   const ioOptions = JSON.stringify(getIoOptions(processConfig))
 
-  if (numOfRestart === processConfig.stoptime) return
+  if (numOfRestart === processConfig.stoptime) {
+	  logger.write("INFO", `gave up [${processConfig.config.command}] after max autorestart`)
+	  return
+  }
   const _process = childProcess.fork('./src/server/child-process', [
     processConfig.config.command,
     spawnOptions,

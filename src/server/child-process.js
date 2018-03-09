@@ -59,6 +59,7 @@ _process.stderr.on('data', (data) => {
 		writeInFile(data.toString())
 })
 
+  logger.write(`INFO`, `exited: [${process.argv[2]}] with exit status`)
 _process.on('exit', (code, signal) => {
   const returnCode = signal ? 128 + errorCodes[signal] : code
   logger.write(`${returnCode ? 'WARN' : 'INFO'}`, `exited: [${process.argv[2]}] with exit status [${returnCode}])`)
