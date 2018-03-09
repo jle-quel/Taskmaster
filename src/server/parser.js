@@ -4,26 +4,26 @@ const joi = require('joi')
 const signalCode = require('../signal-codes')
 
 const schema = joi.object().keys({
-	command: joi.string().required(),
-	numprocs: joi.number().integer().min(1).default(1),
-	autostart: joi.boolean().default(true),
-	stopwaitsecs: joi.number().integer().min(0).default(10),
-	stdout_logfile: joi.string().default(null),
-	stderr_logfile: joi.string().default(null),
-	umask: joi.string().regex(/^[0-7]{1,3}$/).default('022'),
-	autorestart: joi.string().valid(['always', 'never', 'unexpected']).default('unexpected'),
-	startretries: joi.number().integer().min(0).default(3),
-	directory: joi.string().default(null),
-	startsecs: joi.number().integer().min(0).default(1),
-	exitcodes: joi.alternatives().try(joi.array().items(joi.number().integer()), joi.number().integer()).default([0, 2]),
-	env: joi.object().default(null),
-	stopsignal: joi.number().integer().valid([
-		signalCode.SIGTERM,
-		signalCode.SIGINT,
-		signalCode.SIGQUIT,
-		signalCode.SIGHUP,
-		signalCode.SIGUSR2
-	]).default(signalCode.SIGTERM)
+  command: joi.string().required(),
+  numprocs: joi.number().integer().min(1).default(1),
+  autostart: joi.boolean().default(true),
+  stopwaitsecs: joi.number().integer().min(0).default(10),
+  stdout_logfile: joi.string().default(null),
+  stderr_logfile: joi.string().default(null),
+  umask: joi.string().regex(/^[0-7]{1,3}$/).default('022'),
+  autorestart: joi.string().valid(['always', 'never', 'unexpected']).default('unexpected'),
+  startretries: joi.number().integer().min(0).default(3),
+  directory: joi.string().default(null),
+  startsecs: joi.number().integer().min(0).default(1),
+  exitcodes: joi.alternatives().try(joi.array().items(joi.number().integer()), joi.number().integer()).default([0, 2]),
+  env: joi.object().default(null),
+  stopsignal: joi.number().integer().valid([
+    signalCode.SIGTERM,
+    signalCode.SIGINT,
+    signalCode.SIGQUIT,
+    signalCode.SIGHUP,
+    signalCode.SIGUSR2
+  ]).default(signalCode.SIGTERM)
 })
 
 module.exports = (filePath) => {
