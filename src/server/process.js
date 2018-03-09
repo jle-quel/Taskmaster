@@ -2,13 +2,13 @@
 
 const childProcess = require('child_process')
 
-const processData = require('./process-data').getAll()
 const processDataEdit = require('./process-data').edit
 const logger = require('../services/logger')
 
 const processEventsInit = (_process, processConfig, processGroupName, numOfRestart, numOfProcess) => {
   const processGroupLength = processConfig.config.numprocs
-
+  const processData = require('./process-data').getAll()
+  
   _process.on('message', (processInfo) => {
     if (processInfo.status === 'FINISH' && (
       processConfig.autorestart === 'always' ||
@@ -58,6 +58,8 @@ const launcher = (processConfig, processGroupName, numOfRestart, numOfProcess) =
 }
 
 const init = () => {
+  const processData = require('./process-data').getAll()
+
   Object.keys(processData).map((processGroupName) => {
     Object.keys(processData[processGroupName]).map((processName, index) => {
       const config = processData[processGroupName][processName].config

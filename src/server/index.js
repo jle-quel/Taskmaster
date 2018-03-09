@@ -29,7 +29,7 @@ configParser(process.argv[2])
 	if (err.details)
 		console.error(`error: config.json: ${err.details[0].message}`)
 	else
-		console.error(`error: ${err}`)
+		console.error(`error: ${err.message}`)
 	process.exit(1)
 })
 

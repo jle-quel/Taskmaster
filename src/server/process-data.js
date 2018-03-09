@@ -6,7 +6,11 @@ const getAll = () => {
   return processData
 }
 
-const init = (processConfig) => {
+const reload = () => {
+  processData = {}
+}
+
+const initAll = (processConfig) => {
   Object.keys(processConfig).map((processGroupName) => {
     const numprocs = processConfig[processGroupName].numprocs
     if (!processData[processGroupName]) processData[processGroupName] = {}
@@ -55,6 +59,7 @@ module.exports = {
   getByProcessName,
   getAll,
   getByPid,
-  init,
-  edit
+  initAll,
+  edit,
+  reload
 }

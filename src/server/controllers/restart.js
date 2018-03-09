@@ -1,13 +1,13 @@
 'use strict'
 
-const processData = require('../process-data').getAll()
 const getByProcessName = require('../process-data').getByProcessName
 const start = require('./start')
 const stop = require('./stop')
 
 const all = () => {
   const restart = []
-
+  const processData = require('../process-data').getAll()
+  
   return stop.all()
   .then((stopResult) => {
     restart.push(stopResult)
@@ -21,7 +21,8 @@ const all = () => {
 
 const one = (processNamesOrGroupName) => {
   const restart = []
-
+  const processData = require('../process-data').getAll()
+  
   return Promise.all(processNamesOrGroupName.map((processNameOrGroupName) => {
     if (processData[processNameOrGroupName]) {
       return stop.one([processNameOrGroupName])
