@@ -42,7 +42,7 @@ const server = net.createServer((socket) => {
 		}
 	
 		let ping = true
-		logger.write("INFO", `New connection from [${socket.remoteAddress}:${socket.remotePort}]`)
+		logger.write("INFO", `new connection from [${socket.remoteAddress}:${socket.remotePort}]\n`)
 		status.all()
 			.then((ret) => socket.write(ret))
 
@@ -50,7 +50,7 @@ const server = net.createServer((socket) => {
 			const command = JSON.parse(data)
 			
 			if (command[0] === 'shutdown') {
-				logger.write("INFO", `Connection to the server stopped from [${socket.remoteAddress}:${socket.remotePort}]`)
+				logger.write("INFO", `connection to the server stopped from [${socket.remoteAddress}:${socket.remotePort}]`)
 				stopAll()
 				.then(() => process.exit(0))
 			} else {
@@ -67,7 +67,7 @@ const server = net.createServer((socket) => {
 
 		socket.on('end', () => {
 			ping = false
-			logger.write("WARN", `Lost connection from [${socket.remoteAddress}:${socket.remotePort}]`)
+			logger.write("WARN", `lost connection from [${socket.remoteAddress}:${socket.remotePort}]`)
 		})
 	})
 })

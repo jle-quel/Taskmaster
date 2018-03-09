@@ -68,9 +68,8 @@ process.on('message', (data) => {
 _process.on('exit', (code, signal) => {
 	const returnCode = signal ? 128 + errorCodes[signal] : code
 
-	logger.write("WARN", `Process [${process.argv[2]}] exited with code [${code}]`)
-	if (checkCode(returnCode) === true) //logger.write("INFO", `exited: [${process.argv[2]}] (exit status [${returnCode}]; not expected)`)
-		console.log(processData)
+	if (returnCode) logger.write("WARN", `exited: [${process.argv[2]}] (exit status [${returnCode}])`)
+	else logger.write("INFO", `exited: [${process.argv[2]}] (exit status [${returnCode}])`)
 	if (processData.killedByMe === true) {
 		process.send({
 			'status': 'STOPPED',

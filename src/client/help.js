@@ -18,15 +18,15 @@ module.exports = {
 		console.log('stop	\t\tStop all process')
 	},
 	'help': () => {
-		console.log('default commands (type help <topic>):')
+		console.log('\ndefault commands (type help <topic>):')
 		console.log('=====================================')
 		console.log('status\t\tstart\t\tstop')
-		console.log('restart\t\treload\t\tshutdown')
+		console.log('restart\t\treload\t\tshutdown\n')
 	},
 	'shutdown': () => {
-		console.log('Stop the server')
+		console.log('shutdown \t\tShut the remote supervisord down')
 	},
 	'error': (str) => {
-		console.log(`** No help on ${str}`)
+		console.log(`*** No help on ${str}`)
 	}
 }

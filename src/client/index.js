@@ -36,6 +36,15 @@ const client = net.createConnection(config.PORT, config.HOST, () => {
 	})
 })
 
+client.on('error', (error) => {
+	if (error.errno === 'ECONNREFUSED')
+		console.error("error: ECONNREFUSED Connection refused by the server")
+	else
+		console.log(`error: ${error}`)
+
+	process.exit(1)
+})
+
 client.on('data', (data) => {
 	if (data.toString() !== 'No result') console.log(data.toString())
 	rl.prompt()

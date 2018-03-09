@@ -5,8 +5,7 @@ const fs = require('fs')
 const FILEPATH = './taskmaster.log'
 
 const getDate = () => {
-	const event = new Date(Date.now());
-	return event.toUTCString()
+	return new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')
 }
 
 const log = {
@@ -21,6 +20,9 @@ const log = {
 	},
 	"WARN": (str) => {
 		return `${getDate()} \x1b[33mWARN\x1b[0m: ${str}\n`
+	},
+	"FATAL": (str) => {
+		return `${getDate()} \x1b[31mFATAL\x1b[0m: ${str}\n`
 	}
 }
 
