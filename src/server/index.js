@@ -8,6 +8,7 @@ const processData = require('./process-data')
 const _process = require('./process')
 const controller = require('./controllers')
 const stopAll = require('./controllers/stop').all
+const restartAll = require('./controllers/restart').all
 const logger = require('../services/logger')
 const status = require('./controllers/status')
 
@@ -86,7 +87,7 @@ server.on("error", (err) => {
 
 process.on('SIGHUP', () => {
 	logger.write("INFO", `WARN received SIGHUP indicating restart request`)
-	//restart
+	restartAll()
 })
 process.on('SIGTERM', () => {
 	logger.write("INFO", `WARN received SIGTERM indicating exit request`)
