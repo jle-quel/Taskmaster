@@ -1,6 +1,6 @@
 {
-	"ls": {
-		"command": "ls",
+	"echo": {
+		"command": "echo $TEST",
 		"numprocs": 1,
 		"autostart": true,
 		"autorestart": "never",
@@ -10,6 +10,9 @@
 		"stopsignal": 2,
 		"stdout_logfile": "/tmp/test",
 		"stderr_logfile": "/tmp/test",
-		"umask": "022"
+		"umask": "022",
+		"env": {
+			"TEST": "lol"
+		}
 	}
 }
