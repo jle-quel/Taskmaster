@@ -75,7 +75,6 @@ server.listen(8000, () => {
   logger.write('INFO', `server is running on PORT [${config.PORT}]`)
 })
 
-<<<<<<< HEAD
 server.on("error", (err) => {
 	if (err.errno === 'EADDRINUSE')
 		console.error('error: EADDRINUSE address already in use')
@@ -85,7 +84,3 @@ server.on("error", (err) => {
 
 process.on('SIGHUP', () => console.log("supervisord will stop all processes, reload the configuration from the first config file it finds, and start all processes."))
 process.on('SIGUSR2', () => console.log("log"))
-=======
-process.on('SIGHUP', () => console.log('supervisord will stop all processes, reload the configuration from the first config file it finds, and start all processes.'))
-process.on('SIGUSR2', () => console.log('log'))
->>>>>>> ae98ad1449661a48a2555c1685e9f82c9aba6d20

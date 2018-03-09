@@ -4,6 +4,7 @@ const status = require('./status')
 const start = require('./start')
 const restart = require('./restart')
 const stop = require('./stop')
+const reload = require('./reload')
 
 module.exports = {
   'status': (processNamesOrGroupName) => {
@@ -18,7 +19,5 @@ module.exports = {
   'restart': (processNamesOrGroupName) => {
     return processNamesOrGroupName[0] === 'all' ? restart.all() : restart.one(processNamesOrGroupName)
   },
-  'reload': (argv, socket) => {
-    console.log(argv)
-  }
+  'reload': (configFile) => reload(configFile)
 }
