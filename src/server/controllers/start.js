@@ -1,12 +1,12 @@
 'use strict'
 
-const processData = require('../process-data').getAll()
 const getByProcessName = require('../process-data').getByProcessName
 const _process = require('../process')
 
 const all = (restart) => {
   const start = []
-
+  const processData = require('../process-data').getAll()
+  
   Object.keys(processData).map((processGroupName) => {
     Object.keys(processData[processGroupName]).map((processName, index) => {
       if (processData[processGroupName][processName].status === 'STOPPED' || restart) {
@@ -20,7 +20,8 @@ const all = (restart) => {
 
 const one = (processNamesOrGroupName, restart) => {
   const start = []
-
+  const processData = require('../process-data').getAll()
+  
   processNamesOrGroupName.map((processNameOrGroupName) => {
     if (processData[processNameOrGroupName]) {
       Object.keys(processData[processNameOrGroupName]).map((processName, index) => {

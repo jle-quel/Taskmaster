@@ -1,6 +1,5 @@
 'use strict'
 
-const processData = require('../process-data').getAll()
 const getByProcessName = require('../process-data').getByProcessName
 
 const getUpTime = (time) => {
@@ -17,6 +16,7 @@ const getUpTime = (time) => {
 
 const all = () => {
   const status = []
+  const processData = require('../process-data').getAll()
 
   Object.keys(processData).map((processGroupName) => {
     const processGroupLength = Object.keys(processData[processGroupName]).length
@@ -35,7 +35,8 @@ const all = () => {
 
 const one = (processNamesOrGroupName) => {
   const status = []
-
+  const processData = require('../process-data').getAll()
+  
   processNamesOrGroupName.map((processNameOrGroupName) => {
     if (processData[processNameOrGroupName]) {
       const processGroupLength = Object.keys(processData[processNameOrGroupName]).length

@@ -1,14 +1,14 @@
 'use strict'
 
 const childProcess = require('child_process')
-const processData = require('../process-data').getAll()
 const processDataEdit = require('../process-data').edit
 const getByProcessName = require('../process-data').getByProcessName
 const logger = require('../../services/logger.js')
 
 const all = () => {
   const stop = []
-
+  const processData = require('../process-data').getAll()
+  
   Object.keys(processData).map((processGroupName) => {
     Object.keys(processData[processGroupName]).map((processName, index) => {
       const processGroupLength = Object.keys(processData[processGroupName]).length
@@ -16,10 +16,11 @@ const all = () => {
 
       if (_process.status !== 'STOPPED' && _process.status !== 'EXITED') {
         processDataEdit({killedByMe: true}, processGroupName, processName)
-        const processCopy = _process['process']
+        const processCopy = {..._process['process']}
         delete _process['process']
 
         processCopy.send(_process)
+        _process['process'] = processCopy
         childProcess.spawn(`kill -${_process.config.stopsignal} ${_process.pid}`, [], {detached: true, shell: true})
         stop.push(`${processGroupLength === 1 ? '' : processGroupName + ':'}${processName} STOPPED`)
 		logger.write("INFO", `stopped [${processName}] (terminated by ${_process.config.stopsignal})`)
@@ -31,7 +32,8 @@ const all = () => {
 
 const one = (processNamesOrGroupName) => {
   const stop = []
-
+  const processData = require('../process-data').getAll()
+  
   processNamesOrGroupName.map((processNameOrGroupName) => {
     if (processData[processNameOrGroupName]) {
       Object.keys(processData[processNameOrGroupName]).map((processName, index) => {
