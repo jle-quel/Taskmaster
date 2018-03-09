@@ -11,6 +11,7 @@ const _process = require('./process')
 const controller = require('./controllers')
 const stopAll = require('./controllers/stop').all
 const logger = require('../services/logger')
+const status = require('./controllers/status')
 
 if (process.argv.length !== 3) {
 	console.error('Usage: npm run start:server')
@@ -31,8 +32,6 @@ configParser(process.argv[2])
 	console.error(err)
 	process.exit(1)
 })
-
-const status = require('./controllers/status')
 
 const server = net.createServer((socket) => {
 	socket.server.getConnections((err, numberOfConnections) => {
