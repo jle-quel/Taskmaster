@@ -22,7 +22,7 @@ logger.write('INFO', `supervisord started with pid [${process.pid}]`)
 
 configParser(process.argv[2])
 .then((configParsed) => {
-  processData.init(configParsed)
+  processData.initAll(configParsed)
   _process.init()
 })
 .catch((err) => {

@@ -19,11 +19,14 @@ const log = {
 }
 
 const write = (code, str) => {
-  fs.appendFile(FILEPATH, log[code](str), 'utf8', (err) => {
-    if (err) {
-      console.error('taskmaster: error in creation of the logger')
-      process.exit(1)
-    }
+  return new Promise((resolve, reject) => {
+	  fs.appendFile(FILEPATH, log[code](str), 'utf8', (err) => {
+		  if (err) {
+			  console.error('taskmaster: error in creation of the logger')
+			  process.exit(1)
+		  }
+		  resolve()
+	  })
   })
 }
 

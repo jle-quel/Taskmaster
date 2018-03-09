@@ -1,18 +1,7 @@
 {
-	"echo": {
-		"command": "echo $TEST",
-		"numprocs": 1,
-		"autostart": true,
+	"ls": {
+		"command": "sleep 5; touch /etc/test",
 		"autorestart": "unexpected",
-		"exitcodes": [0],
-		"startretries": 2,
-		"startsecs": 0,
-		"stopsignal": 2,
-		"stdout_logfile": "/tmp/test",
-		"stderr_logfile": "/tmp/test",
-		"umask": "022",
-		"env": {
-			"TEST": "lol"
-		}
+		"startretries": 10
 	}
 }
