@@ -83,4 +83,7 @@ server.on("error", (err) => {
 })
 
 process.on('SIGHUP', () => console.log("supervisord will stop all processes, reload the configuration from the first config file it finds, and start all processes."))
+process.on('SIGTERM', () => logger.write("WARN", `received SIGTERM indicating exit request`))
+process.on('SIGINT', () => logger.write("WARN", `received SIGINT indicating exit request`))
+process.on('SIGQUIT', () => logger.write("WARN", `received SIGQUIT indicating exit request`))
 process.on('SIGUSR2', () => console.log("log"))
