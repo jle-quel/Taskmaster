@@ -13,7 +13,7 @@ const stdio = JSON.parse(process.argv[4])
 process.umask(process.argv[5].umask)
 
 const _process = childProcess.spawn(process.argv[2], [], options)
-logger.write('INFO', `process [${process.argv[2]}] starting with PID [${_process.pid}]`)
+logger.write('INFO', `spawned [${process.argv[2]}] with pid [${_process.pid}]`)
 process.send({
   'status': 'STARTING',
   'code': null,
@@ -25,7 +25,7 @@ process.send({
 })
 
 setTimeout(() => {
-  logger.write('INFO', `process [${process.argv[2]}] is running with PID [${_process.pid}]`)
+	logger.write('INFO', `success [${process.argv[2]}] entered RUNNING state, process has stayed up for > than [${processData.config.startsecs}] seconds (startsecs)`)
   process.send({
     'status': 'RUNNING',
     'code': null,
@@ -64,7 +64,7 @@ process.on('message', (data) => { processData = data })
 
 _process.on('exit', (code, signal) => {
   const returnCode = signal ? 128 + errorCodes[signal] : code
-  logger.write(`${returnCode ? 'WARN' : 'INFO'}`, `exited: [${process.argv[2]}] (exit status [${returnCode}])`)
+  logger.write(`${returnCode ? 'WARN' : 'INFO'}`, `exited: [${process.argv[2]}] with exit status [${returnCode}])`)
 
   if (processData.killedByMe === true) {
     process.send({

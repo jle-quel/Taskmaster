@@ -21,13 +21,14 @@ logger.write('INFO', `supervisord started with pid [${process.pid}]`)
 
 configParser(process.argv[2])
 .then((configParsed) => {
-  logger.write('INFO', `[${process.argv[2]}] was sucessfully parsed`)
-
   processData.init(configParsed)
   _process.init()
 })
 .catch((err) => {
-	console.error(`error: config.json: ${err.details[0].message}`)
+	if (err.details)
+		console.error(`error: config.json: ${err.details[0].message}`)
+	else
+		console.error(`error: ${err}`)
 	process.exit(1)
 })
 
@@ -84,4 +85,15 @@ server.on("error", (err) => {
 })
 
 process.on('SIGHUP', () => console.log("supervisord will stop all processes, reload the configuration from the first config file it finds, and start all processes."))
+process.on('SIGTERM', () => {
+	stopAll()
+	.then((ret) => {
+		const array = ret.split("\n")
+		const len = array.length
+		
+		for (let index = 0; index < len; index++)
+			logger.write("INFO", `${array[index]} (terminated by SIGTERM)`)
+	})
+})
+
 process.on('SIGUSR2', () => console.log("log"))

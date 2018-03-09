@@ -1,3 +1,6 @@
 {
-	"ls"
+	"ls": {
+		"command": "cat",
+		"numprocs": 15
+	}
 }
