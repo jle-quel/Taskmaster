@@ -5,9 +5,7 @@ const childProcess = require('child_process')
 const processDataEdit = require('./process-data').edit
 const logger = require('../services/logger')
 
-/* ************************************************************************** */
-
-const process = {
+const exitProcess = {
 	"always": (processInfo, processConfig, processGroupName, numOfRestart, numOfProcess) => {
 		launcher(processConfig, processGroupName, numOfRestart - 1)
 	},
@@ -29,16 +27,13 @@ const getIoOptions = (processConfig) => ({
   'stdout_logfile': processConfig.config.stdout_logfile
 })
 
-
-/* ************************************************************************** */
-
 const processEventsInit = (_process, processConfig, processGroupName, numOfRestart, numOfProcess) => {
 	const processGroupLength = processConfig.config.numprocs
 	const processData = require('./process-data').getAll()
 	
 	_process.on('message', (processInfo) => {
 		if (processInfo.status === 'FINISH' || processInfo.status === 'EXITED')
-			process[processConfig.config.autorestart](processInfo, processConfig, processGroupName, numOfRestart, numOfProcess)
+			exitProcess[processConfig.config.autorestart](processInfo, processConfig, processGroupName, numOfRestart, numOfProcess)
 		else {
 			if (!processData[processGroupName]) processData[processGroupName] = {}
 			
@@ -56,7 +51,7 @@ const launcher = (processConfig, processGroupName, numOfRestart, numOfProcess) =
 	const spawnOptions = JSON.stringify(getSpawnOptions(processConfig))
 	const ioOptions = JSON.stringify(getIoOptions(processConfig))
 	
-	if (!numOfRestart) {
+	if (numOfRestart === -1) {
 		logger.write("INFO", `gave up [${processConfig.config.command}] after max autorestart`)
 		return
 	}
@@ -78,8 +73,9 @@ const init = () => {
 		Object.keys(processData[processGroupName]).map((processName, index) => {
 			const config = processData[processGroupName][processName].config
 			
-			if (config.autostart)
+			if (config.autostart) {
 				launcher(processData[processGroupName][processName], processGroupName, config.startretries, index)
+			}
 		})
 	})
 }
