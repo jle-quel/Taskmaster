@@ -10,9 +10,6 @@
 		"stopsignal": 2,
 		"stdout_logfile": "/tmp/test",
 		"stderr_logfile": "/tmp/test",
-		"umask": "022",
-		"env": {
-			"TEST": "lol"
-		}
+		"umask": "022"
 	}
 }

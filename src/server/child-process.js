@@ -40,6 +40,25 @@ setTimeout(() => {
 
 process.on('message', (data) => { processData = data })
 
+const writeInFile = (str) => {
+	try {
+		fs.writeFileSync(stdio.stdout_logfile, str)
+	}
+	catch(err) {
+		logger.write("INFO", `error: EACCES permission denied on ${stdio.stdout_logfile}`)
+	}
+}
+
+_process.stdout.on('data', (data) => {
+	if (stdio.stdout_logfile)
+		writeInFile(data.toString())
+})
+
+_process.stderr.on('data', (data) => {
+	if (stdio.stderr_logfile)
+		writeInFile(data.toString())
+})
+
 _process.on('exit', (code, signal) => {
   const returnCode = signal ? 128 + errorCodes[signal] : code
   logger.write(`${returnCode ? 'WARN' : 'INFO'}`, `exited: [${process.argv[2]}] with exit status [${returnCode}])`)
