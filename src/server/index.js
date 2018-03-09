@@ -85,11 +85,25 @@ server.on("error", (err) => {
 		console.error(`error: ${err}`)
 })
 
+process.on('SIGTERM', () => {
+	logger.write("WARN", `received SIGTERM indicating exit request`)
+	stopAll()
+})
+process.on('SIGINT', () => {
+	logger.write("WARN", `received SIGINT indicating exit request`)
+	stopAll()
+})
+process.on('SIGQUIT', () => {
+	logger.write("WARN", `received SIGQUIT indicating exit request`)
+	stopAll()
+})
+
 process.on('SIGHUP', () => {
-	logger.write("INFO", `WARN received SIGHUP indicating restart request`)
+	logger.write("WARN", `received SIGHUP indicating restart request`)
 	restartAll()
 })
-process.on('SIGTERM', () => {
-	logger.write("INFO", `WARN received SIGTERM indicating exit request`)
-	stopAll()
+
+process.on('SIGUSR2', () => {
+	logger.write("WARN", `received SIGUSR2 indicating log reopen request`)
+	logger.write("INFO", `supervisord logreopen`)
 })
