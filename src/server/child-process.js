@@ -27,14 +27,14 @@ process.send({
   'status': 'STARTING',
   'code': null,
   'signal': null,
-  'pid': null,
-  'ppid': null,
+  'pid': _process.pid,
+  'ppid': process.pid,
   'killedByMe': false,
   'time': null,
   'exitdate': null
 })
 
-setTimeout(() => {
+const timeout = setTimeout(() => {
 	logger.write('INFO', `success [${process.argv[2]}] entered RUNNING state`)
   process.send({
     'status': 'RUNNING',
@@ -45,9 +45,7 @@ setTimeout(() => {
     'ppid': process.pid,
     'time': Date.now(),
     'exitdate': null
-})
-}
-, parseInt(process.argv[6]) * 1000)
+})}, parseInt(process.argv[6]) * 1000)
 
 process.on('message', (data) => { processData = data })
 
@@ -63,23 +61,24 @@ _process.stderr.on('data', (data) => {
 
 _process.on('exit', (code, signal) => {
   const returnCode = signal ? 128 + errorCodes[signal] : code
+  clearTimeout(timeout)
   logger.write(`${returnCode ? 'WARN' : 'INFO'}`, `exited: [${process.argv[2]}] with exit status [${returnCode}])`)
   .then(() => {
-    if (processData.status === 'STARTING') {
-      process.send({
-        'status': 'FATAL',
-        'code': returnCode,
-        'signal': signal,
-        'pid': null,
-        'killedByMe': false,
-        'ppid': null,
-        'time': null,
-        'exitdate': Date.now()
-      }, () => process.exit(0))
-    }
-	  else if (processData.killedByMe === true) {
+
+	if (processData.killedByMe === true) {
     process.send({
       'status': 'STOPPED',
+      'code': returnCode,
+      'signal': signal,
+      'pid': null,
+      'killedByMe': false,
+      'ppid': null,
+      'time': null,
+      'exitdate': Date.now()
+    }, () => process.exit(0))
+  } else if (processData.status === 'STARTING') {
+    process.send({
+      'status': 'FATAL',
       'code': returnCode,
       'signal': signal,
       'pid': null,

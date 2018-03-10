@@ -41,7 +41,7 @@ const one = (processNamesOrGroupName) => {
         const _process = processData[processNameOrGroupName][processName]
 
       if (_process.status === 'RUNNING' || _process.status === 'STARTING') {
-            processDataEdit({killedByMe: true}, processNameOrGroupName, processName)
+          processDataEdit({killedByMe: true}, processNameOrGroupName, processName)
           const processCopy = _process['process']
           delete _process['process']
 
