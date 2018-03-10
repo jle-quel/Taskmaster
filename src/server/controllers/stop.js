@@ -24,7 +24,7 @@ const all = () => {
         childProcess.spawn(`kill -${_process.config.stopsignal} ${_process.pid}`, [], {detached: true, shell: true})
         stop.push(`${processGroupLength === 1 ? '' : processGroupName + ':'}${processName} STOPPED`)
 		    logger.write("INFO", `stopped [${processName}] (terminated by ${_process.config.stopsignal})`)
-      } else stop.push(`${processGroupName} is not RUNNING`) 
+      } else stop.push(`${processGroupLength === 1 ? '' : processGroupName + ':'}${processName} is not RUNNING`)
     })
   })
   return Promise.resolve(stop.join('\n'))
@@ -48,7 +48,7 @@ const one = (processNamesOrGroupName) => {
           processCopy.send(_process)
           childProcess.spawn(`kill -${_process.config.stopsignal} ${_process.pid}`, [], {detached: true, shell: true})
           stop.push(`${processGroupLength === 1 ? '' : processNameOrGroupName + ':'}${processName} STOPPED`)
-        } else stop.push(`${processNameOrGroupName} is not RUNNING`) 
+        } else stop.push(`${processGroupLength === 1 ? '' : processNameOrGroupName + ':'}${processName} is not RUNNING`)
       })
     } else {
       const processInfos = getByProcessName(processNameOrGroupName)

@@ -28,7 +28,6 @@ const getStatus = (_process, processGroupLength, processGroupName, processName) 
     return `${statusName}${processName}\t${_process.status}\t\tNot started`
   } else if (_process.status === 'STARTING') return `${statusName}${processName}\t${_process.status}`
   else return `${statusName}${processName}\t${_process.status}\t\tpid ${_process.pid}, uptime ${time[0]}:${time[1]}:${time[2]}`
-
 }
 
 const all = () => {
