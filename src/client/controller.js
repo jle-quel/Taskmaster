@@ -19,7 +19,7 @@ module.exports = {
   'restart': (argv) => checkCommand(argv),
   'reload': (argv) => {
     if (argv.length !== 2) {
-      console.error(`Error: ${argv[0]} don't allows many arguments`)
+		console.error(`Error: reload requires a configuration file [JSON]`)
       help[argv[0]]()
       return null
     } else return argv

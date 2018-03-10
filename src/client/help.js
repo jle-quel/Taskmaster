@@ -7,11 +7,11 @@ module.exports = {
   },
   'status': () => {
     console.log('status <name/gname>\tGet status for a single or group process')
-    console.log('status \t\tGet all process status info')
+    console.log('status \t\t\tGet all process status info')
   },
   'restart': () => {
     console.log('restart <name/gname>\tRestart a single or group process')
-    console.log('restart  \t\tRestart all process')
+    console.log('restart all  \t\tRestart all process')
   },
   'stop': () => {
     console.log('stop <name/gname>\tStop a single or group process')
@@ -27,7 +27,7 @@ module.exports = {
     console.log('shutdown \t\tShut the remote taskmaster down')
   },
   'reload': () => {
-    console.log('reload \t\tRestart the remote taskmaster.')
+    console.log('reload <config file>\tRestart the remote taskmaster.')
   },
   'error': (str) => {
     console.log(`*** No help on ${str}`)
