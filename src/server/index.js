@@ -92,7 +92,6 @@ process.on('SIGTERM', () => {
 process.on('SIGINT', () => {
 	logger.write("WARN", `received SIGINT indicating exit request`)
 	stopAll()
-	process.exit(0)
 })
 process.on('SIGQUIT', () => {
 	logger.write("WARN", `received SIGQUIT indicating exit request`)
