@@ -23,8 +23,8 @@ const all = () => {
         _process['process'] = processCopy
         childProcess.spawn(`kill -${_process.config.stopsignal} ${_process.pid}`, [], {detached: true, shell: true})
         stop.push(`${processGroupLength === 1 ? '' : processGroupName + ':'}${processName}: STOPPED`)
-		    logger.write("INFO", `stopped [${processName}] (terminated by ${_process.config.stopsignal})`)
-      } else stop.push(`${processGroupLength === 1 ? '' : processGroupName + ':'}${processName} is not RUNNING`)
+		logger.write("INFO", `stopped [${processName}] (terminated by ${_process.config.stopsignal})`)
+      }
     })
   })
   return Promise.resolve(stop.join('\n'))
@@ -48,7 +48,8 @@ const one = (processNamesOrGroupName) => {
           processCopy.send(_process)
           childProcess.spawn(`kill -${_process.config.stopsignal} ${_process.pid}`, [], {detached: true, shell: true})
           stop.push(`${processGroupLength === 1 ? '' : processNameOrGroupName + ':'}${processName}: STOPPED`)
-        } else stop.push(`${processGroupLength === 1 ? '' : processNameOrGroupName + ':'}${processName} is not RUNNING`)
+		  logger.write("INFO", `stopped [${processName}] (terminated by ${_process.config.stopsignal})`)
+        }
       })
     } else {
       const processInfos = getByProcessName(processNameOrGroupName)
@@ -64,7 +65,7 @@ const one = (processNamesOrGroupName) => {
           processCopy.send(processDataFound)
           childProcess.spawn(`kill -${processDataFound.config.stopsignal} ${processDataFound.pid}`, [], {detached: true, shell: true})
           stop.push(`${processNameOrGroupName}: STOPPED`)
-        } else stop.push(`${processNameOrGroupName} is not RUNNING`) 
+        }
       } else stop.push(`${processNameOrGroupName}: ERROR (no such process)`)
     }
   })
