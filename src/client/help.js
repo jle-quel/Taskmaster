@@ -15,7 +15,7 @@ module.exports = {
   },
   'stop': () => {
     console.log('stop <name/gname>\tStop a single or group process')
-    console.log('stop \t\tStop all process')
+    console.log('stop \t\t\tStop all process')
   },
   'help': () => {
     console.log('\ndefault commands (type help <topic>):')
