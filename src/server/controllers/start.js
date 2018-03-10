@@ -12,7 +12,7 @@ const all = (restart) => {
       const processStatus = processData[processGroupName][processName].status
     
       if (processStatus === 'FATAL' || processStatus === 'STOPPED' || processStatus === 'EXITED' || restart) {
-        _process.launcher(processData[processGroupName][processName], processGroupName, -1, index)
+        _process.launcher(processData[processGroupName][processName], processGroupName, processData[processGroupName][processName].config.startretries, index)
         start.push(`${processName}: STARTED`)
       } else if (processStatus === 'RUNNING') start.push(`${processName}: is already RUNNING`)
     })
@@ -29,8 +29,8 @@ const one = (processNamesOrGroupName, restart) => {
       Object.keys(processData[processNameOrGroupName]).map((processName, index) => {
         const processStatus = processData[processNameOrGroupName][processName].status
     
-      if (processStatus === 'FATAL' || processStatus === 'STOPPED' || processStatus === 'EXITED' || restart) {
-          _process.launcher(processData[processNameOrGroupName][processName], processNameOrGroupName, -1, index)
+        if (processStatus === 'FATAL' || processStatus === 'STOPPED' || processStatus === 'EXITED' || restart) {
+			_process.launcher(processData[processNameOrGroupName][processName], processNameOrGroupName, processData[processNameOrGroupName][processName].config.startretries, index)
           start.push(`${processName}: STARTED`)
         } else if (processStatus === 'RUNNING') start.push(`${processName}: is already RUNNING`)
       })
@@ -40,8 +40,8 @@ const one = (processNamesOrGroupName, restart) => {
       if (processInfos) {
         const processDataFound = processInfos[1]
 
-      if (processStatus === 'FATAL' || processStatus === 'STOPPED' || processStatus === 'EXITED' || restart) {
-          _process.launcher(processDataFound, processInfos[0], -1, processInfos[2])
+        if (processDataFound.status === 'FATAL' || processDataFound.status === 'STOPPED' || processDataFound.status === 'EXITED' || restart) {
+          _process.launcher(processDataFound, processInfos[0], processDataFound.config.startretries, processInfos[2])
           start.push(`${processNameOrGroupName}: STARTED`)
         } else if (processDataFound.status === 'RUNNING') start.push(`${processNameOrGroupName}: is already RUNNING`)
       } else start.push(`${processNameOrGroupName}: ERROR (no such process)`)
