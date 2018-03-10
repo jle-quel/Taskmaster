@@ -89,10 +89,7 @@ process.on('SIGTERM', () => {
 	logger.write("WARN", `received SIGTERM indicating exit request`)
 	stopAll()
 })
-process.on('SIGINT', () => {
-	logger.write("WARN", `received SIGINT indicating exit request`)
-	stopAll()
-})
+
 process.on('SIGQUIT', () => {
 	logger.write("WARN", `received SIGQUIT indicating exit request`)
 	stopAll()
