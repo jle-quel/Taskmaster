@@ -23,9 +23,8 @@ const all = () => {
         _process['process'] = processCopy
         childProcess.spawn(`kill -${_process.config.stopsignal} ${_process.pid}`, [], {detached: true, shell: true})
         stop.push(`${processGroupLength === 1 ? '' : processGroupName + ':'}${processName}: STOPPED`)
-		logger.write("INFO", `stopped [${processName}] (terminated by ${_process.config.stopsignal})`)
-      }
-	  else stop.push(`${processName + ':'} ERROR (already stopped)`)
+	    	logger.write("INFO", `stopped [${processName}] (terminated by ${_process.config.stopsignal})`)
+      } else stop.push(`${processName + ':'} ERROR (already stopped)`)
     })
   })
   return Promise.resolve(stop.join('\n'))
@@ -49,9 +48,8 @@ const one = (processNamesOrGroupName) => {
           processCopy.send(_process)
           childProcess.spawn(`kill -${_process.config.stopsignal} ${_process.pid}`, [], {detached: true, shell: true})
           stop.push(`${processGroupLength === 1 ? '' : processNameOrGroupName + ':'}${processName}: STOPPED`)
-		  logger.write("INFO", `stopped [${processName}] (terminated by ${_process.config.stopsignal})`)
-        }
-		else stop.push(`${processName + ':'} ERROR (already stopped)`)
+		      logger.write("INFO", `stopped [${processName}] (terminated by ${_process.config.stopsignal})`)
+        } else stop.push(`${processName + ':'} ERROR (already stopped)`)
       })
     } else {
       const processInfos = getByProcessName(processNameOrGroupName)
@@ -67,10 +65,8 @@ const one = (processNamesOrGroupName) => {
           processCopy.send(processDataFound)
           childProcess.spawn(`kill -${processDataFound.config.stopsignal} ${processDataFound.pid}`, [], {detached: true, shell: true})
           stop.push(`${processNameOrGroupName}: STOPPED`)
-        }
-		else stop.push(`${processNameOrGroupName + ':'} ERROR (already stopped)`)
-      }
-	  else stop.push(`${processNameOrGroupName}: ERROR (no such process)`)
+        } else stop.push(`${processNameOrGroupName + ':'} ERROR (already stopped)`)
+      } else stop.push(`${processNameOrGroupName}: ERROR (no such process)`)
     }
   })
   return Promise.resolve(stop.join('\n'))
