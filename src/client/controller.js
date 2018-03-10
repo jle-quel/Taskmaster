@@ -5,7 +5,7 @@ const help = require('./help')
 const checkCommand = (command) => {
   if (command[1]) return command
   else {
-    console.error(`Error: ${command[0]} requires a process name'}`)
+    console.error(`Error: ${command[0]} requires a process name`)
     help[command[0]]()
     return null
   }
