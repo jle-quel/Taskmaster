@@ -14,7 +14,7 @@ const all = () => {
     return start.all(true)
     .then((startResult) => {
       restart.push(startResult)
-      return Promise.resolve(restart.join())
+      return Promise.resolve(restart.join('\n'))
     })
   })
 }
@@ -31,7 +31,6 @@ const one = (processNamesOrGroupName) => {
         return start.one([processNameOrGroupName], true)
         .then((startResult) => {
           restart.push(startResult)
-          console.log(startResult)
           return Promise.resolve(restart.join())
         })
       })
@@ -51,7 +50,7 @@ const one = (processNamesOrGroupName) => {
     }
   }))
   .then(([restartResult]) => {
-    return Promise.resolve(restartResult.join('\n'))
+    return Promise.resolve(restartResult.split(',').join('\n'))
   })
 }
 

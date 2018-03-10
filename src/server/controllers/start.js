@@ -14,7 +14,7 @@ const all = (restart) => {
       if (processStatus === 'STOPPED' || processStatus === 'EXITED' || restart) {
         _process.launcher(processData[processGroupName][processName], processGroupName, -1, index)
         start.push(`${processName}: STARTED`)
-      }
+      } else if (processStatus === 'RUNNING') start.push(`${processName}: is already RUNNING`)
     })
   })
   return Promise.resolve(start.join('\n'))
@@ -31,8 +31,8 @@ const one = (processNamesOrGroupName, restart) => {
     
         if (processStatus === 'STOPPED' || processStatus === 'EXITED' || restart) {
           _process.launcher(processData[processNameOrGroupName][processName], processNameOrGroupName, -1, index)
-          start.push(`${processName}: started`)
-        }
+          start.push(`${processName}: STARTED`)
+        } else if (processStatus === 'RUNNING') start.push(`${processName}: is already RUNNING`)
       })
     } else {
       const processInfos = getByProcessName(processNameOrGroupName)
@@ -43,7 +43,7 @@ const one = (processNamesOrGroupName, restart) => {
         if (processDataFound.status === 'STOPPED' || processDataFound.status === 'EXITED' || restart) {
           _process.launcher(processDataFound, processInfos[0], -1, processInfos[2])
           start.push(`${processNameOrGroupName}: STARTED`)
-        }
+        } else if (processDataFound.status === 'RUNNING') start.push(`${processNameOrGroupName}: is already RUNNING`)
       } else start.push(`${processNameOrGroupName}: ERROR (no such process)`)
     }
   })
