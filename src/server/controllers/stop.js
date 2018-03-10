@@ -14,7 +14,7 @@ const all = () => {
       const processGroupLength = Object.keys(processData[processGroupName]).length
       const _process = processData[processGroupName][processName]
 
-      if (_process.status === 'RUNNING') {
+      if (_process.status === 'RUNNING' || _process.status === 'STARTING') {
         processDataEdit({killedByMe: true}, processGroupName, processName)
         const processCopy = {..._process['process']}
         delete _process['process']
@@ -41,7 +41,7 @@ const one = (processNamesOrGroupName) => {
         const processGroupLength = Object.keys(processData[processNameOrGroupName]).length
         const _process = processData[processNameOrGroupName][processName]
 
-        if (_process.status === 'RUNNING') {
+      if (_process.status === 'RUNNING' || _process.status === 'STARTING') {
             processDataEdit({killedByMe: true}, processNameOrGroupName, processName)
           const processCopy = _process['process']
           delete _process['process']
@@ -59,7 +59,7 @@ const one = (processNamesOrGroupName) => {
       if (processInfos) {
         const processDataFound = processInfos[1]
 
-        if (processDataFound.status === 'RUNNING') {
+      if (_process.status === 'RUNNING' || _process.status === 'STARTING') {
           processDataEdit({killedByMe: true}, processInfos[0], processNameOrGroupName)
           const processCopy = processDataFound['process']
           delete processDataFound['process']
