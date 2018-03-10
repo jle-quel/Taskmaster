@@ -11,7 +11,7 @@ const all = (restart) => {
     Object.keys(processData[processGroupName]).map((processName, index) => {
       const processStatus = processData[processGroupName][processName].status
     
-      if (processStatus === 'STOPPED' || processStatus === 'EXITED' || restart) {
+      if (processStatus === 'FATAL' || processStatus === 'STOPPED' || processStatus === 'EXITED' || restart) {
         _process.launcher(processData[processGroupName][processName], processGroupName, -1, index)
         start.push(`${processName}: STARTED`)
       } else if (processStatus === 'RUNNING') start.push(`${processName}: is already RUNNING`)
@@ -29,7 +29,7 @@ const one = (processNamesOrGroupName, restart) => {
       Object.keys(processData[processNameOrGroupName]).map((processName, index) => {
         const processStatus = processData[processNameOrGroupName][processName].status
     
-        if (processStatus === 'STOPPED' || processStatus === 'EXITED' || restart) {
+      if (processStatus === 'FATAL' || processStatus === 'STOPPED' || processStatus === 'EXITED' || restart) {
           _process.launcher(processData[processNameOrGroupName][processName], processNameOrGroupName, -1, index)
           start.push(`${processName}: STARTED`)
         } else if (processStatus === 'RUNNING') start.push(`${processName}: is already RUNNING`)
@@ -40,7 +40,7 @@ const one = (processNamesOrGroupName, restart) => {
       if (processInfos) {
         const processDataFound = processInfos[1]
 
-        if (processDataFound.status === 'STOPPED' || processDataFound.status === 'EXITED' || restart) {
+      if (processStatus === 'FATAL' || processStatus === 'STOPPED' || processStatus === 'EXITED' || restart) {
           _process.launcher(processDataFound, processInfos[0], -1, processInfos[2])
           start.push(`${processNameOrGroupName}: STARTED`)
         } else if (processDataFound.status === 'RUNNING') start.push(`${processNameOrGroupName}: is already RUNNING`)
