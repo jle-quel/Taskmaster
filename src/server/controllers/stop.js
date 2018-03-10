@@ -14,7 +14,7 @@ const all = () => {
       const processGroupLength = Object.keys(processData[processGroupName]).length
       const _process = processData[processGroupName][processName]
 
-      if (_process.status !== 'STOPPED' && _process.status !== 'EXITED') {
+      if (_process.status === 'RUNNING') {
         processDataEdit({killedByMe: true}, processGroupName, processName)
         const processCopy = {..._process['process']}
         delete _process['process']
@@ -23,8 +23,8 @@ const all = () => {
         _process['process'] = processCopy
         childProcess.spawn(`kill -${_process.config.stopsignal} ${_process.pid}`, [], {detached: true, shell: true})
         stop.push(`${processGroupLength === 1 ? '' : processGroupName + ':'}${processName} STOPPED`)
-		logger.write("INFO", `stopped [${processName}] (terminated by ${_process.config.stopsignal})`)
-      }
+		    logger.write("INFO", `stopped [${processName}] (terminated by ${_process.config.stopsignal})`)
+      } else stop.push(`${processGroupName} is not RUNNING`) 
     })
   })
   return Promise.resolve(stop.join('\n'))
@@ -40,15 +40,15 @@ const one = (processNamesOrGroupName) => {
         const processGroupLength = Object.keys(processData[processNameOrGroupName]).length
         const _process = processData[processNameOrGroupName][processName]
 
-        if (_process.status !== 'STOPPED' && _process.status !== 'EXITED') {
-          processDataEdit({killedByMe: true}, processNameOrGroupName, processName)
+        if (_process.status === 'RUNNING') {
+            processDataEdit({killedByMe: true}, processNameOrGroupName, processName)
           const processCopy = _process['process']
           delete _process['process']
 
           processCopy.send(_process)
           childProcess.spawn(`kill -${_process.config.stopsignal} ${_process.pid}`, [], {detached: true, shell: true})
           stop.push(`${processGroupLength === 1 ? '' : processNameOrGroupName + ':'}${processName} STOPPED`)
-        }
+        } else stop.push(`${processNameOrGroupName} is not RUNNING`) 
       })
     } else {
       const processInfos = getByProcessName(processNameOrGroupName)
@@ -56,7 +56,7 @@ const one = (processNamesOrGroupName) => {
       if (processInfos) {
         const processDataFound = processInfos[1]
 
-        if (processDataFound.status !== 'STOPPED' && processDataFound.status !== 'EXITED') {
+        if (processDataFound.status === 'RUNNING') {
           processDataEdit({killedByMe: true}, processInfos[0], processNameOrGroupName)
           const processCopy = processDataFound['process']
           delete processDataFound['process']
@@ -64,7 +64,7 @@ const one = (processNamesOrGroupName) => {
           processCopy.send(processDataFound)
           childProcess.spawn(`kill -${processDataFound.config.stopsignal} ${processDataFound.pid}`, [], {detached: true, shell: true})
           stop.push(`${processNameOrGroupName} STOPPED`)
-        }
+        } else stop.push(`${processNameOrGroupName} is not RUNNING`) 
       } else stop.push(`${processNameOrGroupName}: ERROR (no such process)`)
     }
   })

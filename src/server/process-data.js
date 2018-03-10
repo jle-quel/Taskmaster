@@ -24,7 +24,8 @@ const initAll = (processConfig) => {
         'signal': null,
         'pid': null,
         'ppid': null,
-        'time': null
+        'time': null,
+        'exitdate': null
       }
     }
   })

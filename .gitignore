@@ -6,3 +6,4 @@ taskmaster.log
 .vscode
 blueprint
 config.json
+sample.conf

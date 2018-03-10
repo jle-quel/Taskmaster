@@ -19,7 +19,6 @@
   "homepage": "https://github.com/jle-quel/Taskmaster#readme",
   "dependencies": {
     "joi": "^13.1.2",
-    "jsonfile": "^4.0.0",
-    "winston": "^2.4.0"
+    "jsonfile": "^4.0.0"
   }
 }

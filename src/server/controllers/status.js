@@ -14,6 +14,23 @@ const getUpTime = (time) => {
   return [hours, minutes, secondes]
 }
 
+const getStatus = (_process, processGroupLength, processGroupName, processName) => {
+  const statusName = processGroupLength === 1 ? '' : processGroupName + ':' 
+  if (_process.status === 'FATAL') return `${statusName}${processName}\t${_process.status}\t\tExited too quickly (process log may have details)`
+
+  const time = _process.status === 'EXITED' || _process.status === 'STOPPED'
+  ? new Date(_process.exitdate).toString().split(' ').slice(0, 5).join(' ')
+  : getUpTime(_process.time)
+
+  if (_process.status === 'EXITED' || _process.status === 'STOPPED') {
+    return `${statusName}${processName}\t${_process.status}\t\t${time}`
+  } else if (_process.status === 'STOPPED' && !_process.pid) {
+    return `${statusName}${processName}\t${_process.status}\t\tNot started`
+  } else if (_process.status === 'STARTING') return `${statusName}${processName}\t${_process.status}`
+  else return `${statusName}${processName}\t${_process.status}\t\tpid ${_process.pid}, uptime ${time[0]}:${time[1]}:${time[2]}`
+
+}
+
 const all = () => {
   const status = []
   const processData = require('../process-data').getAll()
@@ -23,12 +40,7 @@ const all = () => {
 
     Object.keys(processData[processGroupName]).map((processName) => {
       const _process = processData[processGroupName][processName]
-
-      if (_process.status !== 'STARTING' && (_process.status !== 'STOPPED' && _process.pid)) {
-        const time = getUpTime(_process.time)
-
-        status.push(`${processGroupLength === 1 ? '' : processGroupName + ':'}${processName}\t${_process.status}\t\tpid ${_process.pid}, uptime ${time[0]}:${time[1]}:${time[2]}`)
-      } else status.push(`${processGroupLength === 1 ? '' : processGroupName + ':'}${processName}\t${_process.status}\t\t${_process.status === 'STOPPED' && !_process.pid ? 'Not started' : ''}`)
+      status.push(getStatus(_process, processGroupLength, processGroupName, processName))
     })
   })
   return Promise.resolve(status.join('\n'))
@@ -44,24 +56,14 @@ const one = (processNamesOrGroupName) => {
 
       Object.keys(processData[processNameOrGroupName]).map((processName) => {
         const _process = processData[processNameOrGroupName][processName]
-
-        if (_process.status !== 'STARTING' && (_process.status !== 'STOPPED' && _process.pid)) {
-          const time = getUpTime(_process.time)
-
-          status.push(`${processGroupLength === 1 ? '' : processNameOrGroupName + ':'}${processName}\t${_process.status}\t\tpid ${_process.pid}, uptime ${time[0]}:${time[1]}:${time[2]}`)
-        } else status.push(`${processGroupLength === 1 ? '' : processNameOrGroupName + ':'}${processName}\t${_process.status}\t\t${_process.status === 'STOPPED' && !_process.pid ? 'Not started' : ''}`)
+        status.push(getStatus(_process, processGroupLength, processNameOrGroupName, processName))
       })
     } else {
       const processInfos = getByProcessName(processNameOrGroupName)
 
       if (processInfos) {
         const processDataFound = processInfos[1]
-
-        if (processDataFound.status !== 'STARTING' && processDataFound.pid) {
-          const time = getUpTime(processDataFound.time)
-
-          status.push(`${processNameOrGroupName}\t${processDataFound.status}\t\tpid ${processDataFound.pid}, uptime ${time[0]}:${time[1]}:${time[2]}`)
-        } else status.push(`${processNameOrGroupName}\t${processDataFound.status}\t\t${processDataFound.status === 'STOPPED' && !processDataFound.pid ? 'Not started' : ''}`)
+        status.push(getStatus(processDataFound, 1, null, processName))
       } else status.push(`${processNameOrGroupName}: ERROR (no such process)`)
     }
   })

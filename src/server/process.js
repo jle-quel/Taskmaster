@@ -5,17 +5,6 @@ const childProcess = require('child_process')
 const processDataEdit = require('./process-data').edit
 const logger = require('../services/logger')
 
-const exitProcess = {
-	"always": (processInfo, processConfig, processGroupName, numOfRestart, numOfProcess) => {
-		launcher(processConfig, processGroupName, numOfRestart - 1)
-	},
-	"unexpected": (processInfo, processConfig, processGroupName, numOfRestart, numOfProcess) => {
-		if (!processConfig.config.exitcodes.includes(processInfo.code) && numOfRestart)
-			launcher(processConfig, processGroupName, numOfRestart - 1)
-	},
-	"never": () => { return }
-}
-
 const getSpawnOptions = (processConfig) => ({
   'shell': true,
   'env': processConfig.config.env,
@@ -27,18 +16,27 @@ const getIoOptions = (processConfig) => ({
   'stdout_logfile': processConfig.config.stdout_logfile
 })
 
-const processEventsInit = (_process, processConfig, processGroupName, numOfRestart, numOfProcess) => {
+const processEventsInit = (_process, processConfig, processGroupName, startRetries, processNum) => {
 	const processGroupLength = processConfig.config.numprocs
 	const processData = require('./process-data').getAll()
-	
+
 	_process.on('message', (processInfo) => {
-		if (processInfo.status === 'FINISH' || processInfo.status === 'EXITED')
-			exitProcess[processConfig.config.autorestart](processInfo, processConfig, processGroupName, numOfRestart, numOfProcess)
-		else {
+		if (startRetries === 0 && processInfo.status === 'FATAL') {
+			logger.write("INFO", `gave up [${processConfig.config.command}] after max startretries`)
+		}
+
+		const autorestart = processConfig.config.autorestart
+		const exitcodes = processConfig.config.exitcodes
+		
+		if (startRetries > 0 && processInfo.status === 'FATAL') launcher(processConfig, processGroupName, startRetries - 1)
+		else if (processInfo.status === 'EXITED' && autorestart === 'always') launcher(processConfig, processGroupName, startRetries)
+		else if (processInfo.status === 'EXITED' && autorestart === 'unexpected' && !exitcodes.includes(processInfo.code)) {
+			launcher(processConfig, processGroupName, startRetries)
+		} else {
 			if (!processData[processGroupName]) processData[processGroupName] = {}
 			
-			const processDataInfo = processData[processGroupName][`${processGroupLength === 1 ? processGroupName : processGroupName + '_' + numOfProcess}`]
-			processDataEdit(processInfo, processGroupName, `${processGroupLength === 1 ? processGroupName : processGroupName + '_' + numOfProcess}`)
+			const processDataInfo = processData[processGroupName][`${processGroupLength === 1 ? processGroupName : processGroupName + '_' + processNum}`]
+			processDataEdit(processInfo, processGroupName, `${processGroupLength === 1 ? processGroupName : processGroupName + '_' + processNum}`)
 			
 			delete processDataInfo['process']
 			_process.send(processDataInfo)
@@ -47,14 +45,9 @@ const processEventsInit = (_process, processConfig, processGroupName, numOfResta
 	})
 }
 
-const launcher = (processConfig, processGroupName, numOfRestart, numOfProcess) => {
+const launcher = (processConfig, processGroupName, startRetries, processNum) => {
 	const spawnOptions = JSON.stringify(getSpawnOptions(processConfig))
 	const ioOptions = JSON.stringify(getIoOptions(processConfig))
-	
-	if (numOfRestart === -1) {
-		logger.write("INFO", `gave up [${processConfig.config.command}] after max autorestart`)
-		return
-	}
 	
 	const _process = childProcess.fork('./src/server/child-process', [
 		processConfig.config.command,
@@ -63,7 +56,7 @@ const launcher = (processConfig, processGroupName, numOfRestart, numOfProcess) =
 		processConfig.config.umask,
 		processConfig.config.startsecs
 	])
-	processEventsInit(_process, processConfig, processGroupName, numOfRestart, numOfProcess)
+	processEventsInit(_process, processConfig, processGroupName, startRetries, processNum)
 }
 
 const init = () => {
