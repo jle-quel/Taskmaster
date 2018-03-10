@@ -9,7 +9,9 @@ const all = (restart) => {
   
   Object.keys(processData).map((processGroupName) => {
     Object.keys(processData[processGroupName]).map((processName, index) => {
-      if (processData[processGroupName][processName].status === 'STOPPED' || restart) {
+      const processStatus = processData[processGroupName][processName].status
+    
+      if (processStatus === 'STOPPED' || processStatus === 'EXITED' || restart) {
         _process.launcher(processData[processGroupName][processName], processGroupName, -1, index)
         start.push(`${processName}: STARTED`)
       }
@@ -25,7 +27,9 @@ const one = (processNamesOrGroupName, restart) => {
   processNamesOrGroupName.map((processNameOrGroupName) => {
     if (processData[processNameOrGroupName]) {
       Object.keys(processData[processNameOrGroupName]).map((processName, index) => {
-        if (processData[processNameOrGroupName][processName].status === 'STOPPED' || restart) {
+        const processStatus = processData[processNameOrGroupName][processName].status
+    
+        if (processStatus === 'STOPPED' || processStatus === 'EXITED' || restart) {
           _process.launcher(processData[processNameOrGroupName][processName], processNameOrGroupName, -1, index)
           start.push(`${processName}: started`)
         }
@@ -36,7 +40,7 @@ const one = (processNamesOrGroupName, restart) => {
       if (processInfos) {
         const processDataFound = processInfos[1]
 
-        if (processDataFound.status === 'STOPPED' || restart) {
+        if (processDataFound.status === 'STOPPED' || processDataFound.status === 'EXITED' || restart) {
           _process.launcher(processDataFound, processInfos[0], -1, processInfos[2])
           start.push(`${processNameOrGroupName}: STARTED`)
         }

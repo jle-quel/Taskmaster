@@ -20,7 +20,7 @@ const client = net.createConnection(config.PORT, config.HOST, () => {
         controller['error'](argv)
         rl.prompt()
       } else {
-        const commandToSend = controller[argv[0]](argv)
+        const commandToSend = controller[argv[0]](argv.filter((item, index) => argv.indexOf(item) == index))
 
         if (commandToSend) client.write(JSON.stringify(commandToSend))
         else rl.prompt()
