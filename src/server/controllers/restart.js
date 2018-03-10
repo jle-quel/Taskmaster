@@ -36,22 +36,25 @@ const one = (processNamesOrGroupName) => {
       })
     } else {
       const processInfos = getByProcessName(processNameOrGroupName)
-      const processName = Object.keys(processData[processInfos[0]])[processInfos[2]]
+      if (processInfos) {
+        const processName = Object.keys(processData[processInfos[0]])[processInfos[2]]
 
-      return stop.one([processName])
-      .then((stopResult) => {
-        restart.push(stopResult)
-        return start.one([processName], true)
-        .then((startResult) => {
-          restart.push(startResult)
-          return Promise.resolve(restart)
+        return stop.one([processName])
+        .then((stopResult) => {
+          restart.push(stopResult)
+          return start.one([processName], true)
+          .then((startResult) => {
+            restart.push(startResult)
+            return Promise.resolve(restart.join())
+          })
         })
-      })
+      } else {
+        restart.push(`${processNameOrGroupName}: ERROR (no such process)`)
+        return Promise.resolve(restart.join())
+      }
     }
   }))
-  .then(([restartResult]) => {
-    return Promise.resolve(restartResult.split(',').join('\n'))
-  })
+  .then(([restartResult]) => Promise.resolve(restartResult.split(',').join('\n')))
 }
 
 module.exports = {
