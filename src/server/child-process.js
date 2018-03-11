@@ -10,7 +10,7 @@ let processData = {}
 
 const options = JSON.parse(process.argv[3])
 const stdio = JSON.parse(process.argv[4])
-process.umask(process.argv[5].umask)
+process.umask(parseInt(process.argv[5].umask))
 
 const writeInFile = (str) => {
 	try {

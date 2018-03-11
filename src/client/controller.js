@@ -3,7 +3,12 @@
 const help = require('./help')
 
 const checkCommand = (command) => {
-  if (command[1]) return command
+  if (command.length === 2) return command
+  else if (command.length > 2) {
+    console.error(`Error: ${command[0]} does not allow multiple arguments`)
+    help[command[0]]()
+    return null
+  }
   else {
     console.error(`Error: ${command[0]} requires a process name`)
     help[command[0]]()

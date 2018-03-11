@@ -9,8 +9,8 @@ const all = () => {
   const stop = []
   const processData = require('../process-data').getAll()
   
-  Object.keys(processData).map((processGroupName) => {
-    Object.keys(processData[processGroupName]).map((processName, index) => {
+  return Promise.all(Object.keys(processData).map((processGroupName) => {
+    return Promise.all(Object.keys(processData[processGroupName]).map((processName, index) => {
       const processGroupLength = Object.keys(processData[processGroupName]).length
       const _process = processData[processGroupName][processName]
 
@@ -21,29 +21,36 @@ const all = () => {
 
         processCopy.send(_process)
         _process['process'] = processCopy
-        childProcess.spawn(`kill -${_process.config.stopsignal} ${_process.pid}`, [], {detached: true, shell: true})
-        childProcess.exec(`kill -0 ${_process.pid}`, (err, stdout, stderr) => {
-          if (stderr === '') {
-            logger.write("INFO", `Waiting for the ${processName} with pid: ${_process.pid} to stop`)
-            timeout(_process.pid, _process.config.stopwaitsecs)
-          } else {
-            stop.push(`${processGroupLength === 1 ? '' : processGroupName + ':'}${processName}: STOPPED`)
-            logger.write("INFO", `stopped [${processName}] (terminated by ${_process.config.stopsignal})`)
-          }
+        return new Promise((resolve, reject) => {
+          childProcess.exec(`kill -${_process.config.stopsignal} ${_process.pid}`, () => {
+            childProcess.exec(`kill -0 ${_process.pid}`, (err, stdout, stderr) => {
+              if (!err) {
+                logger.write("INFO", `Waiting for the ${processName} with pid: ${_process.pid} to stop`)
+                timeout(_process.pid, _process.config.stopwaitsecs)
+              } else {
+                stop.push(`${processGroupLength === 1 ? '' : processGroupName + ':'}${processName}: STOPPED`)
+                logger.write("INFO", `stopped [${processName}] (terminated by ${_process.config.stopsignal})`)
+              }
+              return resolve()
+            })
+          })
         })
-      } else stop.push(`${processName + ':'} ERROR (already stopped)`)
-    })
-  })
-  return Promise.resolve(stop.join('\n'))
+      } else {
+        stop.push(`${processName + ':'} ERROR (already stopped)`)
+        return Promise.resolve()
+      }
+    }))
+  }))
+  .then(() => Promise.resolve(stop.join('\n')))
 }
 
 const one = (processNamesOrGroupName) => {
   const stop = []
   const processData = require('../process-data').getAll()
   
-  processNamesOrGroupName.map((processNameOrGroupName) => {
+  return Promise.all(processNamesOrGroupName.map((processNameOrGroupName) => {
     if (processData[processNameOrGroupName]) {
-      Object.keys(processData[processNameOrGroupName]).map((processName, index) => {
+      return Promise.all(Object.keys(processData[processNameOrGroupName]).map((processName, index) => {
         const processGroupLength = Object.keys(processData[processNameOrGroupName]).length
         const _process = processData[processNameOrGroupName][processName]
 
@@ -53,18 +60,26 @@ const one = (processNamesOrGroupName) => {
           delete _process['process']
 
           processCopy.send(_process)
-          childProcess.spawn(`kill -${_process.config.stopsignal} ${_process.pid}`, [], {detached: true, shell: true})
-          childProcess.exec(`kill -0 ${_process.pid}`, (err, stdout, stderr) => {
-            if (stderr === '') {
-              logger.write("INFO", `Waiting for the ${processName} with pid: ${_process.pid} to stop`)
-              timeout(_process.pid, _process.config.stopwaitsecs)
-            } else {
-              stop.push(`${processGroupLength === 1 ? '' : processNameOrGroupName + ':'}${processName}: STOPPED`)
-              logger.write("INFO", `stopped [${processName}] (terminated by ${_process.config.stopsignal})`)
-            }
+          _process['process'] = processCopy
+          return new Promise((resolve, reject) => {
+            childProcess.exec(`kill -${_process.config.stopsignal} ${_process.pid}`, () => {
+              childProcess.exec(`kill -0 ${_process.pid}`, (err, stdout, stderr) => {
+                if (!err) {
+                  logger.write("INFO", `Waiting for the ${processName} with pid: ${_process.pid} to stop`)
+                  timeout(_process.pid, _process.config.stopwaitsecs)
+                } else {
+                  stop.push(`${processGroupLength === 1 ? '' : processNameOrGroupName + ':'}${processName}: STOPPED`)
+                  logger.write("INFO", `stopped [${processName}] (terminated by ${_process.config.stopsignal})`)
+                }
+                return resolve()
+              })
+            })
           })
-        } else stop.push(`${processName + ':'} ERROR (already stopped)`)
-      })
+        } else {
+          stop.push(`${processName + ':'} ERROR (already stopped)`)
+          return Promise.resolve()
+        }
+      }))
     } else {
       const processInfos = getByProcessName(processNameOrGroupName)
 
@@ -77,21 +92,31 @@ const one = (processNamesOrGroupName) => {
           delete processDataFound['process']
 
           processCopy.send(processDataFound)
-          childProcess.spawn(`kill -${processDataFound.config.stopsignal} ${processDataFound.pid}`, [], {detached: true, shell: true})
-          childProcess.exec(`kill -0 ${processDataFound.pid}`, (err, stdout, stderr) => {
-            if (stderr === '') {
-              logger.write("INFO", `Waiting for the ${processNameOrGroupName} with pid: ${processDataFound.pid} to stop`)
-              timeout(processDataFound.pid, processDataFound.config.stopwaitsecs)
-            } else {
-              stop.push(`${processNameOrGroupName}: STOPPED`)
-              logger.write("INFO", `stopped [${processNameOrGroupName}] (terminated by ${processDataFound.config.stopsignal})`)
-            }
+          return new Promise((resolve, reject) => {
+            childProcess.exec(`kill -${processDataFound.config.stopsignal} ${processDataFound.pid}`, () => {
+              childProcess.exec(`kill -0 ${processDataFound.pid}`, (err, stdout, stderr) => {
+                if (!err) {
+                  logger.write("INFO", `Waiting for the ${processNameOrGroupName} with pid: ${processDataFound.pid} to stop`)
+                  timeout(processDataFound.pid, processDataFound.config.stopwaitsecs)
+                } else {
+                  stop.push(`${processNameOrGroupName}: STOPPED`)
+                  logger.write("INFO", `stopped [${processNameOrGroupName}] (terminated by ${processDataFound.config.stopsignal})`)
+                }
+                return resolve()
+              })
+            })
           })
-        } else stop.push(`${processNameOrGroupName + ':'} ERROR (already stopped)`)
-      } else stop.push(`${processNameOrGroupName}: ERROR (no such process)`)
+        } else {
+          stop.push(`${processNameOrGroupName + ':'} ERROR (already stopped)`)
+          return Promise.resolve()
+        }
+      } else {
+        stop.push(`${processNameOrGroupName}: ERROR (no such process)`)
+        return Promise.resolve()
+      }
     }
-  })
-  return Promise.resolve(stop.join('\n'))
+  }))
+  .then(() => Promise.resolve(stop.join('\n')))
 }
 
 const timeout = (pid, stopwaitsecs) => {

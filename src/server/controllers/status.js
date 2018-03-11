@@ -62,7 +62,7 @@ const one = (processNamesOrGroupName) => {
 
       if (processInfos) {
         const processDataFound = processInfos[1]
-        status.push(getStatus(processDataFound, 1, null, processName))
+        status.push(getStatus(processDataFound, 1, null, processNameOrGroupName))
       } else status.push(`${processNameOrGroupName}: ERROR (no such process)`)
     }
   })
