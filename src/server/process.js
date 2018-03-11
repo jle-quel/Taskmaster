@@ -48,7 +48,7 @@ const processEventsInit = (_process, processConfig, processGroupName, startRetri
 const launcher = (processConfig, processGroupName, startRetries, processNum) => {
 	const spawnOptions = JSON.stringify(getSpawnOptions(processConfig))
 	const ioOptions = JSON.stringify(getIoOptions(processConfig))
-	
+
 	const _process = childProcess.fork('./src/server/child-process', [
 		processConfig.config.command,
 		spawnOptions,
