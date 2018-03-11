@@ -9,7 +9,7 @@ const schema = joi.object().keys({
   autostart: joi.boolean().default(true),
   autorestart: joi.string().valid(['always', 'never', 'unexpected']).default('unexpected'),
   stopwaitsecs: joi.number().integer().min(0).default(10),
-  exitcodes: joi.array().items(joi.number().integer()).default([0, 2]),
+  exitcodes: joi.array().items(joi.number().integer()).min(1).default([0, 2]),
   startretries: joi.number().integer().min(0).default(3),
   startsecs: joi.number().integer().min(0).default(1),
   stdout_logfile: joi.string().default(null),
