@@ -51,6 +51,7 @@ const getByPid = (pid) => {
 }
 
 const edit = (dataToEdit, processGroupName, processName) => {
+  if (!processData[processGroupName] || !processData[processGroupName][processName]) return
   Object.keys(dataToEdit).map(key => {
     processData[processGroupName][processName][key] = dataToEdit[key]
   })

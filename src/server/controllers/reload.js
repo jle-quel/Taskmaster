@@ -8,12 +8,10 @@ module.exports = (configFile) => {
   .then((configParsed) => {
     return stopAll()
     .then(() => {
-		setTimeout(() => {
       processData.reload()
       processData.initAll(configParsed)
       _process.init()
       return Promise.resolve('Taskmaster reloaded')
-  }, 1000)
     })
   })
   .catch((err) => Promise.reject(err))
