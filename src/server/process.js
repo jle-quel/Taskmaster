@@ -24,14 +24,14 @@ const processEventsInit = (_process, processConfig, processGroupName, startRetri
 		if (startRetries === 0 && processInfo.status === 'FATAL') {
 			logger.write("INFO", `gave up [${processConfig.config.command}] after max startretries`)
 		}
-
+		
 		const autorestart = processConfig.config.autorestart
 		const exitcodes = processConfig.config.exitcodes
 		
-		if (startRetries > 0 && processInfo.status === 'FATAL') launcher(processConfig, processGroupName, startRetries - 1)
-		else if (processInfo.status === 'EXITED' && autorestart === 'always') launcher(processConfig, processGroupName, startRetries)
+		if (startRetries > 0 && processInfo.status === 'FATAL') launcher(processConfig, processGroupName, startRetries - 1, processNum)
+		else if (processInfo.status === 'EXITED' && autorestart === 'always') launcher(processConfig, processGroupName, startRetries, processNum)
 		else if (processInfo.status === 'EXITED' && autorestart === 'unexpected' && !exitcodes.includes(processInfo.code)) {
-			launcher(processConfig, processGroupName, startRetries)
+			launcher(processConfig, processGroupName, startRetries, processNum)
 		} else {
 			if (!processData[processGroupName]) processData[processGroupName] = {}
 			
