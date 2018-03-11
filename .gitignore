@@ -1,9 +1,3 @@
 node_modules
-.DS_Store
 npm-debug.log
 package-lock.json
-taskmaster.log
-.vscode
-blueprint
-config.json
-sample.conf
